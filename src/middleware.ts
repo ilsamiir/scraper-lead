@@ -37,8 +37,6 @@ export async function middleware(request: NextRequest) {
 
     const { data: { user } } = await supabase.auth.getUser()
 
-    // TEMPORARILY DISABLED: Authentication redirects bypassed for development
-    /*
     const isAuthRoute = request.nextUrl.pathname.startsWith('/login')
 
     if (!user && !isAuthRoute) {
@@ -54,7 +52,6 @@ export async function middleware(request: NextRequest) {
         url.pathname = '/'
         return NextResponse.redirect(url)
     }
-    */
 
     return response
 }

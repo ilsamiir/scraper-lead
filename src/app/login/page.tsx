@@ -48,19 +48,19 @@ export default function LoginPage() {
                         <span className="text-3xl font-bold tracking-tight text-white">saks.</span>
                     </div>
 
-                    <h2 className="text-2xl font-medium mb-2">Area Riservata</h2>
-                    <p className="text-white/50 mb-8 text-sm">Piattaforma di lead-scraper interna. Accedi per conquistare l'universo digitale.</p>
+                    <h2 className="text-2xl font-bold mb-2">Accesso Riservato</h2>
+                    <p className="text-white/50 mb-8 text-sm">Inserisci le credenziali per generare i preventivi.</p>
 
                     <form onSubmit={handleLogin} className="flex flex-col gap-5 text-left">
                         <div>
-                            <label className="block text-sm font-medium text-white/70 mb-1.5 ml-1">Credenziali d'accesso</label>
+                            <label className="block text-sm font-medium text-white/70 mb-1.5 ml-1">Username</label>
                             <input
                                 type="text"
                                 required
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="w-full bg-white/5 border border-white/10 focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/50 rounded-xl px-4 py-3 text-white placeholder-white/30 outline-none transition-all"
-                                placeholder="saksagency_root"
+                                placeholder="Inserisci username"
                             />
                         </div>
 
@@ -72,7 +72,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full bg-white/5 border border-white/10 focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/50 rounded-xl px-4 py-3 text-white placeholder-white/30 outline-none transition-all"
-                                placeholder="••••••••"
+                                placeholder="Inserisci password"
                             />
                         </div>
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { LogOut, Home as HomeIcon, Users, Calendar } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { SearchForm } from "@/components/SearchForm";
 import { LeadsTable } from "@/components/LeadsTable";
 import { createClient } from "@/utils/supabase/client";
@@ -54,10 +55,19 @@ export default function Home() {
           <div className="container flex items-center justify-between h-16 px-4 mx-auto sm:px-8">
             <div className="flex items-center gap-2">
               <Image src="/saksweb.png" alt="Saks Logo" width={120} height={40} className="object-contain" />
-              <span className="px-2 py-0.5 text-xs font-medium tracking-wider text-brand-accent border border-brand-accent/30 rounded-full uppercase bg-brand-accent/10">lead-scraper</span>
+              <span className="px-2 py-0.5 text-xs font-medium tracking-wider text-brand-accent border border-brand-accent/30 rounded-full uppercase bg-brand-accent/10">mini-crm</span>
             </div>
             <nav className="flex items-center gap-6">
-              <button onClick={handleLogout} className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+              <Link href="/" className="text-sm font-medium text-brand-accent flex items-center gap-2">
+                <HomeIcon className="w-4 h-4" /> <span className="hidden sm:inline">Ricerca</span>
+              </Link>
+              <Link href="/clienti" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+                <Users className="w-4 h-4" /> <span className="hidden sm:inline">Clienti Selezionati</span>
+              </Link>
+              <Link href="/promemoria" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+                <Calendar className="w-4 h-4" /> <span className="hidden sm:inline">Promemoria</span>
+              </Link>
+              <button onClick={handleLogout} className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2 ml-4">
                 <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline">Esci</span>
               </button>

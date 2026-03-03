@@ -1,12 +1,15 @@
 "use client";
 
-import { ExternalLink, Search, Download } from "lucide-react";
+import { ExternalLink, Search, Download, Save } from "lucide-react";
 import { useState } from "react";
 import * as XLSX from "xlsx";
+import { createClient } from '@/utils/supabase/client';
 
 export function LeadsTable({ leads }: { leads: any[] }) {
     const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
     const [selectedLeads, setSelectedLeads] = useState<Set<any>>(new Set());
+    const [isSaving, setIsSaving] = useState(false);
+    const supabase = createClient();
 
     if (!leads || leads.length === 0) {
         return (
@@ -75,6 +78,34 @@ export function LeadsTable({ leads }: { leads: any[] }) {
         XLSX.writeFile(workbook, "contatti_selezionati.xlsx");
     };
 
+    const handleSaveClients = async () => {
+        if (selectedLeads.size === 0) return;
+        setIsSaving(true);
+
+        const leadsToSave = Array.from(selectedLeads).map(lead => ({
+            business_name: lead.business_name || '',
+            city: lead.city || '',
+            province: lead.province || '',
+            address: lead.address || '',
+            phone: lead.phone || '',
+            website: lead.website || '',
+            google_maps_url: lead.google_maps_url || '',
+            email: lead.email || '',
+            status: 'Da contattare'
+        }));
+
+        const { error } = await supabase.from('saved_clients').insert(leadsToSave);
+
+        setIsSaving(false);
+
+        if (error) {
+            alert('Errore durante il salvataggio dei clienti: ' + error.message);
+        } else {
+            alert('Clienti salvati con successo nel CRM!');
+            setSelectedLeads(new Set());
+        }
+    };
+
     return (
         <div className="w-full glass-panel overflow-hidden">
             <div className="p-4 border-b border-white/10 flex items-center justify-between">
@@ -83,12 +114,21 @@ export function LeadsTable({ leads }: { leads: any[] }) {
                         {selectedLeads.size > 0 ? `${selectedLeads.size} contatti selezionati` : 'Nessun contatto selezionato'}
                     </span>
                     {selectedLeads.size > 0 && (
-                        <button
-                            onClick={handleExportExcel}
-                            className="bg-brand-gradient-1 text-white hover:opacity-90 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
-                        >
-                            <Download className="w-4 h-4" /> Scarica Excel
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={handleSaveClients}
+                                disabled={isSaving}
+                                className="bg-brand-accent text-white hover:opacity-90 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                            >
+                                <Save className="w-4 h-4" /> {isSaving ? 'Salvataggio...' : 'Salva nel CRM'}
+                            </button>
+                            <button
+                                onClick={handleExportExcel}
+                                className="bg-brand-gradient-1 text-white hover:opacity-90 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
+                            >
+                                <Download className="w-4 h-4" /> Scarica Excel
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>

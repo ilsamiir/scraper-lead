@@ -5,9 +5,21 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import { createClient } from '@/utils/supabase/client';
 
-export function LeadsTable({ leads }: { leads: any[] }) {
-    const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
-    const [selectedLeads, setSelectedLeads] = useState<Set<any>>(new Set());
+type Lead = {
+    id?: string;
+    business_name?: string;
+    city?: string;
+    province?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    website?: string;
+    google_maps_url?: string;
+};
+
+export function LeadsTable({ leads }: { leads: Lead[] }) {
+    const [sortConfig, setSortConfig] = useState<{ key: keyof Lead, direction: 'asc' | 'desc' } | null>(null);
+    const [selectedLeads, setSelectedLeads] = useState<Set<Lead>>(new Set());
     const [isSaving, setIsSaving] = useState(false);
     const supabase = createClient();
 
@@ -28,19 +40,21 @@ export function LeadsTable({ leads }: { leads: any[] }) {
     const sortedLeads = [...leads];
     if (sortConfig !== null) {
         sortedLeads.sort((a, b) => {
-            if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
-            if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+            const aValue = a[sortConfig.key] ?? "";
+            const bValue = b[sortConfig.key] ?? "";
+            if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+            if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
             return 0;
         });
     }
 
-    const requestSort = (key: string) => {
+    const requestSort = (key: keyof Lead) => {
         let direction: 'asc' | 'desc' = 'asc';
         if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') direction = 'desc';
         setSortConfig({ key, direction });
     };
 
-    const toggleSelect = (lead: any) => {
+    const toggleSelect = (lead: Lead) => {
         const newSelected = new Set(selectedLeads);
         if (newSelected.has(lead)) {
             newSelected.delete(lead);
@@ -61,7 +75,7 @@ export function LeadsTable({ leads }: { leads: any[] }) {
     const handleExportExcel = () => {
         if (selectedLeads.size === 0) return;
 
-        const dataToExport = Array.from(selectedLeads).map(lead => ({
+        const dataToExport = Array.from(selectedLeads).map((lead) => ({
             'Nome Azienda': lead.business_name || '',
             'Città': lead.city || '',
             'Provincia': lead.province || '',
@@ -82,7 +96,7 @@ export function LeadsTable({ leads }: { leads: any[] }) {
         if (selectedLeads.size === 0) return;
         setIsSaving(true);
 
-        const leadsToSave = Array.from(selectedLeads).map(lead => ({
+        const leadsToSave = Array.from(selectedLeads).map((lead) => ({
             business_name: lead.business_name || '',
             city: lead.city || '',
             province: lead.province || '',

@@ -1,22 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Phone, Mail, FileText, Send, Calendar as CalendarIcon, Loader2, Save } from "lucide-react";
 
+type ContactHistory = {
+    id: string;
+    contact_method: string;
+    contact_date: string;
+    notes?: string | null;
+};
+
+type CollapsedHistory = ContactHistory & {
+    repeatCount?: number;
+};
+
 export function FollowUpHistory({ clientId }: { clientId: string }) {
-    const [history, setHistory] = useState<any[]>([]);
+    const [history, setHistory] = useState<ContactHistory[]>([]);
     const [loading, setLoading] = useState(true);
     const [newNote, setNewNote] = useState("");
     const supabase = createClient();
 
-    useEffect(() => {
-        fetchHistory();
-    }, [clientId]);
-
-    const fetchHistory = async () => {
+    const fetchHistory = useCallback(async () => {
         setLoading(true);
         const { data, error } = await supabase
             .from('contact_history')
@@ -24,10 +31,15 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
             .eq('client_id', clientId)
             .order('contact_date', { ascending: false });
 
-        if (data) setHistory(data);
+        if (data) setHistory(data as ContactHistory[]);
         if (error) console.error("Error fetching history:", error);
         setLoading(false);
-    };
+    }, [clientId, supabase]);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchHistory();
+    }, [fetchHistory]);
 
     const handleAddNote = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,7 +58,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
             .select();
 
         if (data && !error) {
-            setHistory([data[0], ...history]);
+            setHistory((prev) => [data[0] as ContactHistory, ...prev]);
             setNewNote("");
         } else {
             alert("Errore salvataggio nota: " + error?.message);
@@ -62,6 +74,20 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
             default: return <CalendarIcon className="w-4 h-4 text-white/50" />;
         }
     };
+
+    const collapsedHistory = history.reduce<CollapsedHistory[]>((acc, log) => {
+        const last = acc[acc.length - 1];
+        const lastNotes = last?.notes ?? "";
+        const currentNotes = log.notes ?? "";
+
+        if (last && last.contact_method === log.contact_method && lastNotes === currentNotes) {
+            last.repeatCount = (last.repeatCount ?? 1) + 1;
+            return acc;
+        }
+
+        acc.push({ ...log });
+        return acc;
+    }, []);
 
     if (loading) {
         return (
@@ -101,7 +127,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                     </div>
                 ) : (
                     <div className="relative border-l border-white/10 ml-3 space-y-6 pb-2">
-                        {history.map((log) => (
+                        {collapsedHistory.map((log) => (
                             <div key={log.id} className="relative pl-6">
                                 {/* Timeline Dot / Icon */}
                                 <div className="absolute -left-3.5 top-0.5 bg-black border border-white/20 rounded-full p-1.5 z-10">
@@ -111,8 +137,13 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                                 {/* Content */}
                                 <div className="bg-white/[0.03] border border-white/5 rounded-lg p-4">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-white/90 capitalize">
+                                        <span className="text-sm font-medium text-white/90 capitalize flex items-center gap-2">
                                             {log.contact_method}
+                                            {log.repeatCount && log.repeatCount > 1 && (
+                                                <span className="text-[10px] font-semibold uppercase text-white/50 bg-white/10 px-2 py-0.5 rounded-full">
+                                                    Ripetuto x{log.repeatCount}
+                                                </span>
+                                            )}
                                         </span>
                                         <span className="text-xs text-white/40">
                                             {format(new Date(log.contact_date), "d MMM yyyy, HH:mm", { locale: it })}

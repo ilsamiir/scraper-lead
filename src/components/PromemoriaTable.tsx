@@ -1,12 +1,29 @@
 "use client";
 
-import { useState, useEffect, Fragment } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Phone, Mail, Calendar as CalendarIcon, FileText, CheckCircle, ExternalLink, Save, History, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { FollowUpHistory } from "@/components/FollowUpHistory";
 
+type SavedClient = {
+    id: string;
+    business_name?: string | null;
+    city?: string | null;
+    province?: string | null;
+    address?: string | null;
+    phone?: string | null;
+    website?: string | null;
+    google_maps_url?: string | null;
+    email?: string | null;
+    last_contact_method?: string | null;
+    last_contact_date?: string | null;
+    follow_up_date?: string | null;
+    notes?: string | null;
+    created_at?: string | null;
+};
+
 export function PromemoriaTable() {
-    const [clients, setClients] = useState<any[]>([]);
+    const [clients, setClients] = useState<SavedClient[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingEmailId, setEditingEmailId] = useState<string | null>(null);
     const [emailValue, setEmailValue] = useState("");
@@ -17,11 +34,7 @@ export function PromemoriaTable() {
     const [selectedClients, setSelectedClients] = useState<string[]>([]);
     const supabase = createClient();
 
-    useEffect(() => {
-        fetchClients();
-    }, []);
-
-    const fetchClients = async () => {
+    const fetchClients = useCallback(async () => {
         setLoading(true);
         // Get today's date in YYYY-MM-DD
         const today = new Date().toISOString().split('T')[0];
@@ -33,17 +46,22 @@ export function PromemoriaTable() {
             .lte('follow_up_date', today)
             .order('follow_up_date', { ascending: true });
 
-        if (data) setClients(data);
+        if (data) setClients(data as SavedClient[]);
         if (error) console.error(error);
         setLoading(false);
-    };
+    }, [supabase]);
 
-    const handleEmailEdit = (client: any) => {
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchClients();
+    }, [fetchClients]);
+
+    const handleEmailEdit = (client: SavedClient) => {
         setEditingEmailId(client.id);
         setEmailValue(client.email || "");
     };
 
-    const handleLastContactEdit = (client: any) => {
+    const handleLastContactEdit = (client: SavedClient) => {
         setEditingLastContactId(client.id);
         setLastContactDateValue(client.last_contact_date ? new Date(client.last_contact_date).toISOString().slice(0, 16) : "");
         setLastContactMethodValue(client.last_contact_method || "chiamata");
@@ -96,7 +114,7 @@ export function PromemoriaTable() {
         setEditingEmailId(null);
     };
 
-    const updateAction = async (id: string, updates: any) => {
+    const updateAction = async (id: string, updates: Partial<SavedClient>) => {
         const { error } = await supabase
             .from('saved_clients')
             .update(updates)
@@ -132,7 +150,7 @@ export function PromemoriaTable() {
         await supabase.from('contact_history').insert([{ client_id: id, contact_method: 'email', contact_date: now }]);
     };
 
-    const handleNotes = async (client: any) => {
+    const handleNotes = async (client: SavedClient) => {
         const note = prompt("Inserisci note per " + client.business_name + ":", client.notes || "");
         if (note !== null) {
             updateAction(client.id, { notes: note });
@@ -140,7 +158,7 @@ export function PromemoriaTable() {
         }
     };
 
-    const handleFollowUp = async (client: any) => {
+    const handleFollowUp = async (client: SavedClient) => {
         const date = prompt("Inserisci nuova data di follow-up (YYYY-MM-DD):", client.follow_up_date || "");
         if (date !== null) {
             if (date === "" || /^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -330,7 +348,9 @@ export function PromemoriaTable() {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className="px-2 py-1 rounded text-xs bg-red-500/20 text-red-400 font-medium">
-                                            {new Date(client.follow_up_date).toLocaleDateString('it-IT')}
+                                            {client.follow_up_date
+                                                ? new Date(client.follow_up_date).toLocaleDateString('it-IT')
+                                                : "-"}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">

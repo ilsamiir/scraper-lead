@@ -4,6 +4,11 @@ import { useState } from "react";
 import { Search, MapPin, Sparkles } from "lucide-react";
 import Autocomplete from "react-google-autocomplete";
 
+type PlaceResult = {
+    formatted_address?: string;
+    name?: string;
+};
+
 export function SearchForm({ onSearch }: { onSearch: (keyword: string, location: string) => void }) {
     const [keyword, setKeyword] = useState("");
     const [location, setLocation] = useState("");
@@ -36,17 +41,16 @@ export function SearchForm({ onSearch }: { onSearch: (keyword: string, location:
                 <div className="relative flex-1 flex items-center border-t sm:border-t-0 border-white/10">
                     <MapPin className="absolute left-4 w-5 h-5 text-white/40" />
                     <Autocomplete
-                        // @ts-ignore
                         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-                        onPlaceSelected={(place: any) => {
+                        onPlaceSelected={(place: PlaceResult) => {
                             if (place && (place.formatted_address || place.name)) {
-                                setLocation(place.formatted_address || place.name);
+                                setLocation(place.formatted_address || place.name || "");
                             }
                         }}
                         options={{
                             types: ["(cities)"]
                         }}
-                        onChange={(e: any) => setLocation(e.target.value)}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setLocation(event.target.value)}
                         defaultValue={location}
                         placeholder="es. Milano, Italia"
                         className="w-full bg-transparent border-none focus:ring-0 text-white placeholder-white/40 pl-12 pr-4 py-3 outline-none"

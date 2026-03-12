@@ -1,14 +1,23 @@
+// @ts-expect-error - Deno runtime import
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// @ts-expect-error - Deno runtime import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+declare const Deno: {
+    env: {
+        get(key: string): string | undefined;
+    };
+};
 
 const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 
-serve(async (req) => {
+serve(async (req: Request) => {
     // Parse Webhook payload
     let payload;
     try {
         payload = await req.json();
-    } catch (err) {
+    } catch (error) {
+        console.error("Invalid custom payload format.", error);
         return new Response("Invalid custom payload format.", { status: 400 });
     }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Home as HomeIcon, Users, Calendar } from "lucide-react";
+import { LogOut, Home as HomeIcon, Users, Calendar, ClipboardList } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -9,8 +9,20 @@ import { SearchForm } from "@/components/SearchForm";
 import { LeadsTable } from "@/components/LeadsTable";
 import { createClient } from "@/utils/supabase/client";
 
+type Lead = {
+  id?: string;
+  business_name?: string;
+  city?: string;
+  province?: string;
+  address?: string;
+  phone?: string;
+  website?: string;
+  google_maps_url?: string;
+  email?: string;
+};
+
 export default function Home() {
-  const [leads, setLeads] = useState<any[]>([]);
+  const [leads, setLeads] = useState<Lead[]>([]);
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -67,6 +79,9 @@ export default function Home() {
               <Link href="/promemoria" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
                 <Calendar className="w-4 h-4" /> <span className="hidden sm:inline">Promemoria</span>
               </Link>
+              <Link href="/resoconto" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+                <ClipboardList className="w-4 h-4" /> <span className="hidden sm:inline">Resoconto</span>
+              </Link>
               <button onClick={handleLogout} className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2 ml-4">
                 <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline">Esci</span>
@@ -80,7 +95,7 @@ export default function Home() {
           {/* Hero Section */}
           <div className="flex flex-col items-center justify-center max-w-3xl mx-auto text-center mb-16 space-y-6">
             <h1 className="text-4xl sm:text-6xl font-normal tracking-tight">
-              Conquista l'universo <span className="font-semibold text-brand-accent">digitale.</span>
+              Conquista l&apos;universo <span className="font-semibold text-brand-accent">digitale.</span>
             </h1>
             <p className="text-lg text-white/60 max-w-xl">
               Inserisci un settore e una località per ricercare i potenziali clienti. Una volta estratti i risultati, ti suggeriamo di navigare i siti web elencati per recuperare gli indirizzi email mancanti.

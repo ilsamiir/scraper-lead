@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
-import { PromemoriaTable } from "@/components/PromemoriaTable";
+import { DailyReportTable } from "@/components/DailyReportTable";
 
-export default function PromemoriaPage() {
+export default function ResocontoPage() {
     const router = useRouter();
 
     const handleLogout = async () => {
@@ -38,10 +38,10 @@ export default function PromemoriaPage() {
                             <Link href="/clienti" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
                                 <Users className="w-4 h-4" /> <span className="hidden sm:inline">Clienti Selezionati</span>
                             </Link>
-                            <Link href="/promemoria" className="text-sm font-medium text-brand-accent flex items-center gap-2">
+                            <Link href="/promemoria" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
                                 <Calendar className="w-4 h-4" /> <span className="hidden sm:inline">Promemoria</span>
                             </Link>
-                            <Link href="/resoconto" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+                            <Link href="/resoconto" className="text-sm font-medium text-brand-accent flex items-center gap-2">
                                 <ClipboardList className="w-4 h-4" /> <span className="hidden sm:inline">Resoconto</span>
                             </Link>
                             <button onClick={handleLogout} className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2 ml-4">
@@ -55,14 +55,14 @@ export default function PromemoriaPage() {
                 <main className="flex-1 container px-4 py-12 mx-auto sm:px-8 max-w-7xl">
                     <div className="flex flex-col items-center justify-center max-w-3xl mx-auto text-center mb-16 space-y-6">
                         <h1 className="text-4xl sm:text-5xl font-normal tracking-tight">
-                            I tuoi <span className="font-semibold text-brand-accent">Promemoria.</span>
+                            Resoconto <span className="font-semibold text-brand-accent">giornaliero.</span>
                         </h1>
                         <p className="text-lg text-white/60 max-w-xl">
-                            Ecco i clienti che dovresti ricontattare oggi o in ritardo.
+                            Verifica le attività del team sui clienti selezionati: filtra per data e per tipo di contatto.
                         </p>
                     </div>
                     <div className="w-full">
-                        <PromemoriaTable />
+                        <DailyReportTable />
                     </div>
                 </main>
             </div>

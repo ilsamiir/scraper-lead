@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
-import { Phone, Mail, FileText, Send, Calendar as CalendarIcon, Loader2, Save } from "lucide-react";
+import { Phone, Mail, FileText, Send, Calendar as CalendarIcon, Loader2, Save, Trash2 } from "lucide-react";
 
 type ContactHistory = {
     id: string;
@@ -21,6 +21,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
     const [history, setHistory] = useState<ContactHistory[]>([]);
     const [loading, setLoading] = useState(true);
     const [newNote, setNewNote] = useState("");
+    const [deletingId, setDeletingId] = useState<string | null>(null);
     const supabase = createClient();
 
     const fetchHistory = useCallback(async () => {
@@ -63,6 +64,24 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
         } else {
             alert("Errore salvataggio nota: " + error?.message);
         }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm("Sei sicuro di voler eliminare questa azione dalla cronologia?")) return;
+
+        setDeletingId(id);
+        const { error } = await supabase
+            .from('contact_history')
+            .delete()
+            .eq('id', id);
+
+        if (!error) {
+            setHistory(prev => prev.filter(item => item.id !== id));
+        } else {
+            console.error("Error deleting activity:", error);
+            alert("Errore durante l'eliminazione: " + error.message);
+        }
+        setDeletingId(null);
     };
 
     const getIconForMethod = (method: string) => {
@@ -126,28 +145,39 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                         Nessun evento registrato per questo cliente.
                     </div>
                 ) : (
-                    <div className="relative border-l border-white/10 ml-3 space-y-6 pb-2">
-                        {collapsedHistory.map((log) => (
+                    <div className="space-y-4">
+                        {history.map((log) => (
                             <div key={log.id} className="relative pl-6">
                                 {/* Timeline Dot / Icon */}
                                 <div className="absolute -left-3.5 top-0.5 bg-black border border-white/20 rounded-full p-1.5 z-10">
                                     {getIconForMethod(log.contact_method)}
                                 </div>
 
-                                {/* Content */}
-                                <div className="bg-white/[0.03] border border-white/5 rounded-lg p-4">
+                                <div className="group bg-white/[0.03] border border-white/5 rounded-lg p-4 transition-all hover:border-white/10">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-white/90 capitalize flex items-center gap-2">
-                                            {log.contact_method}
-                                            {log.repeatCount && log.repeatCount > 1 && (
-                                                <span className="text-[10px] font-semibold uppercase text-white/50 bg-white/10 px-2 py-0.5 rounded-full">
-                                                    Ripetuto x{log.repeatCount}
-                                                </span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-medium text-white/90 capitalize">
+                                                {log.contact_method}
+                                            </span>
+                                            <span className="text-xs text-white/40">
+                                                {format(new Date(log.contact_date), "d MMM yyyy, HH:mm", { locale: it })}
+                                            </span>
+                                        </div>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleDelete(log.id);
+                                            }}
+                                            disabled={deletingId === log.id}
+                                            className="p-1.5 rounded-md text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all disabled:opacity-50"
+                                            title="Elimina attività"
+                                        >
+                                            {deletingId === log.id ? (
+                                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                            ) : (
+                                                <Trash2 className="w-3.5 h-3.5" />
                                             )}
-                                        </span>
-                                        <span className="text-xs text-white/40">
-                                            {format(new Date(log.contact_date), "d MMM yyyy, HH:mm", { locale: it })}
-                                        </span>
+                                        </button>
                                     </div>
                                     {log.notes && (
                                         <p className="text-sm text-white/70 whitespace-pre-wrap">

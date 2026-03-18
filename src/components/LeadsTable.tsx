@@ -8,6 +8,7 @@ import { createClient } from '@/utils/supabase/client';
 type Lead = {
     id?: string;
     business_name?: string;
+    keyword?: string;
     city?: string;
     province?: string;
     address?: string;
@@ -77,6 +78,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
 
         const dataToExport = Array.from(selectedLeads).map((lead) => ({
             'Nome Azienda': lead.business_name || '',
+            'Keyword': lead.keyword || '',
             'Città': lead.city || '',
             'Provincia': lead.province || '',
             'Indirizzo': lead.address || '',
@@ -98,6 +100,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
 
         const leadsToSave = Array.from(selectedLeads).map((lead) => ({
             business_name: lead.business_name || '',
+            keyword: lead.keyword || '',
             city: lead.city || '',
             province: lead.province || '',
             address: lead.address || '',
@@ -159,6 +162,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                                 />
                             </th>
                             <th className="px-6 py-4 font-medium cursor-pointer hover:text-white" onClick={() => requestSort('business_name')}>Nome Azienda</th>
+                            <th className="px-6 py-4 font-medium cursor-pointer hover:text-white" onClick={() => requestSort('keyword')}>Keyword</th>
                             <th className="px-6 py-4 font-medium cursor-pointer hover:text-white" onClick={() => requestSort('city')}>Città</th>
                             <th className="px-6 py-4 font-medium cursor-pointer hover:text-white" onClick={() => requestSort('province')}>Provincia</th>
                             <th className="px-6 py-4 font-medium cursor-pointer hover:text-white" onClick={() => requestSort('address')}>Indirizzo</th>
@@ -179,6 +183,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                                     />
                                 </td>
                                 <td className="px-6 py-4 text-white font-medium">{lead.business_name}</td>
+                                <td className="px-6 py-4 text-white/70">{lead.keyword || '-'}</td>
                                 <td className="px-6 py-4 text-white/70">{lead.city || '-'}</td>
                                 <td className="px-6 py-4 text-white/70">{lead.province || '-'}</td>
                                 <td className="px-6 py-4 text-white/70 truncate max-w-[200px]" title={lead.address}>{lead.address || '-'}</td>

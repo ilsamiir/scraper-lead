@@ -2,12 +2,14 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Phone, Mail, Calendar as CalendarIcon, FileText, ExternalLink, Save, History, ChevronDown, ChevronUp, Trash2, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Phone, Mail, Calendar as CalendarIcon, FileText, ExternalLink, Save, History, ChevronDown, ChevronUp, Trash2, Search, ChevronLeft, ChevronRight, UserPlus, Link as LinkIcon, Plus } from "lucide-react";
 import { FollowUpHistory } from "@/components/FollowUpHistory";
+import { AddClientActions } from "@/components/AddClientActions";
 
 type SavedClient = {
     id: string;
     business_name?: string | null;
+    keyword?: string | null;
     city?: string | null;
     province?: string | null;
     address?: string | null;
@@ -210,6 +212,7 @@ export function SavedClientsTable() {
         const q = searchQuery.toLowerCase();
         return (
             (c.business_name || "").toLowerCase().includes(q) ||
+            (c.keyword || "").toLowerCase().includes(q) ||
             (c.city || "").toLowerCase().includes(q) ||
             (c.phone || "").toLowerCase().includes(q) ||
             (c.email || "").toLowerCase().includes(q)
@@ -244,19 +247,28 @@ export function SavedClientsTable() {
 
     if (clients.length === 0) {
         return (
-            <div className="w-full glass-panel p-8 min-h-[400px] flex flex-col items-center justify-center text-center border-dashed">
-                <h3 className="text-xl font-medium text-white/80">Nessun cliente salvato</h3>
-                <p className="text-white/40 mt-2 max-w-sm">
-                    Torna alla ricerca per estrarre e salvare i tuoi lead nel CRM.
-                </p>
+            <div className="flex flex-col gap-6">
+                <div className="flex justify-center">
+                    <AddClientActions onClientAdded={fetchClients} />
+                </div>
+                <div className="w-full glass-panel p-8 min-h-[400px] flex flex-col items-center justify-center text-center border-dashed">
+                    <h3 className="text-xl font-medium text-white/80">Nessun cliente salvato</h3>
+                    <p className="text-white/40 mt-2 max-w-sm">
+                        Torna alla ricerca per estrarre e salvare i tuoi lead nel CRM, oppure aggiungine uno manualmente qui sopra.
+                    </p>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="w-full glass-panel overflow-hidden">
-            {/* Toolbar: ricerca + azioni */}
-            <div className="px-6 py-4 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+        <div className="flex flex-col gap-6">
+            <div className="flex justify-end">
+                <AddClientActions onClientAdded={fetchClients} />
+            </div>
+            <div className="w-full glass-panel overflow-hidden">
+                {/* Toolbar: ricerca + azioni */}
+                <div className="px-6 py-4 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center gap-3">
                 <div className="relative flex-1 max-w-sm">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
                     <input
@@ -353,6 +365,7 @@ export function SavedClientsTable() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="font-medium text-white">{client.business_name}</div>
+                                            <div className="text-xs text-brand-accent/80 font-medium">{client.keyword || '-'}</div>
                                             <div className="text-xs text-white/50">{client.city} {client.province ? `(${client.province})` : ''}</div>
                                         </td>
                                         <td className="px-6 py-4">
@@ -488,5 +501,6 @@ export function SavedClientsTable() {
                 </div>
             </div>{/* end relative slider wrapper */}
         </div>
+    </div>
     );
 }

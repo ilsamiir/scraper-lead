@@ -20,7 +20,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ## CRM Highlights
 
-- `GET /resoconto`: resoconto giornaliero delle attività sui clienti salvati, con filtro per data e tipo di contatto.
+- `GET /analytics`: dashboard analytics con filtri dinamici, KPI del segmento, andamento attività, stato pipeline e strumento contatto batch.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

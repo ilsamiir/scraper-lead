@@ -279,6 +279,18 @@ export function AnalyticsDashboard() {
     return out;
   }, [filteredClients]);
 
+  // Stato per filtri delle serie del grafico
+  const [activeSeries, setActiveSeries] = useState({
+    created: true,
+    calls: true,
+    emails: true,
+    total: true,
+  });
+
+  const toggleSeries = (key: keyof typeof activeSeries) => {
+    setActiveSeries((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
   const cartesianSeries = useMemo(() => {
     const labels = daysBetweenInclusive(startDate, endDate);
     const created: Record<string, number> = {};
@@ -485,10 +497,58 @@ export function AnalyticsDashboard() {
             <p className="text-xs text-white/45 mt-1">Andamento giornaliero di inserimenti e attività contatto nel periodo filtrato.</p>
           </div>
           <div className="flex flex-wrap gap-2 text-xs">
-            <span className="px-2 py-1 rounded-full border border-cyan-400/40 bg-cyan-400/10 text-cyan-200">Contatti inseriti: {cartesianSeries.totals.inserted}</span>
-            <span className="px-2 py-1 rounded-full border border-blue-400/40 bg-blue-400/10 text-blue-200">Chiamate: {cartesianSeries.totals.calls}</span>
-            <span className="px-2 py-1 rounded-full border border-fuchsia-400/40 bg-fuchsia-400/10 text-fuchsia-200">Email: {cartesianSeries.totals.emails}</span>
-            <span className="px-2 py-1 rounded-full border border-emerald-400/40 bg-emerald-400/10 text-emerald-200">Totale contatti: {cartesianSeries.totals.totalContacts}</span>
+            {/* Filtro serie: Contatti inseriti */}
+            <button
+              className={`px-2 py-1 rounded-full border border-cyan-400/40 bg-cyan-400/10 text-cyan-200 flex items-center gap-1 ${activeSeries.created ? '' : 'opacity-50'}`}
+              onClick={() => toggleSeries('created')}
+              type="button"
+            >
+              Contatti inseriti: {cartesianSeries.totals.inserted}
+              {activeSeries.created ? (
+                <span className="ml-1 text-cyan-200">×</span>
+              ) : (
+                <span className="ml-1 text-cyan-200">+</span>
+              )}
+            </button>
+            {/* Filtro serie: Chiamate */}
+            <button
+              className={`px-2 py-1 rounded-full border border-blue-400/40 bg-blue-400/10 text-blue-200 flex items-center gap-1 ${activeSeries.calls ? '' : 'opacity-50'}`}
+              onClick={() => toggleSeries('calls')}
+              type="button"
+            >
+              Chiamate: {cartesianSeries.totals.calls}
+              {activeSeries.calls ? (
+                <span className="ml-1 text-blue-200">×</span>
+              ) : (
+                <span className="ml-1 text-blue-200">+</span>
+              )}
+            </button>
+            {/* Filtro serie: Email */}
+            <button
+              className={`px-2 py-1 rounded-full border border-fuchsia-400/40 bg-fuchsia-400/10 text-fuchsia-200 flex items-center gap-1 ${activeSeries.emails ? '' : 'opacity-50'}`}
+              onClick={() => toggleSeries('emails')}
+              type="button"
+            >
+              Email: {cartesianSeries.totals.emails}
+              {activeSeries.emails ? (
+                <span className="ml-1 text-fuchsia-200">×</span>
+              ) : (
+                <span className="ml-1 text-fuchsia-200">+</span>
+              )}
+            </button>
+            {/* Filtro serie: Totale contatti */}
+            <button
+              className={`px-2 py-1 rounded-full border border-emerald-400/40 bg-emerald-400/10 text-emerald-200 flex items-center gap-1 ${activeSeries.total ? '' : 'opacity-50'}`}
+              onClick={() => toggleSeries('total')}
+              type="button"
+            >
+              Totale contatti: {cartesianSeries.totals.totalContacts}
+              {activeSeries.total ? (
+                <span className="ml-1 text-emerald-200">×</span>
+              ) : (
+                <span className="ml-1 text-emerald-200">+</span>
+              )}
+            </button>
           </div>
         </div>
 
@@ -508,15 +568,30 @@ export function AnalyticsDashboard() {
             <line x1={chartPad.left} y1={chartPad.top} x2={chartPad.left} y2={chartH - chartPad.bottom} stroke="rgba(255,255,255,0.35)" />
             <line x1={chartPad.left} y1={chartH - chartPad.bottom} x2={chartW - chartPad.right} y2={chartH - chartPad.bottom} stroke="rgba(255,255,255,0.35)" />
 
-            <polyline fill="none" stroke="#22d3ee" strokeWidth="2.4" points={getPolylinePoints(cartesianSeries.points.map((p) => p.created))} />
-            <polyline fill="none" stroke="#60a5fa" strokeWidth="2.4" points={getPolylinePoints(cartesianSeries.points.map((p) => p.calls))} />
-            <polyline fill="none" stroke="#e879f9" strokeWidth="2.4" points={getPolylinePoints(cartesianSeries.points.map((p) => p.emails))} />
-            <polyline fill="none" stroke="#34d399" strokeWidth="2.8" points={getPolylinePoints(cartesianSeries.points.map((p) => p.total))} />
-
-            {renderSeriesDots(cartesianSeries.points.map((p) => p.created), "#22d3ee")}
-            {renderSeriesDots(cartesianSeries.points.map((p) => p.calls), "#60a5fa")}
-            {renderSeriesDots(cartesianSeries.points.map((p) => p.emails), "#e879f9")}
-            {renderSeriesDots(cartesianSeries.points.map((p) => p.total), "#34d399")}
+            {activeSeries.created && (
+              <>
+                <polyline fill="none" stroke="#22d3ee" strokeWidth="2.4" points={getPolylinePoints(cartesianSeries.points.map((p) => p.created))} />
+                {renderSeriesDots(cartesianSeries.points.map((p) => p.created), "#22d3ee")}
+              </>
+            )}
+            {activeSeries.calls && (
+              <>
+                <polyline fill="none" stroke="#60a5fa" strokeWidth="2.4" points={getPolylinePoints(cartesianSeries.points.map((p) => p.calls))} />
+                {renderSeriesDots(cartesianSeries.points.map((p) => p.calls), "#60a5fa")}
+              </>
+            )}
+            {activeSeries.emails && (
+              <>
+                <polyline fill="none" stroke="#e879f9" strokeWidth="2.4" points={getPolylinePoints(cartesianSeries.points.map((p) => p.emails))} />
+                {renderSeriesDots(cartesianSeries.points.map((p) => p.emails), "#e879f9")}
+              </>
+            )}
+            {activeSeries.total && (
+              <>
+                <polyline fill="none" stroke="#34d399" strokeWidth="2.8" points={getPolylinePoints(cartesianSeries.points.map((p) => p.total))} />
+                {renderSeriesDots(cartesianSeries.points.map((p) => p.total), "#34d399")}
+              </>
+            )}
 
             {cartesianSeries.points.map((point, index) => {
               const x = xFor(index, cartesianSeries.points.length);
@@ -719,6 +794,12 @@ export function AnalyticsDashboard() {
               <div key={client.id} className="flex items-center justify-between text-sm border border-white/10 rounded-lg px-3 py-2 bg-white/[0.02]">
                 <div>
                   <div className="font-medium text-white">{client.business_name || "Cliente"}</div>
+                  {client.phone && (
+                    <div className="text-xs text-white/60 flex items-center gap-1 mt-0.5">
+                      <Phone className="w-3 h-3" />
+                      {client.phone}
+                    </div>
+                  )}
                   <div className="text-xs text-white/45">{client.city || "-"} {client.province ? `(${client.province})` : ""}</div>
                 </div>
                 <span className="text-xs px-2 py-1 rounded-full border border-white/20 bg-white/5">Score {score}</span>

@@ -1,0 +1,269 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const articles = [
+  {
+    slug: 'come-gestire-ordini-pizzeria-al-taglio',
+    title: 'Come Gestire gli Ordini in una Pizzeria al Taglio',
+    description: 'Scopri le strategie e gli strumenti per organizzare al meglio gli ordini da asporto nella tua pizzeria al taglio, riducendo errori e tempi di attesa.',
+    category: 'Gestione',
+    date: '21 Mar 2026',
+    readTime: '8 min',
+  },
+  {
+    slug: 'software-asporto-pizzeria-al-taglio',
+    title: 'Software per Asporto Pizzeria: Come Scegliere',
+    description: 'Guida completa per scegliere il software di gestione asporto ideale per la tua pizzeria al taglio: funzionalità, costi e criteri di valutazione.',
+    category: 'Tecnologia',
+    date: '21 Mar 2026',
+    readTime: '7 min',
+  },
+  {
+    slug: 'ridurre-sprechi-pizzeria-al-taglio',
+    title: 'Come Ridurre gli Sprechi in Pizzeria al Taglio',
+    description: 'Tecniche pratiche per minimizzare gli sprechi di impasto, condimenti e prodotto finito ottimizzando la produzione delle teglie.',
+    category: 'Produzione',
+    date: '21 Mar 2026',
+    readTime: '9 min',
+  },
+  {
+    slug: 'fidelizzare-clienti-pizzeria',
+    title: 'Fidelizzare i Clienti della Tua Pizzeria',
+    description: 'Come costruire un programma di fidelizzazione efficace per la tua pizzeria al taglio usando strumenti digitali e comunicazione mirata.',
+    category: 'Marketing',
+    date: '21 Mar 2026',
+    readTime: '7 min',
+  },
+  {
+    slug: 'menu-digitale-pizzeria-al-taglio',
+    title: 'Menu Digitale per Pizzeria al Taglio',
+    description: 'Vantaggi e best practice per creare un menu digitale che aumenti gli ordini e semplifichi la gestione della tua pizzeria.',
+    category: 'Tecnologia',
+    date: '21 Mar 2026',
+    readTime: '6 min',
+  },
+  {
+    slug: 'gestione-teglie-pizza-al-taglio',
+    title: 'Gestione delle Teglie nella Pizza al Taglio',
+    description: 'Come ottimizzare la produzione delle teglie per ridurre gli sprechi e sincronizzare la cottura con gli ordini in arrivo.',
+    category: 'Produzione',
+    date: '21 Mar 2026',
+    readTime: '8 min',
+  },
+];
+---
+
+<Layout
+  title="Blog FoodBot — Consigli e Guide per Pizzerie al Taglio"
+  description="Strategie, consigli pratici e guide per gestire al meglio la tua pizzeria al taglio. Ordini, produzione, fidelizzazione e menu digitale."
+>
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Blog"}]} />
+  <main>
+    <!-- Hero -->
+    <section class="blog-hero section--dark">
+      <div class="container">
+        <span class="section-label section-label--dark reveal">BLOG</span>
+        <h1 class="blog-hero__title reveal reveal-delay-1">Il Blog per le Pizzerie al Taglio</h1>
+        <p class="blog-hero__subtitle reveal reveal-delay-2">
+          Consigli pratici, strategie e guide per gestire, ottimizzare e far crescere la tua pizzeria al taglio.
+        </p>
+      </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="blog-grid-section">
+      <div class="container">
+        <div class="blog-grid">
+          {articles.map((article, i) => (
+            <a href={`/blog/${article.slug}`} class={`blog-card reveal reveal-delay-${(i % 3) + 1}`}>
+              <span class="blog-card__category">{article.category}</span>
+              <h2 class="blog-card__title">{article.title}</h2>
+              <p class="blog-card__description">{article.description}</p>
+              <div class="blog-card__meta">
+                <span class="blog-card__date">{article.date}</span>
+                <span class="blog-card__separator">&middot;</span>
+                <span class="blog-card__read-time">{article.readTime} di lettura</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="blog-cta section--dark">
+      <div class="container blog-cta__inner">
+        <h2 class="blog-cta__title reveal">Gestisci la tua pizzeria al taglio in modo intelligente</h2>
+        <p class="blog-cta__text reveal reveal-delay-1">
+          Ordini, teglie, fidelizzazione e menu digitale in un'unica piattaforma. Zero commissioni.
+        </p>
+        <a href="/prezzi" class="btn btn--primary reveal reveal-delay-2">
+          Scopri FoodBot
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero ── */
+  .blog-hero {
+    position: relative;
+    padding: var(--space-2xl) 0 var(--space-2xl);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .blog-hero__title {
+    color: var(--white);
+    margin-bottom: var(--space-md);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .blog-hero__subtitle {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Blog Grid Section ── */
+  .blog-grid-section {
+    padding: var(--space-2xl) 0;
+    background: var(--offwhite);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  /* ── Card ── */
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                border-color 0.3s ease;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+
+  .blog-card__category {
+    display: inline-block;
+    width: fit-content;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(255, 107, 53, 0.08);
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    padding: 0.3rem 0.85rem;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-sm);
+  }
+
+  .blog-card__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.25;
+    margin-bottom: var(--space-sm);
+  }
+
+  .blog-card:hover .blog-card__title {
+    color: var(--orange);
+  }
+
+  .blog-card__description {
+    font-size: 0.95rem;
+    color: var(--gray-500);
+    line-height: 1.65;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+  }
+
+  .blog-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    border-top: 1px solid var(--gray-100);
+    padding-top: var(--space-sm);
+  }
+
+  .blog-card__separator {
+    color: var(--gray-300);
+  }
+
+  /* ── CTA ── */
+  .blog-cta {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .blog-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .blog-cta__title {
+    color: var(--white);
+    max-width: 700px;
+  }
+
+  .blog-cta__text {
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 550px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-hero {
+      padding-top: var(--space-xl);
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .blog-card {
+      padding: var(--space-md);
+    }
+  }
+</style>

@@ -1,0 +1,436 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Come Gestire gli Ordini in una Pizzeria al Taglio: Guida Completa 2026",
+  "description": "Scopri come gestire gli ordini nella tua pizzeria al taglio in modo efficiente. Guida pratica con 5 strategie per digitalizzare l'asporto e ridurre gli errori.",
+  "datePublished": "2026-03-21",
+  "author": {
+    "@type": "Organization",
+    "name": "FoodBot"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "FoodBot",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ristobot.it/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ristobot.it/blog/come-gestire-ordini-pizzeria-al-taglio"
+  },
+  "wordCount": 1000,
+  "inLanguage": "it"
+};
+---
+
+<Layout
+  title="Come Gestire gli Ordini in una Pizzeria al Taglio: Guida Completa 2026"
+  description="Scopri come gestire gli ordini nella tua pizzeria al taglio in modo efficiente. Guida pratica con 5 strategie per digitalizzare l'asporto e ridurre gli errori."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Blog", href: "/blog"}, {label: "Come Gestire gli Ordini in una Pizzeria al Taglio"}]} />
+  <main>
+
+    <!-- Hero -->
+    <section class="section--dark blog-hero">
+      <div class="container">
+        <div class="blog-hero__inner reveal">
+          <span class="section-label section-label--dark">GESTIONE</span>
+          <h1>Come Gestire gli Ordini in una Pizzeria al Taglio</h1>
+          <p class="blog-hero__meta">21 Mar 2026 &middot; 8 min di lettura</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Article Body -->
+    <section class="blog-body">
+      <div class="container container--narrow">
+        <article class="blog-article">
+
+          <p class="blog-article__lead">Se gestisci una pizzeria al taglio, lo sai bene: il momento del pranzo si trasforma in un campo di battaglia. Telefonate che si accavallano, fogli volanti con ordini scarabocchiati, clienti in coda che sbuffano. Ogni giorno la stessa storia. Ma non deve essere per forza cosi.</p>
+
+          <h2>Il problema: caos analogico in un mondo digitale</h2>
+
+          <p>La pizzeria al taglio ha un modello di business unico. Non e un ristorante tradizionale con servizio al tavolo, non e una pizzeria tonda con consegna a domicilio. E un formato veloce, ad alto volume, dove il cliente vuole ordinare, ritirare e andare. Eppure la maggior parte delle pizzerie al taglio gestisce ancora gli ordini come vent'anni fa.</p>
+
+          <p>Il copione si ripete ogni giorno: il telefono squilla mentre stai servendo al bancone, cerchi una penna per annotare l'ordine su un foglietto, il cliente in negozio ti chiede quanto manca per la margherita, un altro foglietto cade dietro il banco e l'ordine viene dimenticato. A fine giornata, hai servito centinaia di clienti ma non hai idea di quanti ne hai persi per colpa del caos.</p>
+
+          <p>Secondo le stime di settore, una pizzeria al taglio perde in media il 15-20% degli ordini telefonici per linea occupata o errori di trascrizione. In un anno, sono migliaia di euro che vanno in fumo.</p>
+
+          <h2>Le 3 sfide principali di una pizzeria al taglio</h2>
+
+          <p>Prima di parlare di soluzioni, e fondamentale capire quali sono le sfide specifiche di questo formato.</p>
+
+          <ul>
+            <li><strong>Picchi di domanda concentrati.</strong> Il 70% del fatturato si concentra in 2-3 ore al giorno, tra le 12:00 e le 14:00 e tra le 19:00 e le 21:00. In queste finestre temporali, ogni secondo conta. Un sistema di gestione ordini lento o inefficiente amplifica il caos invece di risolverlo.</li>
+            <li><strong>Sincronizzazione con la produzione.</strong> La pizza al taglio nasce in teglia: ogni teglia contiene 6-8 porzioni di un singolo gusto. Se ricevi 3 ordini di margherita e 2 di diavola, devi decidere quante teglie infornare e quando. Sbagliare significa avere pizza avanzata che va sprecata o clienti che aspettano troppo.</li>
+            <li><strong>Tracciamento dei clienti.</strong> Chi e il cliente che ordina ogni martedi la stessa cosa? Quanto spende in media? Quando e stata l'ultima volta che e venuto? Senza questi dati, ogni strategia di fidelizzazione e marketing e un colpo nel buio.</li>
+          </ul>
+
+          <div class="blog-callout">
+            <strong>Lo sapevi?</strong> Una pizzeria al taglio con 200 clienti al giorno che digitalizza la raccolta ordini riduce i tempi di attesa del 40% e gli errori di trascrizione del 95%.
+          </div>
+
+          <h2>Soluzione 1: digitalizzare la raccolta ordini</h2>
+
+          <p>Il primo passo e eliminare carta e telefono come canali principali di raccolta ordini. Non significa smettere di rispondere al telefono, ma affiancare un sistema digitale che gestisca la maggior parte delle richieste in autonomia.</p>
+
+          <p>Un software come <a href="/funzionalita">FoodBot</a> permette ai clienti di ordinare direttamente da una webapp, senza scaricare nessuna app. Il cliente sceglie i gusti, indica l'orario di ritiro, paga online se vuole, e l'ordine arriva direttamente nella dashboard della pizzeria. Nessun foglietto, nessuna trascrizione, nessun errore.</p>
+
+          <p>I vantaggi sono immediati: il telefono squilla meno, il personale al bancone puo concentrarsi sul servizio, e ogni ordine e tracciato digitalmente con nome, orario e dettagli. Ma il vero salto di qualita arriva quando si integra la raccolta ordini con la produzione.</p>
+
+          <h2>Soluzione 2: sincronizzare ordini e cotture con la Logica Teglia</h2>
+
+          <p>Questa e la vera rivoluzione per le pizzerie al taglio. La <a href="/come-funziona">Logica Teglia</a> e un sistema che raggruppa automaticamente gli ordini per ottimizzare ogni infornata. Funziona cosi: quando arrivano ordini per lo stesso gusto, il software li aggrega e ti dice esattamente quante teglie preparare e quando infornare.</p>
+
+          <p>Facciamo un esempio concreto. Sono le 11:30 e hai gia 4 ordini di margherita per le 12:15, 2 ordini di diavola per le 12:00 e 3 ordini di patate per le 12:30. La Logica Teglia ti mostra una timeline visiva: inforna la diavola alle 11:40, la margherita alle 11:55, le patate alle 12:10. Ogni teglia esce dal forno nel momento giusto, con il minimo spreco.</p>
+
+          <p>Il risultato? Meno teglie avanzate a fine giornata, meno sprechi di impasto e condimenti, e clienti che trovano la pizza pronta al momento del ritiro. Le pizzerie che adottano questo sistema riportano una riduzione degli sprechi fino al 30%.</p>
+
+          <div class="blog-callout">
+            <strong>Consiglio pratico:</strong> Inizia monitorando per una settimana i gusti piu richiesti e le fasce orarie di picco. Questi dati ti serviranno per configurare al meglio la Logica Teglia e ottimizzare la produzione fin dal primo giorno.
+          </div>
+
+          <h2>Soluzione 3: notifiche automatiche al cliente via WhatsApp</h2>
+
+          <p>Il cliente ha ordinato online, il pagamento e andato a buon fine, la pizza e in preparazione. E adesso? Nella gestione tradizionale, il cliente chiama per sapere se l'ordine e pronto, occupando la linea e distraendo il personale. Con le notifiche automatiche via WhatsApp, questo problema scompare.</p>
+
+          <p>Il flusso e semplice e potente: il cliente riceve un messaggio di conferma appena l'ordine viene accettato, un aggiornamento quando la pizza entra in forno, e una notifica "pronto al ritiro" quando puo passare a prendere il suo ordine. Tutto automatico, senza che nessuno debba toccare il telefono.</p>
+
+          <p>Questo non e solo un servizio al cliente: e una strategia di fidelizzazione. Il messaggio post-ritiro con un "Grazie, ci vediamo presto!" e un codice sconto per il prossimo ordine trasforma un acquisto occasionale in un'abitudine. I dati mostrano che i clienti che ricevono notifiche WhatsApp hanno un tasso di ritorno superiore del 25% rispetto a quelli che non le ricevono.</p>
+
+          <h2>Checklist: 5 passi per modernizzare la gestione ordini</h2>
+
+          <p>Se vuoi passare dalla gestione caotica a un sistema efficiente, ecco i 5 passi da seguire in ordine:</p>
+
+          <ol>
+            <li><strong>Analizza la situazione attuale.</strong> Per una settimana, annota quanti ordini perdi, quante teglie butti, quanto tempo i clienti aspettano in media. Questi numeri saranno il tuo punto di partenza.</li>
+            <li><strong>Attiva la raccolta ordini digitale.</strong> Configura una webapp dove i clienti possono ordinare in autonomia. Stampa un QR code da mettere in negozio e sui volantini.</li>
+            <li><strong>Configura la Logica Teglia.</strong> Inserisci i tuoi gusti, i tempi di cottura e la capacita del forno. Il sistema fara il resto, raggruppando gli ordini e ottimizzando le infornate.</li>
+            <li><strong>Attiva le notifiche WhatsApp.</strong> Collega il tuo numero business e personalizza i messaggi automatici. Conferma ordine, pronto al ritiro, follow-up: ogni touchpoint e un'occasione di fidelizzazione.</li>
+            <li><strong>Monitora e ottimizza.</strong> Dopo il primo mese, analizza i dati: ordini gestiti, tempo medio di preparazione, sprechi ridotti, clienti di ritorno. Usa questi insight per migliorare continuamente.</li>
+          </ol>
+
+          <p>Non serve rivoluzionare tutto in un giorno. Inizia dal passo 1, prendi confidenza con il sistema, e aggiungi le funzionalita una alla volta. In 30 giorni avrai una pizzeria al taglio che funziona come un orologio.</p>
+
+          <h2>Conclusione</h2>
+
+          <p>Gestire gli ordini in una pizzeria al taglio non deve essere un incubo quotidiano. Con gli strumenti giusti, puoi eliminare gli errori, ridurre gli sprechi, servire piu clienti in meno tempo e costruire una base di clienti fedeli che tornano ogni settimana.</p>
+
+          <p>La tecnologia non sostituisce il tuo lavoro: lo potenzia. Tu continui a fare la pizza migliore del quartiere, il software si occupa di tutto il resto.</p>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- Leggi anche -->
+    <section class="blog-related">
+      <div class="container container--narrow">
+        <h2 class="blog-related__title reveal">Leggi anche</h2>
+        <div class="blog-related__grid reveal">
+          <a href="/blog/logica-teglia-come-funziona" class="blog-related__card">
+            <span class="blog-related__card-label">PRODUZIONE</span>
+            <h3>Come la Logica Teglia riduce gli sprechi del 30%</h3>
+            <p>Scopri il sistema che sincronizza ordini e cotture per ottimizzare ogni infornata.</p>
+          </a>
+          <a href="/blog/fidelizzazione-clienti-pizzeria" class="blog-related__card">
+            <span class="blog-related__card-label">FIDELIZZAZIONE</span>
+            <h3>Carta fedelta digitale: guida per pizzerie al taglio</h3>
+            <p>Come trasformare clienti occasionali in habitue con un programma di fidelizzazione smart.</p>
+          </a>
+          <a href="/blog/whatsapp-marketing-ristorazione" class="blog-related__card">
+            <span class="blog-related__card-label">MARKETING</span>
+            <h3>WhatsApp Marketing per la ristorazione: guida pratica</h3>
+            <p>Notifiche automatiche, promozioni mirate e follow-up: come usare WhatsApp per aumentare il fatturato.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="section--dark blog-cta">
+      <div class="container">
+        <div class="blog-cta__inner reveal">
+          <h2>Prova FoodBot Gratis per 30 Giorni</h2>
+          <p>Nessuna carta di credito richiesta. Zero commissioni. Configura la tua pizzeria in 10 minuti.</p>
+          <a href="/prezzi" class="btn btn--primary">Inizia la prova gratuita &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Blog Hero ── */
+  .blog-hero {
+    padding: var(--space-2xl) 0 var(--space-xl);
+    text-align: center;
+  }
+
+  .blog-hero__inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .blog-hero__inner h1 {
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
+  }
+
+  .blog-hero__meta {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Article Body ── */
+  .blog-body {
+    padding: var(--space-2xl) 0;
+    background: var(--white);
+  }
+
+  .blog-article {
+    max-width: 720px;
+    margin: 0 auto;
+    font-family: var(--font-body);
+  }
+
+  .blog-article__lead {
+    font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+    line-height: 1.8;
+    color: var(--gray-700);
+    margin-bottom: var(--space-lg);
+    font-weight: 500;
+  }
+
+  .blog-article h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--deep-dark);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .blog-article p {
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    line-height: 1.8;
+    color: var(--gray-700);
+    margin-bottom: var(--space-md);
+  }
+
+  .blog-article ul,
+  .blog-article ol {
+    margin-bottom: var(--space-md);
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .blog-article ul li,
+  .blog-article ol li {
+    position: relative;
+    padding-left: 1.8rem;
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    line-height: 1.8;
+    color: var(--gray-700);
+  }
+
+  .blog-article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  .blog-article ol {
+    counter-reset: article-counter;
+  }
+
+  .blog-article ol li {
+    counter-increment: article-counter;
+  }
+
+  .blog-article ol li::before {
+    content: counter(article-counter);
+    position: absolute;
+    left: 0;
+    top: 0.1em;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .blog-article a {
+    color: var(--orange);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 107, 53, 0.3);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .blog-article a:hover {
+    text-decoration-color: var(--orange);
+  }
+
+  .blog-article strong {
+    color: var(--deep-dark);
+    font-weight: 700;
+  }
+
+  /* ── Callout Box ── */
+  .blog-callout {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--pastel-cream);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    line-height: 1.8;
+    color: var(--gray-700);
+  }
+
+  .blog-callout strong {
+    display: block;
+    color: var(--orange-dark);
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── Related Articles ── */
+  .blog-related {
+    padding: var(--space-xl) 0 var(--space-2xl);
+    background: var(--light);
+  }
+
+  .blog-related__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--deep-dark);
+    margin-bottom: var(--space-lg);
+  }
+
+  .blog-related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .blog-related__card {
+    display: block;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    text-decoration: none;
+    border: 1px solid var(--gray-200);
+    transition: all 0.3s ease;
+  }
+
+  .blog-related__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+
+  .blog-related__card-label {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: var(--space-xs);
+  }
+
+  .blog-related__card h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--deep-dark);
+    line-height: 1.3;
+    margin-bottom: var(--space-xs);
+  }
+
+  .blog-related__card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--gray-500);
+  }
+
+  /* ── Bottom CTA ── */
+  .blog-cta {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .blog-cta__inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .blog-cta__inner h2 {
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: var(--space-sm);
+  }
+
+  .blog-cta__inner p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .blog-hero {
+      padding: var(--space-2xl) 0 var(--space-lg);
+    }
+
+    .blog-related__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-callout {
+      padding: var(--space-sm) var(--space-md);
+    }
+  }
+</style>

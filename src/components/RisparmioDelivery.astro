@@ -1,0 +1,455 @@
+---
+const scenarios = [
+  {
+    label: 'Low',
+    tag: 'Piccola attivita',
+    ordersPerDay: 30,
+    monthlySavings: 49,
+    roi: '1.6',
+    progressPercent: 20,
+    featured: false,
+  },
+  {
+    label: 'Base',
+    tag: 'Media pizzeria',
+    ordersPerDay: 80,
+    monthlySavings: 256,
+    roi: '8.6',
+    progressPercent: 55,
+    featured: true,
+  },
+  {
+    label: 'High',
+    tag: 'Alto volume',
+    ordersPerDay: 150,
+    monthlySavings: 1012,
+    roi: '33.8',
+    progressPercent: 95,
+    featured: false,
+  },
+];
+---
+
+<section class="risparmio section--dark" id="risparmio" aria-labelledby="risparmio-title">
+  <div class="container">
+    <div class="section-intro reveal" style="text-align:center;margin-left:auto;margin-right:auto;">
+      <span class="section-label">Il Tuo Risparmio</span>
+      <h2 id="risparmio-title">Quanto risparmi con FoodBot?<br/><span class="risparmio__accent">Fai i conti.</span></h2>
+      <p>Elimina le commissioni del 30-35% delle piattaforme delivery. Con FoodBot ordini diretti, margini intatti e cliente tuo.</p>
+    </div>
+
+    <div class="risparmio__grid">
+      {scenarios.map((s, i) => (
+        <div class={`risparmio__card ${s.featured ? 'risparmio__card--featured' : ''} reveal reveal-delay-${i + 1}`}>
+          {s.featured && <div class="risparmio__card-badge">Piu comune</div>}
+          <div class="risparmio__card-header">
+            <span class="risparmio__card-label">{s.label}</span>
+            <span class="risparmio__card-tag">{s.tag}</span>
+          </div>
+
+          <div class="risparmio__card-orders">
+            <span class="risparmio__card-orders-num">{s.ordersPerDay}</span>
+            <span class="risparmio__card-orders-label">ordini / giorno</span>
+          </div>
+
+          <div class="risparmio__card-savings">
+            <span class="risparmio__card-currency">&euro;</span>
+            <span class="risparmio__card-amount" data-target={s.monthlySavings}>0</span>
+            <span class="risparmio__card-period">/mese risparmiati</span>
+          </div>
+
+          <div class="risparmio__card-progress">
+            <div class="risparmio__card-progress-track">
+              <div class="risparmio__card-progress-fill" style={`--progress-width: ${s.progressPercent}%`}></div>
+            </div>
+          </div>
+
+          <div class="risparmio__card-roi">
+            <span class="risparmio__card-roi-label">ROI</span>
+            <span class="risparmio__card-roi-value">{s.roi}x</span>
+          </div>
+
+          <div class="risparmio__card-detail">
+            vs abbonamento &euro;29,90/mese
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="risparmio__extras reveal reveal-delay-3">
+      <div class="risparmio__extra-item">
+        <span class="risparmio__extra-icon">0%</span>
+        <span>Commissioni</span>
+      </div>
+      <div class="risparmio__extra-item">
+        <span class="risparmio__extra-icon">&darr;</span>
+        <span>Errori ordine</span>
+      </div>
+      <div class="risparmio__extra-item">
+        <span class="risparmio__extra-icon">&uarr;</span>
+        <span>Upsell automatico</span>
+      </div>
+    </div>
+
+    <p class="risparmio__note reveal reveal-delay-3">
+      Calcolo basato su dati FIPE: commissioni delivery 30-35%. Abbonamento FoodBot da &euro;29,90/mese.
+    </p>
+  </div>
+</section>
+
+<script>
+  function animateCountUp() {
+    const amounts = document.querySelectorAll('.risparmio__card-amount');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const target = parseInt(el.dataset.target || '0', 10);
+          const duration = 1800;
+          const startTime = performance.now();
+
+          function update(currentTime: number) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(eased * target);
+            el.textContent = current.toLocaleString('it-IT');
+            if (progress < 1) {
+              requestAnimationFrame(update);
+            }
+          }
+
+          requestAnimationFrame(update);
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    amounts.forEach((el) => observer.observe(el));
+  }
+
+  // Run on initial load
+  animateCountUp();
+  // Re-run after Astro page transitions
+  document.addEventListener('astro:page-load', animateCountUp);
+</script>
+
+<style>
+  .risparmio {
+    padding: var(--space-3xl) 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .risparmio::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.08), transparent 70%);
+    pointer-events: none;
+  }
+
+  .risparmio::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(78,205,196,0.06), transparent 70%);
+    pointer-events: none;
+  }
+
+  .risparmio__accent {
+    color: var(--orange);
+  }
+
+  /* Grid */
+  .risparmio__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    align-items: stretch;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* Card */
+  .risparmio__card {
+    position: relative;
+    padding: var(--space-lg);
+    border-radius: 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(16px);
+    transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .risparmio__card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  /* Featured card */
+  .risparmio__card--featured {
+    background: rgba(255,107,53,0.08);
+    border-color: rgba(255,107,53,0.35);
+    box-shadow:
+      0 0 40px rgba(255,107,53,0.12),
+      0 0 80px rgba(255,107,53,0.06);
+    transform: scale(1.04);
+  }
+
+  .risparmio__card--featured:hover {
+    transform: scale(1.04) translateY(-6px);
+    border-color: rgba(255,107,53,0.5);
+    box-shadow:
+      0 0 50px rgba(255,107,53,0.18),
+      0 0 100px rgba(255,107,53,0.08),
+      0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .risparmio__card-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.3rem 1.2rem;
+    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: var(--radius-full);
+    box-shadow: 0 4px 16px rgba(255,107,53,0.4);
+    white-space: nowrap;
+  }
+
+  /* Card header */
+  .risparmio__card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .risparmio__card-label {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .risparmio__card-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-full);
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Orders */
+  .risparmio__card-orders {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .risparmio__card-orders-num {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .risparmio__card-orders-label {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+    font-weight: 500;
+  }
+
+  /* Savings */
+  .risparmio__card-savings {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .risparmio__card-currency {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--orange);
+    line-height: 1;
+  }
+
+  .risparmio__card-amount {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(255,107,53,0.3);
+  }
+
+  .risparmio__card--featured .risparmio__card-amount {
+    text-shadow: 0 0 40px rgba(255,107,53,0.5);
+  }
+
+  .risparmio__card-period {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.45);
+    font-weight: 500;
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+
+  /* Progress bar */
+  .risparmio__card-progress {
+    padding: 0.25rem 0;
+  }
+
+  .risparmio__card-progress-track {
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .risparmio__card-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--orange), var(--teal));
+    border-radius: 3px;
+    box-shadow: 0 0 12px rgba(255,107,53,0.4);
+    transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .risparmio__card.visible .risparmio__card-progress-fill {
+    width: var(--progress-width);
+  }
+
+  /* ROI */
+  .risparmio__card-roi {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+  }
+
+  .risparmio__card-roi-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .risparmio__card-roi-value {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--teal);
+    text-shadow: 0 0 20px rgba(78,205,196,0.3);
+  }
+
+  .risparmio__card--featured .risparmio__card-roi {
+    background: rgba(78,205,196,0.08);
+    border-color: rgba(78,205,196,0.15);
+  }
+
+  /* Detail */
+  .risparmio__card-detail {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    font-weight: 500;
+  }
+
+  /* Extras row */
+  .risparmio__extras {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-lg);
+  }
+
+  .risparmio__extra-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .risparmio__extra-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.85rem;
+    color: var(--orange);
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.2);
+    flex-shrink: 0;
+  }
+
+  /* Note */
+  .risparmio__note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3) !important;
+    font-style: italic;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .risparmio__grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: var(--space-xl);
+    }
+
+    .risparmio__card--featured {
+      transform: none;
+      order: -1;
+    }
+
+    .risparmio__card--featured:hover {
+      transform: translateY(-6px);
+    }
+
+    .risparmio__extras {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+  }
+</style>

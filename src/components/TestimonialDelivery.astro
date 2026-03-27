@@ -1,0 +1,338 @@
+---
+const testimonials = [
+  {
+    name: 'Marco R.',
+    business: 'Pizzeria al Taglio, Roma',
+    quote: 'Prima pagavamo oltre €1.200 al mese di commissioni delivery. Con FoodBot, il 60% degli ordini arriva diretto. Risparmiamo €800 al mese.',
+    stat: '-€800/mese',
+    statLabel: 'in commissioni',
+  },
+  {
+    name: 'Giulia T.',
+    business: 'Pizza e Sfizi, Milano',
+    quote: 'I clienti preferiscono ordinare dalla nostra webapp. È più veloce, vedono il menu aggiornato e noi teniamo il margine.',
+    stat: '+40%',
+    statLabel: 'ordini diretti',
+  },
+  {
+    name: 'Antonio M.',
+    business: 'La Teglia d\'Oro, Napoli',
+    quote: 'Il centralino smart ha eliminato le telefonate. Ora i clienti ordinano online e noi lavoriamo in pace. Lo scontrino medio è salito del 15%.',
+    stat: '+15%',
+    statLabel: 'scontrino medio',
+  },
+];
+---
+
+<section class="testimonial" id="testimonianze" aria-labelledby="testimonial-title">
+  <div class="testimonial__grid-bg"></div>
+
+  <div class="testimonial__glow testimonial__glow--orange"></div>
+  <div class="testimonial__glow testimonial__glow--teal"></div>
+
+  <div class="testimonial__bg-shapes" aria-hidden="true">
+    <div class="testimonial__shape testimonial__shape--1">🍕</div>
+    <div class="testimonial__shape testimonial__shape--2">⭐</div>
+    <div class="testimonial__shape testimonial__shape--3">🧾</div>
+    <div class="testimonial__shape testimonial__shape--4">📱</div>
+  </div>
+
+  <div class="container">
+    <div class="section-intro reveal">
+      <span class="section-label">Chi Ci Ha Scelto</span>
+      <h2 id="testimonial-title">Pizzerie che hanno ripreso il <em>controllo</em>.</h2>
+    </div>
+
+    <div class="testimonial__cards">
+      {testimonials.map((t, i) => (
+        <div class={`testimonial__card reveal reveal-delay-${i + 1}`}>
+          <div class="testimonial__quote-mark" aria-hidden="true">&ldquo;</div>
+
+          <div class="testimonial__stars" aria-label="5 stelle su 5">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+
+          <blockquote class="testimonial__text">
+            {t.quote}
+          </blockquote>
+
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">
+              {t.name.charAt(0)}
+            </div>
+            <div class="testimonial__author-info">
+              <span class="testimonial__name">{t.name}</span>
+              <span class="testimonial__business">{t.business}</span>
+            </div>
+          </div>
+
+          <div class="testimonial__stat-badge">
+            <span class="testimonial__stat-value">{t.stat}</span>
+            <span class="testimonial__stat-label">{t.statLabel}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonial {
+    position: relative;
+    background: var(--deep-dark, #0D1B2A);
+    overflow: hidden;
+  }
+
+  /* Grid pattern overlay */
+  .testimonial__grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+
+  /* Ambient glow blobs */
+  .testimonial__glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .testimonial__glow--orange {
+    top: -15%;
+    left: -5%;
+    width: 500px;
+    height: 500px;
+    background: rgba(255,107,53,0.07);
+    filter: blur(160px);
+  }
+
+  .testimonial__glow--teal {
+    bottom: -20%;
+    right: -8%;
+    width: 450px;
+    height: 450px;
+    background: rgba(78,205,196,0.06);
+    filter: blur(140px);
+  }
+
+  /* Floating shapes */
+  .testimonial__bg-shapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .testimonial__shape {
+    position: absolute;
+    font-size: 2.2rem;
+    opacity: 0.12;
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.06));
+    animation: testimonial-float 22s ease-in-out infinite;
+  }
+
+  .testimonial__shape--1 { top: 8%; right: 6%; animation-delay: 0s; font-size: 3.5rem; opacity: 0.15; }
+  .testimonial__shape--2 { top: 55%; right: 12%; animation-delay: -5s; }
+  .testimonial__shape--3 { bottom: 12%; left: 4%; animation-delay: -10s; font-size: 2.8rem; }
+  .testimonial__shape--4 { top: 18%; left: 8%; animation-delay: -15s; }
+
+  @keyframes testimonial-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-18px) rotate(4deg); }
+    50% { transform: translateY(-8px) rotate(-3deg); }
+    75% { transform: translateY(-22px) rotate(2deg); }
+  }
+
+  /* Section intro overrides for dark bg */
+  .testimonial .section-intro {
+    text-align: center;
+  }
+
+  .testimonial h2 {
+    color: #fff;
+  }
+
+  .testimonial h2 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--teal) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Cards grid */
+  .testimonial__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+  }
+
+  /* Glass card */
+  .testimonial__card {
+    position: relative;
+    padding: var(--space-xl) var(--space-lg) var(--space-lg);
+    border-radius: var(--radius-lg, 24px);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .testimonial__card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg, 24px);
+    background: linear-gradient(160deg, rgba(255,255,255,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .testimonial__card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255,107,53,0.2);
+    box-shadow:
+      0 20px 50px rgba(0,0,0,0.3),
+      0 0 40px rgba(255,107,53,0.06);
+  }
+
+  /* Decorative quote mark */
+  .testimonial__quote-mark {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 6rem;
+    line-height: 1;
+    color: var(--orange, #FF6B35);
+    opacity: 0.12;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Stars */
+  .testimonial__stars {
+    display: flex;
+    gap: 3px;
+    margin-bottom: var(--space-md);
+    color: #FBBF24;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Quote text */
+  .testimonial__text {
+    color: rgba(255,255,255,0.85);
+    font-size: 1rem;
+    line-height: 1.75;
+    font-style: italic;
+    margin: 0 0 var(--space-lg);
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Author row */
+  .testimonial__author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: var(--space-md);
+    position: relative;
+    z-index: 1;
+  }
+
+  .testimonial__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange, #FF6B35), var(--orange-light, #FF8F60));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display, 'Montserrat', sans-serif);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .testimonial__author-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .testimonial__name {
+    font-family: var(--font-display, 'Montserrat', sans-serif);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fff;
+  }
+
+  .testimonial__business {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* Stat badge */
+  .testimonial__stat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    background: linear-gradient(135deg, var(--orange, #FF6B35), var(--orange-light, #FF8F60));
+    border-radius: var(--radius-full, 9999px);
+    align-self: flex-start;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+  }
+
+  .testimonial__stat-value {
+    font-family: var(--font-display, 'Montserrat', sans-serif);
+    font-weight: 800;
+    font-size: 1rem;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+
+  .testimonial__stat-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .testimonial__cards {
+      grid-template-columns: 1fr;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .testimonial__card {
+      padding: var(--space-lg) var(--space-md) var(--space-md);
+    }
+
+    .testimonial__quote-mark {
+      font-size: 4.5rem;
+      top: 8px;
+      right: 14px;
+    }
+  }
+</style>

@@ -1,0 +1,670 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+interface CityData {
+  slug: string;
+  name: string;
+  region: string;
+}
+
+const cities: CityData[] = [
+  { slug: 'roma', name: 'Roma', region: 'Lazio' },
+  { slug: 'milano', name: 'Milano', region: 'Lombardia' },
+  { slug: 'napoli', name: 'Napoli', region: 'Campania' },
+  { slug: 'torino', name: 'Torino', region: 'Piemonte' },
+  { slug: 'firenze', name: 'Firenze', region: 'Toscana' },
+  { slug: 'bologna', name: 'Bologna', region: 'Emilia-Romagna' },
+  { slug: 'palermo', name: 'Palermo', region: 'Sicilia' },
+  { slug: 'genova', name: 'Genova', region: 'Liguria' },
+  { slug: 'bari', name: 'Bari', region: 'Puglia' },
+  { slug: 'catania', name: 'Catania', region: 'Sicilia' },
+  { slug: 'verona', name: 'Verona', region: 'Veneto' },
+  { slug: 'padova', name: 'Padova', region: 'Veneto' },
+  { slug: 'brescia', name: 'Brescia', region: 'Lombardia' },
+  { slug: 'modena', name: 'Modena', region: 'Emilia-Romagna' },
+  { slug: 'parma', name: 'Parma', region: 'Emilia-Romagna' },
+  { slug: 'bergamo', name: 'Bergamo', region: 'Lombardia' },
+  { slug: 'pescara', name: 'Pescara', region: 'Abruzzo' },
+  { slug: 'perugia', name: 'Perugia', region: 'Umbria' },
+  { slug: 'cagliari', name: 'Cagliari', region: 'Sardegna' },
+  { slug: 'messina', name: 'Messina', region: 'Sicilia' },
+];
+
+export function getStaticPaths() {
+  const cities: CityData[] = [
+    { slug: 'roma', name: 'Roma', region: 'Lazio' },
+    { slug: 'milano', name: 'Milano', region: 'Lombardia' },
+    { slug: 'napoli', name: 'Napoli', region: 'Campania' },
+    { slug: 'torino', name: 'Torino', region: 'Piemonte' },
+    { slug: 'firenze', name: 'Firenze', region: 'Toscana' },
+    { slug: 'bologna', name: 'Bologna', region: 'Emilia-Romagna' },
+    { slug: 'palermo', name: 'Palermo', region: 'Sicilia' },
+    { slug: 'genova', name: 'Genova', region: 'Liguria' },
+    { slug: 'bari', name: 'Bari', region: 'Puglia' },
+    { slug: 'catania', name: 'Catania', region: 'Sicilia' },
+    { slug: 'verona', name: 'Verona', region: 'Veneto' },
+    { slug: 'padova', name: 'Padova', region: 'Veneto' },
+    { slug: 'brescia', name: 'Brescia', region: 'Lombardia' },
+    { slug: 'modena', name: 'Modena', region: 'Emilia-Romagna' },
+    { slug: 'parma', name: 'Parma', region: 'Emilia-Romagna' },
+    { slug: 'bergamo', name: 'Bergamo', region: 'Lombardia' },
+    { slug: 'pescara', name: 'Pescara', region: 'Abruzzo' },
+    { slug: 'perugia', name: 'Perugia', region: 'Umbria' },
+    { slug: 'cagliari', name: 'Cagliari', region: 'Sardegna' },
+    { slug: 'messina', name: 'Messina', region: 'Sicilia' },
+  ];
+
+  return cities.map((city) => ({
+    params: { citta: city.slug },
+    props: { name: city.name, region: city.region },
+  }));
+}
+
+const { citta } = Astro.params;
+const { name, region } = Astro.props;
+
+const currentCity = cities.find((c) => c.slug === citta)!;
+const otherCities = cities.filter((c) => c.slug !== citta).slice(0, 6);
+
+const features = [
+  'Gestione Ordini',
+  'Logica Teglia',
+  'Menu Digitale',
+  'Notifiche WhatsApp',
+  'Carta Fedeltà',
+  'Stampa Ordini',
+];
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "FoodBot",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "url": `https://ristobot.it/citta/${citta}`,
+  "areaServed": {
+    "@type": "City",
+    "name": name,
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Prova gratuita 30 giorni senza carta di credito",
+  },
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": `FoodBot funziona a ${name}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Sì, FoodBot è disponibile a ${name} e in tutta la regione ${region}. Il software funziona interamente online come WebApp, quindi puoi utilizzarlo in qualsiasi pizzeria al taglio a ${name} senza bisogno di installazioni.`,
+      },
+    },
+    {
+      "@type": "Question",
+      "name": `Quanto costa FoodBot a ${name}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `FoodBot offre una prova gratuita di 30 giorni senza carta di credito per le pizzerie al taglio a ${name}. Dopo il periodo di prova, il costo è un canone mensile o annuale con zero commissioni sulle transazioni.`,
+      },
+    },
+    {
+      "@type": "Question",
+      "name": `Come posso provare FoodBot a ${name}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Per provare FoodBot nella tua pizzeria al taglio a ${name}, basta registrarsi sul sito ristobot.it o scrivere a info@ristobot.it. L'attivazione richiede meno di 5 minuti e non serve carta di credito.`,
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  title={`Software Gestione Ordini Pizzeria al Taglio a ${name} | FoodBot`}
+  description={`FoodBot è il software per pizzerie al taglio a ${name}. Gestione ordini, Logica Teglia, zero commissioni. Prova gratis 30 giorni a ${name} e in tutta ${region}.`}
+>
+  <!-- JSON-LD Schemas -->
+  <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <Navbar />
+  <main>
+
+    <!-- Hero -->
+    <section class="section--dark city-hero">
+      <div class="container">
+        <div class="city-hero__inner reveal">
+          <span class="section-label section-label--dark">{name.toUpperCase()}</span>
+          <h1>Software per Pizzerie al Taglio a {name}</h1>
+          <p class="city-hero__sub">
+            La soluzione completa per gestire gli ordini da asporto nella tua pizzeria al taglio a {name}.
+            Ottimizza la produzione con la Logica Teglia, riduci gli sprechi e fidelizza i tuoi clienti in {region} e oltre.
+          </p>
+          <div class="city-hero__actions">
+            <a href="mailto:info@ristobot.it" class="btn btn--primary">Prova gratis 30 giorni</a>
+            <a href="/come-funziona" class="btn btn--secondary btn--on-dark">Scopri come funziona</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Perché FoodBot -->
+    <section class="city-benefits">
+      <div class="container">
+        <div class="section-intro reveal">
+          <span class="section-label">Vantaggi</span>
+          <h2>Perché FoodBot a {name}</h2>
+          <p>Ogni pizzeria al taglio a {name} merita uno strumento pensato per le sue esigenze specifiche. FoodBot è progettato per il modello al taglio, non adattato da soluzioni generiche.</p>
+        </div>
+        <div class="city-benefits__grid">
+          <div class="city-benefits__card reveal reveal-delay-1">
+            <span class="city-benefits__icon">💰</span>
+            <h3>Zero commissioni</h3>
+            <p>Nessuna percentuale sugli ordini. A {name} come in tutta Italia, con FoodBot ogni euro incassato resta alla tua pizzeria. Proteggi i margini del tuo locale.</p>
+          </div>
+          <div class="city-benefits__card reveal reveal-delay-2">
+            <span class="city-benefits__icon">🍕</span>
+            <h3>Logica Teglia</h3>
+            <p>L'algoritmo esclusivo di FoodBot raggruppa gli ordini per ottimizzare ogni cottura. Per le pizzerie al taglio a {name}, questo significa fino al 30% di sprechi in meno.</p>
+          </div>
+          <div class="city-benefits__card reveal reveal-delay-3">
+            <span class="city-benefits__icon">💬</span>
+            <h3>Notifiche WhatsApp</h3>
+            <p>I clienti della tua pizzeria a {name} ricevono aggiornamenti automatici su WhatsApp: conferma ordine, stato di preparazione e avviso di ritiro.</p>
+          </div>
+          <div class="city-benefits__card reveal reveal-delay-4">
+            <span class="city-benefits__icon">⚡</span>
+            <h3>Attivo in 5 minuti</h3>
+            <p>Configura FoodBot in pochi minuti: carica il menu, personalizza gli orari e sei operativo. Nessuna installazione, funziona dal browser anche a {name}.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Come funziona -->
+    <section class="section--dark city-steps">
+      <div class="container">
+        <div class="section-intro reveal">
+          <span class="section-label section-label--dark">Processo</span>
+          <h2>Come funziona a {name}</h2>
+          <p>Tre passaggi per trasformare la gestione degli ordini nella tua pizzeria al taglio.</p>
+        </div>
+        <div class="city-steps__grid">
+          <div class="city-steps__item reveal reveal-delay-1">
+            <span class="city-steps__num">1</span>
+            <h3>Registrati e configura il menu</h3>
+            <p>Crea il tuo account FoodBot, inserisci i prodotti della tua pizzeria al taglio a {name} e personalizza prezzi, varianti e orari di disponibilità.</p>
+          </div>
+          <div class="city-steps__item reveal reveal-delay-2">
+            <span class="city-steps__num">2</span>
+            <h3>I clienti ordinano online</h3>
+            <p>Condividi il link del tuo menu digitale. I clienti a {name} scelgono, personalizzano e confermano l'ordine direttamente dallo smartphone.</p>
+          </div>
+          <div class="city-steps__item reveal reveal-delay-3">
+            <span class="city-steps__num">3</span>
+            <h3>FoodBot ottimizza le teglie</h3>
+            <p>La Logica Teglia raggruppa automaticamente gli ordini per massimizzare l'efficienza di ogni cottura. Meno sprechi, più margine per la tua attività a {name}.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Funzionalità -->
+    <section class="city-features">
+      <div class="container">
+        <div class="section-intro reveal">
+          <span class="section-label">Funzionalità</span>
+          <h2>Funzionalità per la tua pizzeria a {name}</h2>
+        </div>
+        <div class="city-features__pills reveal">
+          {features.map((feat) => (
+            <a href="/funzionalita" class="city-features__pill">{feat}</a>
+          ))}
+        </div>
+        <p class="city-features__desc reveal">
+          FoodBot offre alle pizzerie al taglio di {name} un ecosistema completo: dalla ricezione degli ordini alla gestione ottimizzata delle teglie, dal menu digitale personalizzabile fino alle notifiche automatiche via WhatsApp.
+          Ogni funzionalità è stata progettata per il modello al taglio, supportando i ristoratori in {region} nella crescita del proprio business.
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="city-faq">
+      <div class="container container--narrow">
+        <div class="section-intro reveal">
+          <span class="section-label">FAQ</span>
+          <h2>Domande frequenti su FoodBot a {name}</h2>
+        </div>
+        <div class="city-faq__list">
+          <details class="city-faq__item reveal reveal-delay-1">
+            <summary>FoodBot funziona a {name}?</summary>
+            <p>
+              Sì, FoodBot è disponibile a {name} e in tutta la regione {region}. Essendo una WebApp che funziona interamente online, non ha limitazioni geografiche.
+              Qualsiasi pizzeria al taglio a {name} può attivare FoodBot in pochi minuti e iniziare a ricevere ordini ottimizzati con la Logica Teglia.
+            </p>
+          </details>
+          <details class="city-faq__item reveal reveal-delay-2">
+            <summary>Quanto costa FoodBot a {name}?</summary>
+            <p>
+              FoodBot offre una prova gratuita di 30 giorni senza carta di credito. Dopo il periodo di prova, puoi scegliere tra un piano mensile o annuale.
+              La cosa importante: zero commissioni sulle transazioni. Ogni ordine ricevuto nella tua pizzeria a {name} resta interamente tuo.
+              <a href="/prezzi" class="city-faq__link">Scopri tutti i piani e i prezzi.</a>
+            </p>
+          </details>
+          <details class="city-faq__item reveal reveal-delay-3">
+            <summary>Come posso provare FoodBot a {name}?</summary>
+            <p>
+              Iniziare è semplice: scrivi a <a href="mailto:info@ristobot.it" class="city-faq__link">info@ristobot.it</a> oppure registrati direttamente sul sito.
+              L'attivazione richiede meno di 5 minuti: carichi il menu, configuri gli orari e sei subito operativo nella tua pizzeria al taglio a {name}.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section--dark city-cta">
+      <div class="container">
+        <div class="city-cta__inner reveal">
+          <h2>Prova FoodBot nella tua pizzeria a {name}</h2>
+          <p>30 giorni gratis, zero commissioni, configurazione in 5 minuti. Scopri come FoodBot può aiutare la tua pizzeria al taglio a {name} a crescere.</p>
+          <div class="city-cta__actions">
+            <a href="mailto:info@ristobot.it" class="btn btn--primary">Contattaci ora</a>
+            <a href="/prezzi" class="btn btn--secondary btn--on-dark">Vedi i prezzi</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cross-links -->
+    <section class="city-crosslinks">
+      <div class="container">
+        <div class="city-crosslinks__inner reveal">
+          <h3>FoodBot è disponibile anche a:</h3>
+          <div class="city-crosslinks__cities">
+            {otherCities.map((c) => (
+              <a href={`/citta/${c.slug}`} class="city-crosslinks__tag">{c.name}</a>
+            ))}
+          </div>
+          <div class="city-crosslinks__more">
+            <a href="/blog">Leggi il blog</a>
+            <span class="city-crosslinks__sep">·</span>
+            <a href="/confronto/foodbot-vs-gloriafood">Confronta FoodBot</a>
+            <span class="city-crosslinks__sep">·</span>
+            <a href="/funzionalita">Tutte le funzionalità</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero ── */
+  .city-hero {
+    padding: var(--space-3xl) 0 var(--space-2xl);
+    text-align: center;
+  }
+
+  .city-hero__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .city-hero__sub {
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 640px;
+    margin-top: var(--space-md);
+    line-height: 1.7;
+  }
+
+  .city-hero__actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn--on-dark {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .btn--on-dark:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  /* ── Benefits ── */
+  .city-benefits {
+    padding: var(--space-2xl) 0;
+  }
+
+  .city-benefits__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .city-benefits__card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .city-benefits__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .city-benefits__icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: var(--space-sm);
+  }
+
+  .city-benefits__card h3 {
+    margin-bottom: var(--space-xs);
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  }
+
+  .city-benefits__card p {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--gray-700);
+  }
+
+  /* ── Steps ── */
+  .city-steps {
+    padding: var(--space-2xl) 0;
+  }
+
+  .city-steps__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .city-steps__item {
+    text-align: center;
+  }
+
+  .city-steps__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: var(--space-sm);
+  }
+
+  .city-steps__item h3 {
+    color: var(--white);
+    margin-bottom: var(--space-xs);
+    font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+  }
+
+  .city-steps__item p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  /* ── Features ── */
+  .city-features {
+    padding: var(--space-2xl) 0;
+  }
+
+  .city-features__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .city-features__pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.4rem;
+    background: var(--pastel-cream);
+    color: var(--dark);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 107, 53, 0.15);
+    transition: all 0.25s ease;
+  }
+
+  .city-features__pill:hover {
+    background: var(--orange);
+    color: var(--white);
+    border-color: var(--orange);
+    transform: translateY(-2px);
+  }
+
+  .city-features__desc {
+    max-width: 720px;
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    line-height: 1.75;
+    color: var(--gray-700);
+  }
+
+  /* ── FAQ ── */
+  .city-faq {
+    padding: var(--space-2xl) 0;
+    background: var(--brand-bg-light);
+  }
+
+  .city-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .city-faq__item {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .city-faq__item:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .city-faq__item summary {
+    padding: var(--space-md) var(--space-lg);
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--dark);
+  }
+
+  .city-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .city-faq__item summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--orange);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: var(--space-sm);
+  }
+
+  .city-faq__item[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  .city-faq__item p {
+    padding: 0 var(--space-lg) var(--space-md);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+
+  .city-faq__link {
+    color: var(--orange);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .city-faq__link:hover {
+    color: var(--orange-dark);
+  }
+
+  /* ── CTA ── */
+  .city-cta {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .city-cta__inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .city-cta__inner h2 {
+    color: var(--white);
+    margin-bottom: var(--space-sm);
+  }
+
+  .city-cta__inner p {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: clamp(1.05rem, 1.3vw, 1.15rem);
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
+  }
+
+  .city-cta__actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── Cross-links ── */
+  .city-crosslinks {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .city-crosslinks__inner {
+    text-align: center;
+  }
+
+  .city-crosslinks__inner h3 {
+    font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+    margin-bottom: var(--space-md);
+    color: var(--dark);
+  }
+
+  .city-crosslinks__cities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    justify-content: center;
+    margin-bottom: var(--space-md);
+  }
+
+  .city-crosslinks__tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--gray-200);
+    transition: all 0.25s ease;
+  }
+
+  .city-crosslinks__tag:hover {
+    background: var(--orange);
+    color: var(--white);
+    border-color: var(--orange);
+  }
+
+  .city-crosslinks__more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .city-crosslinks__more a {
+    color: var(--orange);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .city-crosslinks__more a:hover {
+    color: var(--orange-dark);
+    text-decoration: underline;
+  }
+
+  .city-crosslinks__sep {
+    color: var(--gray-300);
+    font-size: 0.8rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .city-benefits__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .city-steps__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .city-hero {
+      padding: var(--space-2xl) 0 var(--space-xl);
+    }
+
+    .city-hero__actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

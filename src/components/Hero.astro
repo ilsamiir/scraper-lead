@@ -1,0 +1,384 @@
+---
+---
+<section class="hero" id="hero">
+  <div class="hero__grid"></div>
+
+  <div class="hero__glow hero__glow--orange"></div>
+  <div class="hero__glow hero__glow--blue"></div>
+
+  <div class="hero__bg-shapes" aria-hidden="true">
+    <div class="hero__shape hero__shape--1">🍕</div>
+    <div class="hero__shape hero__shape--2">🫒</div>
+    <div class="hero__shape hero__shape--3">🍅</div>
+    <div class="hero__shape hero__shape--4">🌿</div>
+    <div class="hero__shape hero__shape--5">🧀</div>
+  </div>
+
+  <div class="container">
+    <div class="hero__label reveal">
+      <span class="hero__label-dot"></span>
+      Smart Takeaway Management
+    </div>
+
+    <h1 class="hero__title reveal reveal-delay-1">
+      Ogni teglia
+      <span class="hero__inline-img" aria-hidden="true">
+        <span class="hero__pill hero__pill--rose">🍕</span>
+      </span>
+      <span class="hero__gradient-text">piena.</span><br/>
+      Ogni ordine
+      <span class="hero__inline-img" aria-hidden="true">
+        <span class="hero__pill hero__pill--green">📦</span>
+      </span>
+      perfetto.<br/>
+      Zero
+      <span class="hero__inline-img" aria-hidden="true">
+        <span class="hero__pill hero__pill--cream">✨</span>
+      </span>
+      sprechi.
+    </h1>
+
+    <p class="hero__subtitle reveal reveal-delay-2">
+      Liberati dalle <strong>commissioni del 30-35%</strong> delle app di delivery. FoodBot è il software di
+      <strong>gestione ordini diretti</strong> pensato per le pizzerie al taglio — i tuoi clienti ordinano da te, senza intermediari.
+    </p>
+
+    <div class="hero__actions reveal reveal-delay-3">
+      <a href="/prezzi" class="hero__btn-primary">
+        Prova gratis 30 giorni
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a href="/come-funziona" class="hero__btn-secondary">
+        Scopri come funziona
+      </a>
+    </div>
+
+    <div class="hero__stats reveal reveal-delay-4">
+      <div class="hero__stat">
+        <span class="hero__stat-number">500+</span>
+        <span class="hero__stat-label">Ristoratori attivi</span>
+      </div>
+      <div class="hero__stat-divider"></div>
+      <div class="hero__stat">
+        <span class="hero__stat-number">4.8/5</span>
+        <span class="hero__stat-label">Recensioni</span>
+      </div>
+      <div class="hero__stat-divider"></div>
+      <div class="hero__stat">
+        <span class="hero__stat-number">0%</span>
+        <span class="hero__stat-label">Commissioni</span>
+      </div>
+      <div class="hero__stat-divider"></div>
+      <div class="hero__stat">
+        <span class="hero__stat-number">30-35%</span>
+        <span class="hero__stat-label">Commissioni che risparmi</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: calc(72px + var(--space-2xl)) 0 var(--space-2xl);
+    overflow: hidden;
+    background: var(--deep-dark, #0D1B2A);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Grid pattern overlay */
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+
+  /* Ambient glow blobs */
+  .hero__glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero__glow--orange {
+    top: -10%;
+    right: -5%;
+    width: 600px;
+    height: 600px;
+    background: rgba(255,107,53,0.10);
+    filter: blur(180px);
+  }
+
+  .hero__glow--blue {
+    bottom: -15%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba(10,61,98,0.15);
+    filter: blur(140px);
+  }
+
+  /* Floating food emojis */
+  .hero__bg-shapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero__shape {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.18;
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.08));
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .hero__shape--1 { top: 12%; right: 8%; animation-delay: 0s; font-size: 4rem; opacity: 0.22; }
+  .hero__shape--2 { top: 35%; right: 15%; animation-delay: -4s; }
+  .hero__shape--3 { bottom: 25%; left: 5%; animation-delay: -8s; font-size: 3rem; }
+  .hero__shape--4 { top: 20%; left: 10%; animation-delay: -12s; }
+  .hero__shape--5 { bottom: 15%; right: 20%; animation-delay: -6s; font-size: 3rem; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(5deg); }
+    50% { transform: translateY(-10px) rotate(-3deg); }
+    75% { transform: translateY(-25px) rotate(2deg); }
+  }
+
+  /* Hero label */
+  .hero__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: var(--space-lg);
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.3);
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--radius-full);
+  }
+
+  .hero__label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 8px rgba(255,107,53,0.6), 0 0 16px rgba(255,107,53,0.3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(255,107,53,0.6), 0 0 16px rgba(255,107,53,0.3); }
+    50% { opacity: 0.5; transform: scale(0.8); box-shadow: 0 0 4px rgba(255,107,53,0.3), 0 0 8px rgba(255,107,53,0.15); }
+  }
+
+  /* Title */
+  .hero__title {
+    max-width: 900px;
+    margin-bottom: var(--space-lg);
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+  }
+
+  /* Gradient text for "piena." */
+  .hero__gradient-text {
+    background: linear-gradient(270deg, #4ECDC4 0%, #FF6B35 30%, #FF8F60 60%, #4ECDC4 100%);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 5s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Inline food pills */
+  .hero__inline-img {
+    display: inline-flex;
+    vertical-align: middle;
+    margin: 0 0.15em;
+  }
+
+  .hero__pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15em 0.5em;
+    border-radius: var(--radius-full);
+    font-size: 0.7em;
+    transition: transform 0.3s ease;
+  }
+
+  .hero__pill:hover { transform: scale(1.15) rotate(-5deg); }
+
+  .hero__pill--rose { background: rgba(255,232,226,0.15); }
+  .hero__pill--green { background: rgba(226,245,233,0.15); }
+  .hero__pill--cream { background: rgba(255,244,230,0.15); }
+
+  /* Subtitle */
+  .hero__subtitle {
+    max-width: 600px;
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem) !important;
+    color: rgba(255,255,255,0.7) !important;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__subtitle strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* Buttons */
+  .hero__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .hero__btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    color: #fff;
+    background: var(--orange);
+    border-radius: var(--radius-md, 12px);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 0 30px rgba(255,107,53,0.3), 0 4px 15px rgba(255,107,53,0.2);
+  }
+
+  .hero__btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
+  }
+
+  .hero__btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(255,107,53,0.4), 0 8px 25px rgba(255,107,53,0.3);
+  }
+
+  .hero__btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: var(--radius-md, 12px);
+    text-decoration: none;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .hero__btn-secondary:hover {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.05);
+    transform: translateY(-2px);
+  }
+
+  /* Stats bar */
+  .hero__stats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    width: fit-content;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .hero__stat { display: flex; flex-direction: column; }
+
+  .hero__stat-number {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--orange);
+  }
+
+  .hero__stat-label {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+  }
+
+  .hero__stat-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding-top: calc(72px + var(--space-xl));
+      min-height: auto;
+    }
+
+    .hero__title { font-size: clamp(2.2rem, 8vw, 3rem); }
+
+    .hero__stats {
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      width: 100%;
+      align-items: flex-start;
+    }
+
+    .hero__stat-divider {
+      width: 100%;
+      height: 1px;
+    }
+
+    .hero__actions {
+      flex-direction: column;
+    }
+
+    .hero__actions .hero__btn-primary,
+    .hero__actions .hero__btn-secondary {
+      justify-content: center;
+    }
+  }
+</style>

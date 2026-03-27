@@ -1,0 +1,213 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = "FoodBot — La piattaforma di Smart Takeaway Management per pizzerie al taglio. Gestione ordini, logica teglia, fidelizzazione e notifiche WhatsApp. Zero commissioni, prova gratis 30 giorni.",
+  ogImage = "/og-image.svg",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "FoodBot",
+  "alternateName": "RistoBot",
+  "url": "https://ristobot.it",
+  "logo": "https://ristobot.it/favicon.svg",
+  "description": "Smart Takeaway Management per pizzerie al taglio",
+  "email": "info@ristobot.it",
+  "areaServed": {
+    "@type": "Country",
+    "name": "Italy"
+  },
+  "knowsLanguage": "it"
+};
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "FoodBot",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "Piattaforma di gestione ordini asporto per pizzerie al taglio. Logica teglia, fidelizzazione clienti, notifiche WhatsApp e stampa ordini automatica.",
+  "url": "https://ristobot.it",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Prova gratuita 30 giorni senza carta di credito. Zero commissioni sulle transazioni."
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "200",
+    "bestRating": "5"
+  },
+  "featureList": [
+    "Gestione ordini asporto",
+    "Logica Teglia per ottimizzazione produzione",
+    "Menu digitale personalizzabile",
+    "Notifiche WhatsApp automatiche",
+    "Carta fedeltà digitale integrata",
+    "Stampa ordini automatica",
+    "Gestione multi punto vendita",
+    "Centralino smart",
+    "Sistema upsell integrato"
+  ]
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Cos'è FoodBot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FoodBot è una piattaforma di Smart Takeaway Management pensata specificamente per le pizzerie al taglio. Organizza gli ordini da asporto con la logica della teglia: raggruppa, ottimizza e sincronizza con la produzione per ridurre gli sprechi e aumentare i margini."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quanto costa FoodBot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FoodBot offre una prova gratuita di 30 giorni senza carta di credito. Dopo la prova, il modello è a canone mensile o annuale con zero commissioni sulle transazioni."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Serve installare un'app?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, FoodBot è una WebApp: nessuna installazione richiesta. Funziona direttamente dal browser, sia per il ristoratore che per il cliente."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Cosa significa Logica Teglia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La Logica Teglia è la funzionalità esclusiva di FoodBot che raggruppa automaticamente gli ordini per ottimizzare ogni cottura. Ogni pizza al taglio nasce in teglia con 6-8 porzioni: FoodBot organizza gli ordini per riempire le teglie, riducendo gli sprechi fino al 30%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "FoodBot funziona con WhatsApp?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sì, FoodBot invia automaticamente notifiche WhatsApp ai clienti: conferma ordine, aggiornamenti sullo stato di preparazione, notifica 'pronto al ritiro' e follow-up post-acquisto."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Posso gestire più punti vendita?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sì, FoodBot supporta la gestione multi punto vendita con dashboard centralizzata. Menu, ordini, promozioni e report sono sincronizzati su tutte le sedi."
+      }
+    }
+  ]
+};
+---
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Base -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL.href} />
+  <meta name="theme-color" content="#0D1B2A" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="FoodBot" />
+  <meta name="keywords" content="software pizzeria al taglio, gestione ordini pizzeria, asporto pizzeria, menu digitale pizzeria, carta fedeltà ristorante, notifiche WhatsApp ristorante, gestione teglie, software ristorazione, ordini asporto senza commissioni" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL.href} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImageURL.href} />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:site_name" content="FoodBot" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageURL.href} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+  <!-- Fonts (preconnect + link for performance, moved from CSS @import) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</head>
+<body>
+  <!-- Grain overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <slot />
+
+  <script>
+    // Scroll progress bar
+    const progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollTop / scrollHeight;
+      if (progressBar) {
+        progressBar.style.transform = `scaleX(${progress})`;
+      }
+    }, { passive: true });
+
+    // Scroll reveal observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+    );
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(anchor.getAttribute('href')!);
+        target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>

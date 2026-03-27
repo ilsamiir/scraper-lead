@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Home, Users, Calendar, ClipboardList } from "lucide-react";
+import { LogOut, Home, Users, ChartColumn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,11 +38,8 @@ export default function ClientiPage() {
                             <Link href="/clienti" className="text-sm font-medium text-brand-accent flex items-center gap-2">
                                 <Users className="w-4 h-4" /> <span className="hidden sm:inline">Clienti Selezionati</span>
                             </Link>
-                            <Link href="/promemoria" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
-                                <Calendar className="w-4 h-4" /> <span className="hidden sm:inline">Promemoria</span>
-                            </Link>
-                            <Link href="/resoconto" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
-                                <ClipboardList className="w-4 h-4" /> <span className="hidden sm:inline">Resoconto</span>
+                            <Link href="/analytics" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+                                <ChartColumn className="w-4 h-4" /> <span className="hidden sm:inline">Analytics</span>
                             </Link>
                             <button onClick={handleLogout} className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2 ml-4">
                                 <LogOut className="w-4 h-4" />

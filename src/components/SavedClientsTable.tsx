@@ -1,13 +1,26 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Phone, Mail, Calendar as CalendarIcon, FileText, ExternalLink, Save, History, ChevronDown, ChevronUp, Trash2, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+    Calendar as CalendarIcon,
+    ExternalLink,
+    GripVertical,
+    Mail,
+    Phone,
+    Plus,
+    Save,
+    Search,
+    Trash2,
+    X,
+} from "lucide-react";
+import { AddClientActions } from "@/components/AddClientActions";
 import { FollowUpHistory } from "@/components/FollowUpHistory";
 
 type SavedClient = {
     id: string;
     business_name?: string | null;
+    keyword?: string | null;
     city?: string | null;
     province?: string | null;
     address?: string | null;
@@ -17,476 +30,706 @@ type SavedClient = {
     last_contact_method?: string | null;
     last_contact_date?: string | null;
     follow_up_date?: string | null;
+    status?: string | null;
     notes?: string | null;
     google_maps_url?: string | null;
     created_at?: string | null;
 };
 
+type BoardColumn = {
+    id: string;
+    title: string;
+    colorClass: string;
+};
+
+const DEFAULT_COLUMNS: BoardColumn[] = [
+    { id: "Da contattare", title: "Da contattare", colorClass: "bg-blue-500/15 text-blue-300 border-blue-400/30" },
+    { id: "In lavorazione", title: "In lavorazione", colorClass: "bg-amber-500/15 text-amber-300 border-amber-400/30" },
+    { id: "Da richiamare", title: "Da richiamare", colorClass: "bg-purple-500/15 text-purple-300 border-purple-400/30" },
+    { id: "Convertiti", title: "Convertiti", colorClass: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30" },
+];
+
+const STORAGE_KEY = "lead-intelligence:clienti-columns:v1";
+
+const sanitizeColumnName = (value: string) => value.trim().replace(/\s+/g, " ");
+
 export function SavedClientsTable() {
+    const supabase = createClient();
+
     const [clients, setClients] = useState<SavedClient[]>([]);
     const [loading, setLoading] = useState(true);
     const [contactCounts, setContactCounts] = useState<Record<string, number>>({});
-    const [editingEmailId, setEditingEmailId] = useState<string | null>(null);
-    const [emailValue, setEmailValue] = useState("");
-    const [editingLastContactId, setEditingLastContactId] = useState<string | null>(null);
-    const [lastContactDateValue, setLastContactDateValue] = useState("");
-    const [lastContactMethodValue, setLastContactMethodValue] = useState("chiamata");
-    const [expandedClientId, setExpandedClientId] = useState<string | null>(null);
-    const [selectedClients, setSelectedClients] = useState<string[]>([]);
+    const [columns, setColumns] = useState<BoardColumn[]>(DEFAULT_COLUMNS);
+    const [newColumnName, setNewColumnName] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const supabase = createClient();
+    const [draggedClientId, setDraggedClientId] = useState<string | null>(null);
+    const [draggedColumnId, setDraggedColumnId] = useState<string | null>(null);
+        // Funzione per riordinare le colonne
+        const moveColumn = (fromId: string, toId: string) => {
+            if (fromId === toId) return;
+            const fromIdx = columns.findIndex((col) => col.id === fromId);
+            const toIdx = columns.findIndex((col) => col.id === toId);
+            if (fromIdx === -1 || toIdx === -1) return;
+            const updated = [...columns];
+            const [removed] = updated.splice(fromIdx, 1);
+            updated.splice(toIdx, 0, removed);
+            persistColumns(updated);
+        };
+    const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+    const [savingDetails, setSavingDetails] = useState(false);
+
+    const selectedClient = useMemo(
+        () => clients.find((client) => client.id === selectedClientId) ?? null,
+        [clients, selectedClientId]
+    );
+
+    const [detailDraft, setDetailDraft] = useState<{
+        email: string;
+        phone: string;
+        website: string;
+        follow_up_date: string;
+        notes: string;
+    }>({
+        email: "",
+        phone: "",
+        website: "",
+        follow_up_date: "",
+        notes: "",
+    });
 
     const fetchClients = useCallback(async () => {
         setLoading(true);
+
         const { data, error } = await supabase
-            .from('saved_clients')
-            .select('*')
-            .order('created_at', { ascending: false });
+            .from("saved_clients")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-        if (data) {
-            const clientRows = data as SavedClient[];
-            setClients(clientRows);
-
-            const ids = clientRows.map((client) => client.id).filter(Boolean);
-            if (ids.length > 0) {
-                const { data: historyRows } = await supabase
-                    .from('contact_history')
-                    .select('client_id')
-                    .in('client_id', ids);
-
-                const counts = (historyRows || []).reduce<Record<string, number>>((acc, row) => {
-                    const key = row.client_id as string;
-                    acc[key] = (acc[key] ?? 0) + 1;
-                    return acc;
-                }, {});
-                setContactCounts(counts);
-            } else {
-                setContactCounts({});
-            }
+        if (error) {
+            console.error(error);
+            setLoading(false);
+            return;
         }
-        if (error) console.error(error);
+
+        const rows = (data ?? []) as SavedClient[];
+        setClients(rows);
+
+        const ids = rows.map((client) => client.id);
+        if (ids.length > 0) {
+            const { data: historyRows } = await supabase
+                .from("contact_history")
+                .select("client_id")
+                .in("client_id", ids);
+
+            const counts: Record<string, number> = {};
+            (historyRows ?? []).forEach((row) => {
+                counts[row.client_id] = (counts[row.client_id] ?? 0) + 1;
+            });
+            setContactCounts(counts);
+        } else {
+            setContactCounts({});
+        }
+
         setLoading(false);
     }, [supabase]);
+
+    useEffect(() => {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+
+        try {
+            const parsed = JSON.parse(raw) as BoardColumn[];
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                setColumns(parsed);
+            }
+        } catch {
+            // ignore malformed local value
+        }
+    }, []);
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchClients();
     }, [fetchClients]);
 
-    const handleEmailEdit = (client: SavedClient) => {
-        setEditingEmailId(client.id);
-        setEmailValue(client.email || "");
-    };
+    useEffect(() => {
+        if (!selectedClient) return;
 
-    const handleLastContactEdit = (client: SavedClient) => {
-        setEditingLastContactId(client.id);
-        setLastContactDateValue(client.last_contact_date ? new Date(client.last_contact_date).toISOString().slice(0, 16) : "");
-        setLastContactMethodValue(client.last_contact_method || "chiamata");
-    };
+        setDetailDraft({
+            email: selectedClient.email ?? "",
+            phone: selectedClient.phone ?? "",
+            website: selectedClient.website ?? "",
+            follow_up_date: selectedClient.follow_up_date ?? "",
+            notes: selectedClient.notes ?? "",
+        });
+    }, [selectedClient]);
 
-    const saveLastContact = async (id: string) => {
-        const newDate = lastContactDateValue ? new Date(lastContactDateValue).toISOString() : null;
+    useEffect(() => {
+        if (clients.length === 0) return;
 
-        const { error } = await supabase
-            .from('saved_clients')
-            .update({
-                last_contact_date: newDate,
-                last_contact_method: lastContactMethodValue
-            })
-            .eq('id', id);
+        setColumns((previous) => {
+            const knownIds = new Set(previous.map((col) => col.id));
+            const missingStatuses = Array.from(
+                new Set(
+                    clients
+                        .map((client) => sanitizeColumnName(client.status || ""))
+                        .filter((status) => status.length > 0 && !knownIds.has(status))
+                )
+            );
 
-        if (!error) {
-            setClients(clients.map(c => c.id === id ? {
-                ...c,
-                last_contact_date: newDate,
-                last_contact_method: lastContactMethodValue
-            } : c));
+            if (missingStatuses.length === 0) return previous;
 
-            // Log History automatically if date is set
-            if (newDate) {
-                await supabase.from('contact_history').insert([{
-                    client_id: id,
-                    contact_method: lastContactMethodValue,
-                    contact_date: newDate,
-                    notes: "Modifica manuale data/modello."
-                }]);
-                setContactCounts((prev) => ({
-                    ...prev,
-                    [id]: (prev[id] ?? 0) + 1
-                }));
-            }
-
-        } else {
-            alert("Errore salvataggio ultimo contatto");
-        }
-        setEditingLastContactId(null);
-    };
-
-    const saveEmail = async (id: string) => {
-        const { error } = await supabase
-            .from('saved_clients')
-            .update({ email: emailValue })
-            .eq('id', id);
-
-        if (!error) {
-            setClients(clients.map(c => c.id === id ? { ...c, email: emailValue } : c));
-        } else {
-            alert("Errore salvataggio email");
-        }
-        setEditingEmailId(null);
-    };
-
-    const updateAction = async (id: string, updates: Partial<SavedClient>) => {
-        const { error } = await supabase
-            .from('saved_clients')
-            .update(updates)
-            .eq('id', id);
-
-        if (!error) {
-            setClients(clients.map(c => c.id === id ? { ...c, ...updates } : c));
-        } else {
-            alert("Errore aggiornamento: " + error.message);
-        }
-    };
-
-    const handleCall = async (id: string) => {
-        const now = new Date().toISOString();
-        updateAction(id, { last_contact_method: 'chiamata', last_contact_date: now });
-        await supabase.from('contact_history').insert([{ client_id: id, contact_method: 'chiamata', contact_date: now }]);
-        setContactCounts((prev) => ({
-            ...prev,
-            [id]: (prev[id] ?? 0) + 1
-        }));
-    };
-
-    const handleMail = async (id: string) => {
-        const now = new Date().toISOString();
-        updateAction(id, { last_contact_method: 'email', last_contact_date: now });
-        await supabase.from('contact_history').insert([{ client_id: id, contact_method: 'email', contact_date: now }]);
-        setContactCounts((prev) => ({
-            ...prev,
-            [id]: (prev[id] ?? 0) + 1
-        }));
-    };
-
-    const handleNotes = async (client: SavedClient) => {
-        const note = prompt("Inserisci note per " + client.business_name + ":", client.notes || "");
-        if (note !== null) {
-            updateAction(client.id, { notes: note });
-            await supabase.from('contact_history').insert([{ client_id: client.id, contact_method: 'nota', contact_date: new Date().toISOString(), notes: note }]);
-            setContactCounts((prev) => ({
-                ...prev,
-                [client.id]: (prev[client.id] ?? 0) + 1
+            const appended: BoardColumn[] = missingStatuses.map((status) => ({
+                id: status,
+                title: status,
+                colorClass: "bg-white/10 text-white border-white/20",
             }));
-        }
-    };
 
-    const handleFollowUp = async (client: SavedClient) => {
-        const date = prompt("Inserisci data di follow-up (YYYY-MM-DD):", client.follow_up_date || "");
-        if (date !== null) {
-            // Basic validation
-            if (date === "" || /^\d{4}-\d{2}-\d{2}$/.test(date)) {
-                updateAction(client.id, { follow_up_date: date === "" ? null : date });
-            } else {
-                alert("Formato data non valido. Usa YYYY-MM-DD.");
-            }
-        }
-    };
+            const next = [...previous, ...appended];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+            return next;
+        });
+    }, [clients]);
 
-    const toggleSelect = (id: string) => {
-        setSelectedClients(prev => prev.includes(id) ? prev.filter(cId => cId !== id) : [...prev, id]);
-    };
+    const filteredClients = useMemo(() => {
+        const q = searchQuery.toLowerCase().trim();
+        if (!q) return clients;
 
-    const toggleSelectAll = () => {
-        if (selectedClients.length === filteredClients.length) {
-            setSelectedClients([]);
-        } else {
-            setSelectedClients(filteredClients.map(c => c.id));
-        }
-    };
-
-    const filteredClients = clients.filter(c => {
-        const q = searchQuery.toLowerCase();
-        return (
-            (c.business_name || "").toLowerCase().includes(q) ||
-            (c.city || "").toLowerCase().includes(q) ||
-            (c.phone || "").toLowerCase().includes(q) ||
-            (c.email || "").toLowerCase().includes(q)
+        return clients.filter((client) =>
+            [
+                client.business_name,
+                client.keyword,
+                client.city,
+                client.province,
+                client.phone,
+                client.email,
+                client.status,
+            ]
+                .join(" ")
+                .toLowerCase()
+                .includes(q)
         );
-    });
+    }, [clients, searchQuery]);
 
-    const scrollLeft = () => {
-        scrollRef.current?.scrollBy({ left: -320, behavior: 'smooth' });
+    const groupedClients = useMemo(() => {
+        const defaultColumn = columns[0]?.id ?? "Da contattare";
+
+        return columns.map((column) => ({
+            ...column,
+            clients: filteredClients.filter((client) => (client.status || defaultColumn) === column.id),
+        }));
+    }, [columns, filteredClients]);
+
+    const persistColumns = (nextColumns: BoardColumn[]) => {
+        setColumns(nextColumns);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextColumns));
     };
 
-    const scrollRight = () => {
-        scrollRef.current?.scrollBy({ left: 320, behavior: 'smooth' });
+    const updateClient = async (id: string, updates: Partial<SavedClient>) => {
+        const { error } = await supabase.from("saved_clients").update(updates).eq("id", id);
+
+        if (error) {
+            alert("Errore aggiornamento: " + error.message);
+            return false;
+        }
+
+        setClients((prev) => prev.map((client) => (client.id === id ? { ...client, ...updates } : client)));
+        return true;
     };
 
-    const handleDeleteSelected = async () => {
-        if (!confirm(`Sei sicuro di voler eliminare ${selectedClients.length} clienti selezionati?`)) return;
+    const moveClientToColumn = async (clientId: string, targetColumnId: string) => {
+        const current = clients.find((client) => client.id === clientId);
+        if (!current || current.status === targetColumnId) return;
+
+        await updateClient(clientId, { status: targetColumnId });
+    };
+
+    const handleDropOnColumn = async (columnId: string) => {
+        if (!draggedClientId) return;
+        await moveClientToColumn(draggedClientId, columnId);
+        setDraggedClientId(null);
+    };
+
+    const handleAddColumn = () => {
+        const label = sanitizeColumnName(newColumnName);
+        if (!label) return;
+
+        if (columns.some((column) => column.id.toLowerCase() === label.toLowerCase())) {
+            alert("Esiste già una colonna con questo nome.");
+            return;
+        }
+
+        const next = [
+            ...columns,
+            {
+                id: label,
+                title: label,
+                colorClass: "bg-white/10 text-white border-white/20",
+            },
+        ];
+
+        persistColumns(next);
+        setNewColumnName("");
+    };
+
+    const handleRenameColumn = async (columnId: string) => {
+        const current = columns.find((column) => column.id === columnId);
+        if (!current) return;
+
+        const proposed = prompt("Nuovo nome colonna:", current.title);
+        if (proposed === null) return;
+
+        const nextName = sanitizeColumnName(proposed);
+        if (!nextName || nextName === columnId) return;
+
+        if (columns.some((column) => column.id.toLowerCase() === nextName.toLowerCase())) {
+            alert("Esiste già una colonna con questo nome.");
+            return;
+        }
 
         const { error } = await supabase
-            .from('saved_clients')
-            .delete()
-            .in('id', selectedClients);
+            .from("saved_clients")
+            .update({ status: nextName })
+            .eq("status", columnId);
 
-        if (!error) {
-            setClients(clients.filter(c => !selectedClients.includes(c.id)));
-            setSelectedClients([]);
-        } else {
-            alert("Errore durante l'eliminazione: " + error.message);
+        if (error) {
+            alert("Errore rinomina colonna: " + error.message);
+            return;
+        }
+
+        setClients((prev) =>
+            prev.map((client) => (client.status === columnId ? { ...client, status: nextName } : client))
+        );
+
+        const nextColumns = columns.map((column) =>
+            column.id === columnId ? { ...column, id: nextName, title: nextName } : column
+        );
+
+        persistColumns(nextColumns);
+    };
+
+    const handleDeleteColumn = async (columnId: string) => {
+        if (columns.length <= 1) {
+            alert("Deve rimanere almeno una colonna.");
+            return;
+        }
+
+        const fallbackColumn = columns.find((column) => column.id !== columnId);
+        if (!fallbackColumn) return;
+
+        const clientsInColumn = clients.filter((client) => (client.status || columns[0].id) === columnId);
+
+        if (
+            !confirm(
+                `Eliminare la colonna? ${clientsInColumn.length} nominativi saranno spostati in "${fallbackColumn.title}".`
+            )
+        ) {
+            return;
+        }
+
+        if (clientsInColumn.length > 0) {
+            const { error } = await supabase
+                .from("saved_clients")
+                .update({ status: fallbackColumn.id })
+                .eq("status", columnId);
+
+            if (error) {
+                alert("Errore durante lo spostamento clienti: " + error.message);
+                return;
+            }
+
+            setClients((prev) =>
+                prev.map((client) =>
+                    (client.status || columns[0].id) === columnId
+                        ? { ...client, status: fallbackColumn.id }
+                        : client
+                )
+            );
+        }
+
+        const next = columns.filter((column) => column.id !== columnId);
+        persistColumns(next);
+
+        if (selectedClient?.status === columnId) {
+            setSelectedClientId(selectedClient.id);
         }
     };
 
-    if (loading) return <div className="text-center p-8 text-white/50">Caricamento clienti...</div>;
+    const handleSaveDetails = async () => {
+        if (!selectedClient) return;
 
-    if (clients.length === 0) {
-        return (
-            <div className="w-full glass-panel p-8 min-h-[400px] flex flex-col items-center justify-center text-center border-dashed">
-                <h3 className="text-xl font-medium text-white/80">Nessun cliente salvato</h3>
-                <p className="text-white/40 mt-2 max-w-sm">
-                    Torna alla ricerca per estrarre e salvare i tuoi lead nel CRM.
-                </p>
-            </div>
-        );
+        setSavingDetails(true);
+        const ok = await updateClient(selectedClient.id, {
+            email: detailDraft.email || null,
+            phone: detailDraft.phone || null,
+            website: detailDraft.website || null,
+            follow_up_date: detailDraft.follow_up_date || null,
+            notes: detailDraft.notes || null,
+        });
+
+        if (ok) {
+            alert("Dettagli contatto salvati.");
+        }
+        setSavingDetails(false);
+    };
+
+    const logContact = async (method: "chiamata" | "email") => {
+        if (!selectedClient) return;
+
+        const now = new Date().toISOString();
+        const ok = await updateClient(selectedClient.id, {
+            last_contact_method: method,
+            last_contact_date: now,
+        });
+
+        if (!ok) return;
+
+        await supabase.from("contact_history").insert([
+            {
+                client_id: selectedClient.id,
+                contact_method: method,
+                contact_date: now,
+                notes: method === "chiamata" ? "Chiamata registrata dal board clienti." : "Email registrata dal board clienti.",
+            },
+        ]);
+
+        setContactCounts((prev) => ({
+            ...prev,
+            [selectedClient.id]: (prev[selectedClient.id] ?? 0) + 1,
+        }));
+    };
+
+    const handleDeleteClient = async (id: string) => {
+        if (!confirm("Vuoi eliminare definitivamente questo nominativo?")) return;
+
+        const { error } = await supabase.from("saved_clients").delete().eq("id", id);
+
+        if (error) {
+            alert("Errore eliminazione: " + error.message);
+            return;
+        }
+
+        setClients((prev) => prev.filter((client) => client.id !== id));
+        if (selectedClientId === id) setSelectedClientId(null);
+    };
+
+    if (loading) {
+        return <div className="text-center p-8 text-white/50">Caricamento clienti...</div>;
     }
 
     return (
-        <div className="w-full glass-panel overflow-hidden">
-            {/* Toolbar: ricerca + azioni */}
-            <div className="px-6 py-4 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <div className="relative flex-1 max-w-sm">
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="relative w-full md:max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
                     <input
                         type="text"
-                        placeholder="Cerca per nome, città, telefono..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/60 focus:bg-white/8 transition-all"
+                        placeholder="Cerca nominativi, città, telefono, email..."
+                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-10 py-2.5 text-sm text-white placeholder-white/35 focus:outline-none focus:border-brand-accent/60"
                     />
                     {searchQuery && (
                         <button
-                            onClick={() => setSearchQuery('')}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors text-xs"
+                            onClick={() => setSearchQuery("")}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70"
+                            aria-label="Pulisci ricerca"
                         >
-                            ✕
+                            <X className="w-4 h-4" />
                         </button>
                     )}
                 </div>
-                <span className="text-xs text-white/30 ml-auto">
-                    {filteredClients.length} / {clients.length} clienti
-                </span>
+
+                <div className="flex items-center gap-2 w-full md:w-auto">
+                    <input
+                        type="text"
+                        value={newColumnName}
+                        onChange={(e) => setNewColumnName(e.target.value)}
+                        placeholder="Nuova colonna"
+                        className="flex-1 md:w-52 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/35 focus:outline-none focus:border-brand-accent/60"
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleAddColumn();
+                            }
+                        }}
+                    />
+                    <button
+                        onClick={handleAddColumn}
+                        className="px-3 py-2 rounded-lg bg-brand-accent hover:opacity-90 text-white text-sm font-medium flex items-center gap-1.5"
+                    >
+                        <Plus className="w-4 h-4" /> Colonna
+                    </button>
+                    <AddClientActions onClientAdded={fetchClients} />
+                </div>
             </div>
 
-            {selectedClients.length > 0 && (
-                <div className="bg-brand-gradient-1/10 border-b border-brand-gradient-1/20 px-6 py-3 flex items-center justify-between">
-                    <span className="text-sm font-medium text-white/90">
-                        {selectedClients.length} selezionat{selectedClients.length === 1 ? 'o' : 'i'}
-                    </span>
-                    <button
-                        onClick={handleDeleteSelected}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-md transition-colors text-sm font-medium border border-red-500/20"
-                    >
-                        <Trash2 className="w-4 h-4" />
-                        Elimina Selezionati
-                    </button>
+            {clients.length === 0 ? (
+                <div className="w-full glass-panel p-8 min-h-[380px] flex flex-col items-center justify-center text-center border-dashed">
+                    <h3 className="text-xl font-medium text-white/80">Nessun cliente salvato</h3>
+                    <p className="text-white/45 mt-2 max-w-sm">
+                        Aggiungi nominativi dal pulsante in alto, poi trascinali tra le colonne del board.
+                    </p>
+                </div>
+            ) : (
+                <div className={selectedClient ? "grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-4" : ""}>
+                    <div className={selectedClient ? "glass-panel p-4 overflow-x-auto" : "glass-panel p-4 overflow-x-auto w-full"}>
+                        <div className="flex gap-4 min-h-[560px]">
+                            {groupedClients.map((column) => (
+                                <div
+                                    key={column.id}
+                                    className={`w-[300px] shrink-0 rounded-xl border border-white/10 bg-black/35 flex flex-col transition-shadow ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
+                                    draggable
+                                    onDragStart={() => setDraggedColumnId(column.id)}
+                                    onDragEnd={() => setDraggedColumnId(null)}
+                                    onDragOver={(e) => {
+                                        // Permetti drop solo tra colonne
+                                        if (draggedColumnId) e.preventDefault();
+                                    }}
+                                    onDrop={(e) => {
+                                        if (draggedColumnId) {
+                                            moveColumn(draggedColumnId, column.id);
+                                            setDraggedColumnId(null);
+                                        } else {
+                                            handleDropOnColumn(column.id);
+                                        }
+                                    }}
+                                >
+                                    <div className="px-3 py-3 border-b border-white/10 flex items-start justify-between gap-2 cursor-move">
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <h3 className="font-medium text-white text-sm">{column.title}</h3>
+                                                <span className={`text-xs px-2 py-0.5 rounded-full border ${column.colorClass}`}>
+                                                    {column.clients.length}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => handleRenameColumn(column.id)}
+                                                className="text-xs px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-white/70"
+                                                title="Modifica nome colonna"
+                                            >
+                                                Modifica
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteColumn(column.id)}
+                                                className="p-1.5 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400"
+                                                title="Elimina colonna"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-3 space-y-3 overflow-y-auto min-h-[420px] max-h-[620px]">
+                                        {column.clients.length === 0 ? (
+                                            <div className="rounded-lg border border-dashed border-white/15 text-center text-xs text-white/35 p-4">
+                                                Trascina qui i nominativi
+                                            </div>
+                                        ) : (
+                                            column.clients.map((client) => {
+                                                const isActive = selectedClientId === client.id;
+                                                const contactCounter = contactCounts[client.id] ?? 0;
+
+                                                return (
+                                                    <button
+                                                        key={client.id}
+                                                        draggable
+                                                        onDragStart={() => setDraggedClientId(client.id)}
+                                                        onDragEnd={() => setDraggedClientId(null)}
+                                                        onClick={() => setSelectedClientId(client.id)}
+                                                        className={`w-full text-left rounded-lg border p-3 transition-all ${
+                                                            isActive
+                                                                ? "border-brand-accent/60 bg-brand-accent/10"
+                                                                : "border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"
+                                                        }`}
+                                                    >
+                                                        <div className="flex items-start justify-between gap-2">
+                                                            <div>
+                                                                <p className="text-sm font-medium text-white leading-tight">
+                                                                    {client.business_name || "Senza nome"}
+                                                                </p>
+                                                                <p className="text-xs text-white/50 mt-1">
+                                                                    {client.city || "-"}
+                                                                    {client.province ? ` (${client.province})` : ""}
+                                                                </p>
+                                                            </div>
+                                                            <GripVertical className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
+                                                        </div>
+
+                                                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-white/70">
+                                                            {client.phone && (
+                                                                <span className="inline-flex items-center gap-1">
+                                                                    <Phone className="w-3 h-3" /> {client.phone}
+                                                                </span>
+                                                            )}
+                                                            {client.email && (
+                                                                <span className="inline-flex items-center gap-1 max-w-full truncate">
+                                                                    <Mail className="w-3 h-3" /> {client.email}
+                                                                </span>
+                                                            )}
+                                                        </div>
+
+                                                        <div className="mt-2 flex items-center justify-between text-[11px] text-white/45">
+                                                            <span>{client.keyword || "-"}</span>
+                                                            <span>{contactCounter} contatti</span>
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {selectedClient && (
+                        <aside className="glass-panel p-4 min-h-[560px]">
+                            <div className="space-y-4">
+                                <div className="flex items-start justify-between gap-2">
+                                    <div>
+                                        <h3 className="text-base font-medium text-white leading-tight">
+                                            {selectedClient.business_name}
+                                        </h3>
+                                        <p className="text-xs text-white/50 mt-1">
+                                            {selectedClient.city || "-"}
+                                            {selectedClient.province ? ` (${selectedClient.province})` : ""}
+                                        </p>
+                                    </div>
+                                    <div className="flex gap-2 items-center">
+                                        <button
+                                            onClick={() => setSelectedClientId(null)}
+                                            className="p-2 rounded-md bg-white/5 hover:bg-white/10 text-white/60"
+                                            title="Chiudi pannello"
+                                            style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteClient(selectedClient.id)}
+                                            className="p-2 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400"
+                                            title="Elimina nominativo"
+                                            style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs text-white/55">Email</label>
+                                    <input
+                                        type="email"
+                                        value={detailDraft.email}
+                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, email: e.target.value }))}
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs text-white/55">Telefono</label>
+                                    <input
+                                        type="text"
+                                        value={detailDraft.phone}
+                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, phone: e.target.value }))}
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs text-white/55">Sito web</label>
+                                    <input
+                                        type="text"
+                                        value={detailDraft.website}
+                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, website: e.target.value }))}
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                    />
+                                    <div className="flex items-center gap-2 text-xs">
+                                        {selectedClient.website && (
+                                            <a
+                                                href={selectedClient.website}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-brand-gradient-1 hover:underline inline-flex items-center gap-1"
+                                            >
+                                                Sito <ExternalLink className="w-3 h-3" />
+                                            </a>
+                                        )}
+                                        {selectedClient.google_maps_url && (
+                                            <a
+                                                href={selectedClient.google_maps_url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-brand-accent hover:underline inline-flex items-center gap-1"
+                                            >
+                                                Maps <ExternalLink className="w-3 h-3" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs text-white/55">Data follow-up</label>
+                                    <input
+                                        type="date"
+                                        value={detailDraft.follow_up_date}
+                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, follow_up_date: e.target.value }))}
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs text-white/55">Note</label>
+                                    <textarea
+                                        value={detailDraft.notes}
+                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, notes: e.target.value }))}
+                                        rows={4}
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60 resize-y"
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2">
+                                    <button
+                                        onClick={() => logContact("chiamata")}
+                                        className="px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 text-sm flex items-center justify-center gap-1.5"
+                                    >
+                                        <Phone className="w-4 h-4" /> Chiamata
+                                    </button>
+                                    <button
+                                        onClick={() => logContact("email")}
+                                        className="px-3 py-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-sm flex items-center justify-center gap-1.5"
+                                    >
+                                        <Mail className="w-4 h-4" /> Email
+                                    </button>
+                                </div>
+
+                                <button
+                                    onClick={handleSaveDetails}
+                                    disabled={savingDetails}
+                                    className="w-full px-3 py-2 rounded-lg bg-brand-accent text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    <Save className="w-4 h-4" /> {savingDetails ? "Salvataggio..." : "Salva dettagli"}
+                                </button>
+
+                                <div className="pt-2 border-t border-white/10">
+                                    <div className="flex items-center justify-between text-xs text-white/50 mb-2">
+                                        <span>Ultimo contatto</span>
+                                        <span className="inline-flex items-center gap-1">
+                                            <CalendarIcon className="w-3 h-3" />
+                                            {selectedClient.last_contact_date
+                                                ? new Date(selectedClient.last_contact_date).toLocaleDateString("it-IT")
+                                                : "Nessuno"}
+                                        </span>
+                                    </div>
+                                    <FollowUpHistory clientId={selectedClient.id} />
+                                </div>
+                            </div>
+                        </aside>
+                    )}
                 </div>
             )}
-
-            {/* Slider con frecce */}
-            <div className="relative">
-                <button
-                    onClick={scrollLeft}
-                    className="absolute left-0 top-0 z-10 h-full px-2 flex items-center bg-gradient-to-r from-black/40 to-transparent text-white/40 hover:text-white/80 transition-colors"
-                    aria-label="Scorri a sinistra"
-                >
-                    <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                    onClick={scrollRight}
-                    className="absolute right-0 top-0 z-10 h-full px-2 flex items-center bg-gradient-to-l from-black/40 to-transparent text-white/40 hover:text-white/80 transition-colors"
-                    aria-label="Scorri a destra"
-                >
-                    <ChevronRight className="w-5 h-5" />
-                </button>
-
-                <div ref={scrollRef} className="overflow-x-auto min-h-[500px] scroll-smooth" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.15) transparent' }}>
-                    <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-white/5 border-b border-white/10 text-white/60">
-                            <tr>
-                                <th className="px-6 py-4 font-medium w-12">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedClients.length === filteredClients.length && filteredClients.length > 0}
-                                        onChange={toggleSelectAll}
-                                        className="rounded border-white/20 bg-black/50 text-brand-accent focus:ring-brand-accent focus:ring-offset-black"
-                                    />
-                                </th>
-                                <th className="px-6 py-4 font-medium">Nome Azienda</th>
-                                <th className="px-6 py-4 font-medium">Contatti</th>
-                                <th className="px-6 py-4 font-medium">Email</th>
-                                <th className="px-6 py-4 font-medium">Ultimo Contatto</th>
-                                <th className="px-6 py-4 font-medium">Contatti</th>
-                                <th className="px-6 py-4 font-medium">Follow-up</th>
-                                <th className="px-6 py-4 font-medium">Azioni Rapide</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-white/10">
-                            {filteredClients.length === 0 ? (
-                                <tr>
-                                    <td colSpan={8} className="px-6 py-12 text-center text-white/30 text-sm">
-                                        Nessun cliente trovato per &quot;{searchQuery}&quot;
-                                    </td>
-                                </tr>
-                            ) : filteredClients.map((client) => (
-                                <Fragment key={client.id}>
-                                    <tr className={`hover:bg-white/[0.02] transition-colors ${selectedClients.includes(client.id) ? 'bg-brand-gradient-1/5' : ''}`}>
-                                        <td className="px-6 py-4">
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedClients.includes(client.id)}
-                                                onChange={() => toggleSelect(client.id)}
-                                                className="rounded border-white/20 bg-black/50 text-brand-accent focus:ring-brand-accent focus:ring-offset-black"
-                                            />
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="font-medium text-white">{client.business_name}</div>
-                                            <div className="text-xs text-white/50">{client.city} {client.province ? `(${client.province})` : ''}</div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-white/80">{client.phone || '-'}</div>
-                                            <div className="flex gap-2 text-xs mt-1">
-                                                {client.website && <a href={client.website} target="_blank" className="text-brand-gradient-1 hover:underline flex items-center gap-1">Web <ExternalLink className="w-3 h-3" /></a>}
-                                                {client.google_maps_url && <a href={client.google_maps_url} target="_blank" className="text-brand-accent hover:underline flex items-center gap-1">Maps <ExternalLink className="w-3 h-3" /></a>}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {editingEmailId === client.id ? (
-                                                <div className="flex items-center gap-2">
-                                                    <input
-                                                        autoFocus
-                                                        type="email"
-                                                        value={emailValue}
-                                                        onChange={(e) => setEmailValue(e.target.value)}
-                                                        className="bg-black/50 border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-brand-accent w-48"
-                                                        onKeyDown={(e) => e.key === 'Enter' && saveEmail(client.id)}
-                                                    />
-                                                    <button onClick={() => saveEmail(client.id)} className="text-green-400 hover:text-green-300"><Save className="w-4 h-4" /></button>
-                                                </div>
-                                            ) : (
-                                                <div
-                                                    onClick={() => handleEmailEdit(client)}
-                                                    className="group flex items-center gap-2 cursor-pointer border-b border-transparent hover:border-white/30 transition-colors py-1"
-                                                    title="Clicca per modificare"
-                                                >
-                                                    <span className={client.email ? "text-white/90" : "text-white/30 italic"}>
-                                                        {client.email || 'Inserisci email...'}
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {editingLastContactId === client.id ? (
-                                                <div className="flex flex-col gap-2">
-                                                    <input
-                                                        type="datetime-local"
-                                                        value={lastContactDateValue}
-                                                        onChange={(e) => setLastContactDateValue(e.target.value)}
-                                                        className="bg-black/50 border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-brand-accent w-full"
-                                                    />
-                                                    <div className="flex items-center gap-2">
-                                                        <select
-                                                            value={lastContactMethodValue}
-                                                            onChange={(e) => setLastContactMethodValue(e.target.value)}
-                                                            className="bg-black/50 border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-brand-accent w-full"
-                                                        >
-                                                            <option value="chiamata">Chiamata</option>
-                                                            <option value="email">Email</option>
-                                                            <option value="messaggio">Messaggio</option>
-                                                            <option value="altro">Altro</option>
-                                                        </select>
-                                                        <button onClick={() => saveLastContact(client.id)} className="text-green-400 hover:text-green-300"><Save className="w-4 h-4" /></button>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div
-                                                    onClick={() => handleLastContactEdit(client)}
-                                                    className="group flex items-center gap-2 cursor-pointer border-b border-transparent hover:border-white/30 transition-colors py-1"
-                                                    title="Clicca per modificare data e tipo contatto"
-                                                >
-                                                    {client.last_contact_date ? (
-                                                        <div className="flex items-center gap-2 text-white/80">
-                                                            {client.last_contact_method === 'chiamata' ? <Phone className="w-3 h-3 text-blue-400" /> :
-                                                                client.last_contact_method === 'email' ? <Mail className="w-3 h-3 text-brand-accent" /> :
-                                                                    <FileText className="w-3 h-3 text-white/50" />}
-                                                            {new Date(client.last_contact_date).toLocaleDateString('it-IT')}
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-white/30 italic">Aggiungi contatto...</span>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2">
-                                                {(contactCounts[client.id] ?? 0) === 0 && (
-                                                    <span className="relative flex h-2.5 w-2.5">
-                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400" />
-                                                    </span>
-                                                )}
-                                                <span className="text-white/90 font-medium">
-                                                    {contactCounts[client.id] ?? 0}
-                                                </span>
-                                                <span className="text-xs text-white/40">contatti</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className={`px-2 py-1 rounded text-xs ${client.follow_up_date && new Date(client.follow_up_date) <= new Date() ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-white/70'}`}>
-                                                {client.follow_up_date ? new Date(client.follow_up_date).toLocaleDateString('it-IT') : 'Nessuno'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <button onClick={() => handleCall(client.id)} className="p-1.5 rounded-md bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors" title="Registra Chiamata">
-                                                    <Phone className="w-4 h-4" />
-                                                </button>
-                                                <button onClick={() => handleMail(client.id)} className="p-1.5 rounded-md bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 transition-colors" title="Registra Email">
-                                                    <Mail className="w-4 h-4" />
-                                                </button>
-                                                <button onClick={() => handleFollowUp(client)} className="p-1.5 rounded-md bg-green-500/10 hover:bg-green-500/20 text-green-400 transition-colors" title="Imposta Follow-up">
-                                                    <CalendarIcon className="w-4 h-4" />
-                                                </button>
-                                                <button onClick={() => handleNotes(client)} className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/70 transition-colors relative" title="Aggiungi Note">
-                                                    <FileText className="w-4 h-4" />
-                                                    {client.notes && <span className="absolute -top-1 -right-1 w-2 h-2 bg-brand-accent rounded-full"></span>}
-                                                </button>
-                                                <button
-                                                    onClick={() => setExpandedClientId(expandedClientId === client.id ? null : client.id)}
-                                                    className="ml-2 p-1.5 rounded-md bg-brand-gradient-1/10 hover:bg-brand-gradient-1/20 text-brand-gradient-1 transition-colors flex items-center gap-1"
-                                                    title="Vedi Storico"
-                                                >
-                                                    <History className="w-4 h-4" />
-                                                    {expandedClientId === client.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {expandedClientId === client.id && (
-                                        <tr key={`history-${client.id}`} className="bg-white/[0.01]">
-                                            <td colSpan={8} className="p-0 border-b border-white/5">
-                                                <FollowUpHistory clientId={client.id} />
-                                            </td>
-                                        </tr>
-                                    )}
-                                </Fragment>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>{/* end relative slider wrapper */}
         </div>
     );
 }

@@ -256,15 +256,17 @@ section {
   box-shadow: 0 8px 24px rgba(255,107,53,0.4);
 }
 
+
 .btn--secondary {
-  background: var(--white);
-  color: var(--dark);
-  border: 2px solid var(--gray-200);
+  background: var(--orange);
+  color: var(--white);
+  border: 2px solid var(--orange);
 }
 
 .btn--secondary:hover {
-  border-color: var(--orange);
-  color: var(--orange);
+  background: var(--orange-dark);
+  color: var(--white);
+  border-color: var(--orange-dark);
   transform: translateY(-2px);
 }
 

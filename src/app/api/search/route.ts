@@ -148,6 +148,7 @@ function mapPlaceToLead(place: SerpPlace, keyword: string, location: string) {
     return {
         search_keyword: keyword,
         search_location: location,
+        keyword: keyword,
         business_name: place.title ?? 'Unknown Name',
         address: place.address ?? null,
         city: city,

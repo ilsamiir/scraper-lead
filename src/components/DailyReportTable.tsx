@@ -71,10 +71,12 @@ export function DailyReportTable() {
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(getTodayDateInput());
     const [methodFilter, setMethodFilter] = useState("tutti");
+    const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
     const supabase = createClient();
 
     const fetchDailyReport = useCallback(async () => {
         setLoading(true);
+        setExpandedRowId(null);
         const start = new Date(`${selectedDate}T00:00:00`);
         const end = new Date(`${selectedDate}T23:59:59.999`);
 
@@ -185,65 +187,96 @@ export function DailyReportTable() {
                         </thead>
                         <tbody className="divide-y divide-white/10">
                             {rows.map((row) => (
-                                <tr key={row.id} className="hover:bg-white/[0.02] transition-colors">
-                                    <td className="px-6 py-4">
-                                        <div className="font-medium text-white">
-                                            {row.saved_clients?.business_name || "Cliente"}
-                                        </div>
-                                        {(row.saved_clients?.city || row.saved_clients?.province) && (
-                                            <div className="text-xs text-white/50">
-                                                {row.saved_clients?.city} {row.saved_clients?.province ? `(${row.saved_clients?.province})` : ""}
+                                <>
+                                    <tr 
+                                        key={row.id} 
+                                        className={`hover:bg-white/[0.04] transition-colors cursor-pointer ${expandedRowId === row.id ? 'bg-white/[0.04]' : ''}`}
+                                        onClick={() => setExpandedRowId(expandedRowId === row.id ? null : row.id)}
+                                    >
+                                        <td className="px-6 py-4">
+                                            <div className="font-medium text-white">
+                                                {row.saved_clients?.business_name || "Cliente"}
                                             </div>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2 text-white/80">
-                                            {getMethodIcon(row.contact_method)}
-                                            <span>{getMethodLabel(row.contact_method)}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 text-white/70">
-                                        {format(new Date(row.contact_date), "d MMM yyyy, HH:mm", { locale: it })}
-                                    </td>
-                                    <td className="px-6 py-4 text-white/70">
-                                        {row.saved_clients?.email ? (
-                                            <a
-                                                href={`mailto:${row.saved_clients.email}`}
-                                                className="text-brand-accent hover:underline"
-                                            >
-                                                {row.saved_clients.email}
-                                            </a>
-                                        ) : (
-                                            "-"
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 text-white/70">
-                                        {row.saved_clients?.phone ? (
-                                            <a href={`tel:${row.saved_clients.phone}`} className="text-brand-accent hover:underline">
-                                                {row.saved_clients.phone}
-                                            </a>
-                                        ) : (
-                                            "-"
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 text-white/70">
-                                        {row.saved_clients?.website ? (
-                                            <a
-                                                href={row.saved_clients.website}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-brand-accent hover:underline"
-                                            >
-                                                {row.saved_clients.website}
-                                            </a>
-                                        ) : (
-                                            "-"
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 text-white/60 whitespace-pre-wrap">
-                                        {row.notes || "-"}
-                                    </td>
-                                </tr>
+                                            {(row.saved_clients?.city || row.saved_clients?.province) && (
+                                                <div className="text-xs text-white/50">
+                                                    {row.saved_clients?.city} {row.saved_clients?.province ? `(${row.saved_clients?.province})` : ""}
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-2 text-white/80">
+                                                {getMethodIcon(row.contact_method)}
+                                                <span>{getMethodLabel(row.contact_method)}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-white/70">
+                                            {format(new Date(row.contact_date), "d MMM yyyy, HH:mm", { locale: it })}
+                                        </td>
+                                        <td className="px-6 py-4 text-white/70">
+                                            {row.saved_clients?.email ? (
+                                                <a
+                                                    href={`mailto:${row.saved_clients.email}`}
+                                                    className="text-brand-accent hover:underline"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    {row.saved_clients.email}
+                                                </a>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4 text-white/70">
+                                            {row.saved_clients?.phone ? (
+                                                <a 
+                                                    href={`tel:${row.saved_clients.phone}`} 
+                                                    className="text-brand-accent hover:underline"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    {row.saved_clients.phone}
+                                                </a>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4 text-white/70">
+                                            {row.saved_clients?.website ? (
+                                                <a
+                                                    href={row.saved_clients.website}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="text-brand-accent hover:underline"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    {row.saved_clients.website}
+                                                </a>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4 text-white/60">
+                                            {row.notes ? (
+                                                <div className="flex items-center gap-2 text-brand-accent font-medium">
+                                                    <FileText className="w-3 h-3" />
+                                                    <span>Dettagli</span>
+                                                </div>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
+                                    </tr>
+                                    {expandedRowId === row.id && row.notes && (
+                                        <tr className="bg-white/[0.02]">
+                                            <td colSpan={7} className="px-6 py-4">
+                                                <div className="bg-black/20 rounded-lg p-4 border border-white/5">
+                                                    <div className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">Note dell'attività</div>
+                                                    <div className="text-white/80 whitespace-pre-wrap leading-relaxed">
+                                                        {row.notes}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </>
                             ))}
                         </tbody>
                     </table>

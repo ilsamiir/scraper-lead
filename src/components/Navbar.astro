@@ -1,0 +1,233 @@
+---
+const isHome = Astro.url.pathname === '/';
+---
+<nav class:list={["navbar", { "navbar--page": !isHome }]}>
+  <div class="navbar__inner container">
+    <button class="navbar__menu-btn" aria-label="Menu" id="menuBtn">
+      <span></span>
+      <span></span>
+    </button>
+
+    <a href="/" class="navbar__logo">
+      <span class="navbar__logo-icon">🍕</span>
+      <span class="navbar__logo-text">FoodBot</span>
+    </a>
+
+    <div class="navbar__links" id="navLinks">
+      <a href="/funzionalita">Funzionalità</a>
+      <a href="/come-funziona">Come Funziona</a>
+      <a href="/prezzi">Prezzi</a>
+      <a href="/blog">Blog</a>
+      <a href="/faq">FAQ</a>
+    </div>
+
+    <a href="/prezzi" class="navbar__cta">
+      Inizia Gratis
+    </a>
+  </div>
+
+  <div class="navbar__mobile-menu" id="mobileMenu">
+    <a href="/funzionalita">Funzionalità</a>
+    <a href="/come-funziona">Come Funziona</a>
+    <a href="/prezzi">Prezzi</a>
+    <a href="/blog">Blog</a>
+    <a href="/faq">FAQ</a>
+    <a href="/prezzi" class="navbar__mobile-cta">Inizia Gratis</a>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .navbar--scrolled {
+    background: rgba(13,27,42,0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+  }
+
+  /* Always-dark navbar for inner pages (no transparent-on-top-of-white issue) */
+  .navbar--page {
+    background: rgba(13,27,42,0.95);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    gap: 2rem;
+  }
+
+  .navbar__menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    width: 28px;
+  }
+
+  .navbar__menu-btn span {
+    display: block;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .navbar__menu-btn span:first-child { width: 100%; }
+  .navbar__menu-btn span:last-child { width: 60%; }
+
+  .navbar__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .navbar__logo-icon {
+    font-size: 1.6rem;
+    display: flex;
+  }
+
+  .navbar__links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .navbar__links a {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    transition: color 0.2s ease;
+    position: relative;
+    text-decoration: none;
+  }
+
+  .navbar__links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--orange);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .navbar__links a:hover { color: #fff; }
+  .navbar__links a:hover::after { width: 100%; }
+
+  .navbar__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 1.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    color: #fff;
+    background: var(--orange);
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .navbar__cta:hover {
+    background: var(--orange-light, #FF8F60);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(255,107,53,0.35);
+  }
+
+  /* Mobile menu */
+  .navbar__mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: 1rem 1.5rem 1.5rem;
+    background: rgba(13,27,42,0.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .navbar__mobile-menu a {
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .navbar__mobile-menu a:hover {
+    color: #fff;
+  }
+
+  .navbar__mobile-cta {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 1rem;
+    padding: 0.65rem 1.5rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    color: #fff !important;
+    background: var(--orange);
+    border-radius: 9999px;
+    border-bottom: none !important;
+    transition: background 0.2s ease;
+  }
+
+  .navbar__mobile-cta:hover {
+    background: var(--orange-light, #FF8F60);
+  }
+
+  @media (max-width: 900px) {
+    .navbar__links { display: none; }
+    .navbar__menu-btn { display: flex; }
+    .navbar__cta { display: none; }
+    .navbar__mobile-menu.open { display: flex; }
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('menuBtn');
+  const menu = document.getElementById('mobileMenu');
+  const navbar = document.querySelector('.navbar');
+
+  btn?.addEventListener('click', () => menu?.classList.toggle('open'));
+  menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu?.classList.remove('open')));
+
+  // Scroll detection for navbar background
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      navbar?.classList.add('navbar--scrolled');
+    } else {
+      navbar?.classList.remove('navbar--scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
+</script>

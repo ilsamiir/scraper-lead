@@ -1,0 +1,11 @@
+/* Brand orange secondary button for non-homepage */
+.btn--secondary.brand-orange {
+  background: var(--orange);
+  color: var(--white) !important;
+  border: 2px solid var(--orange);
+}
+.btn--secondary.brand-orange:hover {
+  background: var(--orange-dark);
+  color: var(--white) !important;
+  border-color: var(--orange-dark);
+}

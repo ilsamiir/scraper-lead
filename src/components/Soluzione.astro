@@ -1,0 +1,227 @@
+---
+---
+<section class="soluzione" id="soluzione" aria-labelledby="soluzione-title">
+  <div class="container">
+    <div class="soluzione__layout">
+      <div class="soluzione__text reveal">
+        <span class="section-label">La Soluzione</span>
+        <h2 id="soluzione-title">FoodBot ragiona come un <em>fornaio</em>, non come un cameriere.</h2>
+        <p>La piattaforma organizza gli ordini in base alla logica della teglia: raggruppa, ottimizza, sincronizza con la produzione. <strong>Meno sprechi, più margine, operatività fluida.</strong></p>
+      </div>
+
+      <div class="soluzione__flow reveal reveal-delay-2">
+        <div class="soluzione__flow-card">
+          <div class="soluzione__flow-step">
+            <span class="soluzione__flow-num">1</span>
+            <span class="soluzione__flow-emoji">📱</span>
+          </div>
+          <div class="soluzione__flow-content">
+            <h4>Cliente ordina</h4>
+            <p>Ordine online via webapp, intuitivo e veloce</p>
+          </div>
+        </div>
+
+        <div class="soluzione__flow-connector">
+          <div class="soluzione__flow-line"></div>
+        </div>
+
+        <div class="soluzione__flow-card soluzione__flow-card--highlight">
+          <div class="soluzione__flow-step">
+            <span class="soluzione__flow-num">2</span>
+            <span class="soluzione__flow-emoji">🧠</span>
+          </div>
+          <div class="soluzione__flow-content">
+            <h4>Logica FoodBot</h4>
+            <p>Raggruppa le teglie e ottimizza la produzione</p>
+          </div>
+        </div>
+
+        <div class="soluzione__flow-connector">
+          <div class="soluzione__flow-line"></div>
+        </div>
+
+        <div class="soluzione__flow-card">
+          <div class="soluzione__flow-step">
+            <span class="soluzione__flow-num">3</span>
+            <span class="soluzione__flow-emoji">🔥</span>
+          </div>
+          <div class="soluzione__flow-content">
+            <h4>Produzione ottimizzata</h4>
+            <p>Sincronizzazione reale con il laboratorio</p>
+          </div>
+        </div>
+
+        <div class="soluzione__flow-connector">
+          <div class="soluzione__flow-line"></div>
+        </div>
+
+        <div class="soluzione__flow-card">
+          <div class="soluzione__flow-step">
+            <span class="soluzione__flow-num">4</span>
+            <span class="soluzione__flow-emoji">😊</span>
+          </div>
+          <div class="soluzione__flow-content">
+            <h4>Ritiro in store</h4>
+            <p>Cliente soddisfatto, margine protetto</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .soluzione {
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .soluzione::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.05), transparent 70%);
+    pointer-events: none;
+  }
+
+  .soluzione::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -150px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(10,61,98,0.03), transparent 70%);
+    pointer-events: none;
+  }
+
+  .soluzione__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .soluzione__text h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .soluzione__text h2 em {
+    font-style: normal;
+    color: var(--orange);
+  }
+
+  .soluzione__text p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .soluzione__text strong {
+    color: var(--dark);
+  }
+
+  .soluzione__flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
+  }
+
+  .soluzione__flow-connector {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    height: 32px;
+    position: relative;
+  }
+
+  .soluzione__flow-line {
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--orange), rgba(78,205,196,0.4));
+    border-radius: 1px;
+  }
+
+  .soluzione__flow-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--white);
+    border: 1.5px solid rgba(0,0,0,0.06);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 420px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .soluzione__flow-card:hover {
+    border-color: var(--orange);
+    box-shadow: 0 12px 32px rgba(255,107,53,0.1);
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  .soluzione__flow-card--highlight {
+    background: linear-gradient(135deg, rgba(255,107,53,0.06), rgba(255,107,53,0.02));
+    border-color: var(--orange);
+    box-shadow: 0 8px 32px rgba(255,107,53,0.15), 0 0 0 1px rgba(255,107,53,0.1);
+  }
+
+  .soluzione__flow-card--highlight:hover {
+    box-shadow: 0 16px 48px rgba(255,107,53,0.22), 0 0 0 1px rgba(255,107,53,0.2);
+  }
+
+  .soluzione__flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 56px;
+  }
+
+  .soluzione__flow-num {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--orange);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,107,53,0.1);
+  }
+
+  .soluzione__flow-emoji {
+    font-size: 1.8rem;
+  }
+
+  .soluzione__flow-content h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.2rem;
+    color: var(--dark);
+  }
+
+  .soluzione__flow-content p {
+    font-size: 0.88rem;
+    color: var(--gray-500);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .soluzione__layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

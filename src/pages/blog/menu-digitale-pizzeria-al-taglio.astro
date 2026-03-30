@@ -1,0 +1,562 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Menu Digitale per Pizzeria al Taglio: Vantaggi e Come Crearlo",
+  "description": "Guida completa al menu digitale per pizzerie al taglio. 6 vantaggi concreti, come strutturarlo e gli errori da evitare per aumentare ordini e scontrino medio.",
+  "datePublished": "2026-03-21",
+  "author": {
+    "@type": "Organization",
+    "name": "FoodBot",
+    "url": "https://ristobot.it"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "FoodBot",
+    "url": "https://ristobot.it",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ristobot.it/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ristobot.it/blog/menu-digitale-pizzeria-al-taglio"
+  }
+};
+
+const relatedArticles = [
+  {
+    slug: 'come-gestire-ordini-pizzeria-al-taglio',
+    title: 'Come Gestire gli Ordini in una Pizzeria al Taglio',
+    description: 'Scopri le strategie e gli strumenti per organizzare al meglio gli ordini da asporto nella tua pizzeria al taglio.',
+    category: 'Gestione',
+    date: '21 Mar 2026',
+    readTime: '8 min',
+  },
+  {
+    slug: 'ridurre-sprechi-pizzeria-al-taglio',
+    title: 'Come Ridurre gli Sprechi in Pizzeria al Taglio',
+    description: 'Tecniche pratiche per minimizzare gli sprechi di impasto, condimenti e prodotto finito ottimizzando la produzione delle teglie.',
+    category: 'Produzione',
+    date: '21 Mar 2026',
+    readTime: '9 min',
+  },
+  {
+    slug: 'fidelizzare-clienti-pizzeria',
+    title: 'Fidelizzare i Clienti della Tua Pizzeria',
+    description: 'Come costruire un programma di fidelizzazione efficace per la tua pizzeria al taglio usando strumenti digitali.',
+    category: 'Marketing',
+    date: '21 Mar 2026',
+    readTime: '7 min',
+  },
+];
+---
+
+<Layout
+  title="Menu Digitale per Pizzeria al Taglio: Vantaggi e Come Crearlo"
+  description="Guida completa al menu digitale per pizzerie al taglio. 6 vantaggi concreti, come strutturarlo e gli errori da evitare per aumentare ordini e scontrino medio."
+>
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Blog", href: "/blog"}, {label: "Menu Digitale per Pizzeria al Taglio: Vantaggi e Come Crearlo"}]} />
+  <main>
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
+
+    <!-- Hero -->
+    <section class="post-hero section--dark">
+      <div class="container">
+        <span class="section-label section-label--dark reveal">TECNOLOGIA</span>
+        <h1 class="post-hero__title reveal reveal-delay-1">Menu Digitale per Pizzeria al Taglio: Vantaggi e Come Crearlo</h1>
+        <div class="post-hero__meta reveal reveal-delay-2">
+          <span>21 Mar 2026</span>
+          <span class="post-hero__separator">&middot;</span>
+          <span>6 min di lettura</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Article Body -->
+    <section class="post-body">
+      <div class="container container--narrow">
+        <article class="post-article">
+
+          <h2>L'evoluzione dal menu cartaceo al digitale</h2>
+          <p>
+            Per decenni, il menu di una pizzeria al taglio era un foglio plastificato appeso al muro o, nella migliore delle ipotesi, una lavagna scritta a mano con i gusti del giorno. Funzionava? In parte. Ma quel sistema aveva limiti evidenti: aggiornare i prezzi significava ristampare tutto, i clienti non sapevano cosa fosse disponibile prima di entrare, e le informazioni su allergeni e ingredienti erano spesso assenti o incomplete.
+          </p>
+          <p>
+            Oggi il comportamento dei clienti è cambiato. Chi ordina pizza al taglio per l'asporto vuole sapere in anticipo cosa c'è, quanto costa, e magari ordinare direttamente dallo smartphone. Il menu digitale non è più un vezzo tecnologico: è diventato uno strumento di vendita concreto, capace di aumentare gli ordini, ridurre gli errori e migliorare l'esperienza del cliente.
+          </p>
+          <p>
+            In questa guida vediamo i vantaggi reali di un menu digitale per pizzerie al taglio, come strutturarlo nel modo giusto e gli errori che rischiano di vanificare l'investimento.
+          </p>
+
+          <h2>6 vantaggi concreti del menu digitale</h2>
+
+          <h3>1. Aggiornamento in tempo reale</h3>
+          <p>
+            In una pizzeria al taglio, l'offerta cambia continuamente: le teglie escono a rotazione, i gusti variano in base al giorno e alla stagione. Con un menu digitale aggiorni i prodotti disponibili in pochi secondi, direttamente dalla dashboard. Niente più clienti delusi che arrivano e scoprono che la margherita è finita da un'ora. Il menu riflette sempre la realtà del banco.
+          </p>
+
+          <h3>2. Gestione della disponibilità prodotti</h3>
+          <p>
+            Un buon menu digitale permette di segnare un prodotto come "esaurito" senza rimuoverlo dall'elenco. In questo modo il cliente vede l'intera offerta della giornata, capisce che quel gusto esiste ma non è disponibile in quel momento, e può organizzarsi di conseguenza. Questo riduce drasticamente le telefonate per chiedere "avete ancora la diavola?" e le delusioni al banco.
+          </p>
+
+          <h3>3. Foto dei prodotti</h3>
+          <p>
+            La pizza al taglio si vende con gli occhi. Una foto ben fatta della teglia appena sfornata vale più di qualsiasi descrizione. Il menu digitale ti consente di mostrare ogni prodotto con un'immagine reale, aumentando la percezione di qualità e stimolando l'appetito. I dati parlano chiaro: un menu con foto genera in media il 30% di ordini in più rispetto a un elenco testuale.
+          </p>
+
+          <h3>4. Informazioni su allergeni e ingredienti</h3>
+          <p>
+            La normativa italiana richiede che gli allergeni siano comunicati al cliente. Con un menu digitale, ogni prodotto può avere la lista completa degli ingredienti e le icone degli allergeni presenti. Questo non solo ti mette in regola, ma rassicura i clienti con intolleranze o allergie, che diventano clienti fedeli quando trovano un locale che li accoglie senza complicazioni.
+          </p>
+
+          <h3>5. Ordini diretti dal menu</h3>
+          <p>
+            Il vantaggio più potente: trasformare il menu da vetrina passiva a canale di vendita attivo. Un menu digitale integrato con un <a href="/funzionalita">sistema di gestione ordini</a> permette al cliente di selezionare i pezzi, scegliere l'orario di ritiro e inviare l'ordine. Nessuna telefonata, nessun fraintendimento. Per la pizzeria significa ordini più precisi, meno errori e un flusso di lavoro più organizzato.
+          </p>
+
+          <h3>6. Upsell automatico</h3>
+          <p>
+            Quando il cliente ordina una margherita, il menu digitale può suggerire automaticamente un'aggiunta: "Vuoi aggiungere una focaccia?" oppure "I nostri supplì sono appena usciti dal forno". Questo meccanismo di upsell, impossibile con un menu cartaceo, aumenta lo scontrino medio del 15-25% senza alcuno sforzo aggiuntivo da parte del personale.
+          </p>
+
+          <div class="post-callout">
+            <strong>Da sapere:</strong> Secondo le analisi dei nostri clienti, le pizzerie al taglio che passano al menu digitale con ordini integrati vedono un incremento medio del 20% sullo scontrino medio nei primi 3 mesi. L'upsell automatico e la visibilità delle foto sono i fattori principali.
+          </div>
+
+          <h2>Come strutturare il menu digitale</h2>
+          <p>
+            La struttura del menu è fondamentale. Un menu confuso o mal organizzato vanifica tutti i vantaggi tecnologici. Ecco le regole chiave per una pizzeria al taglio.
+          </p>
+
+          <h3>Categorie chiare e intuitive</h3>
+          <p>
+            Organizza il menu per categorie che rispecchiano come il cliente pensa: <strong>Pizze Classiche</strong>, <strong>Pizze Speciali</strong>, <strong>Focacce</strong>, <strong>Supplì e Fritti</strong>, <strong>Bevande</strong>, <strong>Dolci</strong>. Evita categorie troppo generiche ("Altro") o troppo specifiche ("Pizze con verdure grigliate di stagione"). Il cliente deve trovare quello che cerca in massimo 2 tap.
+          </p>
+
+          <h3>Varianti e personalizzazioni</h3>
+          <p>
+            La pizza al taglio ha una peculiarità: spesso il cliente sceglie la dimensione del pezzo, non un formato fisso. Il menu digitale deve gestire varianti come "pezzo singolo", "mezzo trancio" o "teglia intera" con prezzi differenziati. Se offri anche l'opzione "extra ingrediente" (doppia mozzarella, aggiunta di prosciutto crudo), il sistema deve permettere queste personalizzazioni in modo semplice.
+          </p>
+
+          <h3>Prezzi al pezzo e al peso</h3>
+          <p>
+            Alcune pizzerie vendono al pezzo con prezzo fisso, altre al peso. Il tuo menu digitale deve supportare entrambi i modelli, o un ibrido. L'importante è che il prezzo sia sempre chiaro e visibile: nessun cliente vuole sorprese alla cassa. Se vendi al peso, indicare un prezzo indicativo per porzione aiuta il cliente a orientarsi ("circa 2,50 a porzione").
+          </p>
+
+          <h2>Errori comuni da evitare</h2>
+
+          <h3>Troppi prodotti nel menu</h3>
+          <p>
+            Il paradosso della scelta: più opzioni offri, più il cliente fa fatica a decidere. Un menu digitale con 80 referenze è controproducente. Concentrati sui prodotti che vendi realmente ogni giorno (15-25 referenze per una pizzeria al taglio tipica) e usa la rotazione giornaliera per introdurre novità senza appesantire la lista.
+          </p>
+
+          <h3>Foto di bassa qualità o assenti</h3>
+          <p>
+            Meglio nessuna foto che una foto scura, sfocata o con la pizza tagliata male. Se decidi di usare le immagini (e dovresti), investi mezz'ora con luce naturale e uno smartphone recente. Fotografa le teglie appena sfornate, dall'alto, con sfondo pulito. Il risultato sarà nettamente superiore a qualsiasi foto stock.
+          </p>
+
+          <h3>Descrizioni assenti o generiche</h3>
+          <p>
+            "Margherita" non basta. Scrivi "Margherita: pomodoro San Marzano, mozzarella fior di latte, basilico fresco, olio EVO". La descrizione racconta la qualità degli ingredienti e giustifica il prezzo. Due righe bastano, ma devono esserci. Il cliente che legge "pomodoro San Marzano" percepisce un valore diverso rispetto a un semplice "pomodoro".
+          </p>
+
+          <div class="post-callout post-callout--tip">
+            <strong>Consiglio pratico:</strong> Aggiorna le foto del menu almeno una volta al mese. I clienti abituali notano quando le immagini non corrispondono al prodotto reale. Una foto fresca comunica cura e attenzione, e spinge a provare i nuovi gusti.
+          </div>
+
+          <h2>Integrazione con il sistema ordini e produzione</h2>
+          <p>
+            Un menu digitale isolato è utile, ma il vero salto di qualità avviene quando è integrato con il sistema di gestione ordini e con la produzione. Ecco come funziona il flusso ideale, che puoi approfondire nella pagina <a href="/come-funziona">come funziona</a>:
+          </p>
+          <ol class="post-list post-list--ordered">
+            <li><strong>Il cliente consulta il menu</strong> dal proprio smartphone o dal link in bio sui social.</li>
+            <li><strong>Seleziona i prodotti</strong>, personalizza le varianti e sceglie l'orario di ritiro.</li>
+            <li><strong>L'ordine entra nel sistema</strong> e viene raggruppato con gli altri ordini per ottimizzare le teglie.</li>
+            <li><strong>La produzione riceve le priorità</strong>: sa quali gusti preparare e in quale quantità.</li>
+            <li><strong>Il cliente riceve una notifica</strong> quando l'ordine è pronto per il ritiro.</li>
+          </ol>
+          <p>
+            Questo flusso elimina le telefonate, riduce gli errori di trascrizione e sincronizza la domanda con la produzione. Per una pizzeria al taglio che gestisce decine di ordini al giorno, la differenza è enorme.
+          </p>
+
+          <h2>Come FoodBot gestisce il menu digitale</h2>
+          <p>
+            <a href="/funzionalita">FoodBot</a> nasce specificamente per le pizzerie al taglio, e il menu digitale è uno dei suoi moduli centrali. Ecco cosa puoi fare:
+          </p>
+          <ul class="post-list">
+            <li><strong>Crea e aggiorna il menu in tempo reale</strong> dalla dashboard, con foto, descrizioni e allergeni per ogni prodotto.</li>
+            <li><strong>Gestisci la disponibilità</strong> con un tap: segna un prodotto come esaurito e il menu si aggiorna istantaneamente.</li>
+            <li><strong>Attiva l'upsell automatico</strong> per suggerire prodotti complementari durante l'ordine.</li>
+            <li><strong>Supporta prezzi al pezzo e varianti</strong> personalizzabili per ogni referenza.</li>
+            <li><strong>Integra menu e ordini</strong> in un unico flusso: il cliente ordina direttamente dal menu, senza passaggi intermedi.</li>
+            <li><strong>Collega il menu alla Logica Teglia</strong>, il sistema esclusivo che raggruppa gli ordini per ottimizzare la produzione e ridurre gli sprechi fino al 30%.</li>
+          </ul>
+          <p>
+            Il menu digitale di FoodBot non è un PDF online o un semplice elenco: è uno strumento di vendita integrato con tutta la catena operativa della pizzeria. Puoi provarlo gratuitamente per 30 giorni, senza carta di credito e senza vincoli. <a href="/prezzi">Scopri i piani e inizia la prova gratuita.</a>
+          </p>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- Leggi anche -->
+    <section class="post-related">
+      <div class="container">
+        <h2 class="post-related__title reveal">Leggi anche</h2>
+        <div class="post-related__grid">
+          {relatedArticles.map((article, i) => (
+            <a href={`/blog/${article.slug}`} class={`post-related__card reveal reveal-delay-${i + 1}`}>
+              <span class="post-related__category">{article.category}</span>
+              <h3 class="post-related__card-title">{article.title}</h3>
+              <p class="post-related__card-desc">{article.description}</p>
+              <div class="post-related__card-meta">
+                <span>{article.date}</span>
+                <span class="post-related__separator">&middot;</span>
+                <span>{article.readTime} di lettura</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="post-cta section--dark">
+      <div class="container post-cta__inner">
+        <h2 class="post-cta__title reveal">Pronto a digitalizzare il menu della tua pizzeria?</h2>
+        <p class="post-cta__text reveal reveal-delay-1">
+          Menu digitale, ordini, produzione e fidelizzazione in un'unica piattaforma. Zero commissioni, prova gratis 30 giorni.
+        </p>
+        <a href="/prezzi" class="btn btn--primary reveal reveal-delay-2">
+          Scopri i piani FoodBot
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero ── */
+  .post-hero {
+    position: relative;
+    padding: var(--space-2xl) 0 var(--space-2xl);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .post-hero__title {
+    color: var(--white);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: var(--space-md);
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.1;
+  }
+
+  .post-hero__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .post-hero__separator {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* ── Article Body ── */
+  .post-body {
+    padding: var(--space-2xl) 0;
+    background: var(--white);
+  }
+
+  .post-article {
+    font-family: var(--font-body);
+    line-height: 1.8;
+  }
+
+  .post-article h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    line-height: 1.2;
+  }
+
+  .post-article h2:first-child {
+    margin-top: 0;
+  }
+
+  .post-article h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    line-height: 1.3;
+  }
+
+  .post-article p {
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    color: var(--gray-700);
+    margin-bottom: var(--space-md);
+    line-height: 1.8;
+  }
+
+  .post-article a {
+    color: var(--orange);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 107, 53, 0.3);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .post-article a:hover {
+    text-decoration-color: var(--orange);
+  }
+
+  /* ── Lists ── */
+  .post-list {
+    margin-bottom: var(--space-md);
+    padding-left: 0;
+  }
+
+  .post-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    color: var(--gray-700);
+    line-height: 1.7;
+  }
+
+  .post-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  .post-list--ordered {
+    counter-reset: post-counter;
+  }
+
+  .post-list--ordered li {
+    padding-left: 2rem;
+  }
+
+  .post-list--ordered li::before {
+    content: counter(post-counter);
+    counter-increment: post-counter;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--orange);
+    top: 0;
+  }
+
+  /* ── Callout ── */
+  .post-callout {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(255, 107, 53, 0.06);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    color: var(--gray-700);
+    line-height: 1.7;
+  }
+
+  .post-callout strong {
+    color: var(--orange-dark);
+  }
+
+  .post-callout--tip {
+    background: rgba(78, 205, 196, 0.08);
+    border-left-color: var(--teal);
+  }
+
+  .post-callout--tip strong {
+    color: #2BA39B;
+  }
+
+  /* ── Related Articles ── */
+  .post-related {
+    padding: var(--space-2xl) 0;
+    background: var(--offwhite);
+  }
+
+  .post-related__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+  }
+
+  .post-related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .post-related__card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                border-color 0.3s ease;
+  }
+
+  .post-related__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+
+  .post-related__category {
+    display: inline-block;
+    width: fit-content;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(255, 107, 53, 0.08);
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    padding: 0.3rem 0.85rem;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-related__card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.6vw, 1.25rem);
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.25;
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-related__card:hover .post-related__card-title {
+    color: var(--orange);
+  }
+
+  .post-related__card-desc {
+    font-size: 0.92rem;
+    color: var(--gray-500);
+    line-height: 1.65;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+  }
+
+  .post-related__card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    border-top: 1px solid var(--gray-100);
+    padding-top: var(--space-sm);
+  }
+
+  .post-related__separator {
+    color: var(--gray-300);
+  }
+
+  /* ── CTA ── */
+  .post-cta {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .post-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .post-cta__title {
+    color: var(--white);
+    max-width: 700px;
+  }
+
+  .post-cta__text {
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 580px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .post-related__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .post-hero {
+      padding-top: var(--space-xl);
+    }
+
+    .post-hero__title {
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+    }
+
+    .post-related__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .post-related__card {
+      padding: var(--space-md);
+    }
+
+    .post-callout {
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .post-article h2 {
+      margin-top: var(--space-lg);
+    }
+  }
+</style>

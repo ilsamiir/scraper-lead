@@ -1,0 +1,268 @@
+---
+const solutions = [
+  {
+    problem: 'Ordini via telefono, WhatsApp e foglietti volanti',
+    solution: 'Tutti gli ordini in un\'unica dashboard digitale, con conferma automatica e zero errori.',
+    iconBefore: '📞',
+    iconAfter: '📋',
+    color: 'rose',
+  },
+  {
+    problem: 'Teglie mezze vuote e produzione a caso',
+    solution: 'La Logica Teglia raggruppa gli ordini per ottimizzare ogni cottura. Teglie sempre piene.',
+    iconBefore: '🫤',
+    iconAfter: '🧮',
+    color: 'cream',
+  },
+  {
+    problem: 'Clienti che ordinano una volta e non tornano',
+    solution: 'Fidelity card digitale, punti automatici e reminder WhatsApp. Il cliente torna da solo.',
+    iconBefore: '👋',
+    iconAfter: '🎁',
+    color: 'green',
+  },
+  {
+    problem: 'Il laboratorio non sa cosa preparare e quando',
+    solution: 'Stampa automatica degli ordini con sincronizzazione in tempo reale. Zero comunicazioni verbali.',
+    iconBefore: '🤷',
+    iconAfter: '🖨️',
+    color: 'blue',
+  },
+  {
+    problem: 'Scontrino medio troppo basso',
+    solution: 'Upsell intelligente nel flusso d\'ordine: bibite, dolci, extra. Ogni ordine vale di più.',
+    iconBefore: '💸',
+    iconAfter: '⬆️',
+    color: 'lavender',
+  },
+  {
+    problem: 'Più sedi e nessun controllo centralizzato',
+    solution: 'Dashboard multi-punto vendita: menu, ordini e report sincronizzati su tutte le sedi.',
+    iconBefore: '🏪',
+    iconAfter: '🎯',
+    color: 'cream',
+  },
+  {
+    problem: 'Troppe telefonate che interrompono il lavoro',
+    solution: 'Centralino smart con redirect alla webapp. Il cliente ordina online, tu lavori in pace.',
+    iconBefore: '📵',
+    iconAfter: '📱',
+    color: 'rose',
+  },
+  {
+    problem: '"A che punto è il mio ordine?" — ogni 5 minuti',
+    solution: 'Notifiche WhatsApp automatiche: conferma, stato, "pronto al ritiro". Zero ansie, zero domande.',
+    iconBefore: '❓',
+    iconAfter: '💬',
+    color: 'green',
+  },
+];
+
+const colorMap: Record<string, string> = {
+  rose: 'var(--pastel-rose)',
+  cream: 'var(--pastel-cream)',
+  green: 'var(--pastel-green)',
+  blue: 'var(--pastel-blue)',
+  lavender: 'var(--pastel-lavender)',
+};
+---
+
+<section class="soluzioni" id="mercato" aria-labelledby="mercato-title">
+  <div class="container">
+    <div class="section-intro reveal" style="text-align:center;margin-left:auto;margin-right:auto;">
+      <span class="section-label soluzioni__badge" style="justify-content:center;">Problemi Reali, Soluzioni Concrete</span>
+      <h2 id="mercato-title">Ogni giorno affronti<br/>questi problemi. <span style="color:var(--orange)">Noi li risolviamo.</span></h2>
+      <p>Non feature astratte, ma risposte concrete ai problemi veri di chi gestisce una pizzeria al taglio.</p>
+    </div>
+
+    <div class="soluzioni__grid">
+      {solutions.map((s, i) => (
+        <div class={`soluzioni__card reveal reveal-delay-${(i % 3) + 1}`}>
+          <div class="soluzioni__before">
+            <div class="soluzioni__emoji-container soluzioni__emoji-container--before">
+              <span class="soluzioni__emoji">{s.iconBefore}</span>
+            </div>
+            <span class="soluzioni__tag soluzioni__tag--problem">PRIMA</span>
+            <p class="soluzioni__text soluzioni__text--problem">{s.problem}</p>
+          </div>
+
+          <div class="soluzioni__divider">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+          </div>
+
+          <div class="soluzioni__after" style={`background: ${colorMap[s.color]}`}>
+            <div class="soluzioni__emoji-container soluzioni__emoji-container--after">
+              <span class="soluzioni__emoji">{s.iconAfter}</span>
+            </div>
+            <span class="soluzioni__tag soluzioni__tag--solution">CON FOODBOT</span>
+            <p class="soluzioni__text soluzioni__text--solution">{s.solution}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .soluzioni {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%);
+    padding: var(--space-3xl) 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .soluzioni::before {
+    content: '';
+    position: absolute;
+    top: 5%;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.04), transparent 70%);
+    pointer-events: none;
+  }
+
+  .soluzioni__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: rgba(255,107,53,0.06);
+    border: 1px solid rgba(255,107,53,0.12);
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #FF6B35;
+  }
+
+  .soluzioni h2 {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Grid */
+  .soluzioni__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  /* Card */
+  .soluzioni__card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .soluzioni__card:hover {
+    border-color: var(--orange);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.04);
+  }
+
+  /* Emoji containers */
+  .soluzioni__emoji-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .soluzioni__emoji-container--before {
+    background: rgba(0,0,0,0.04);
+  }
+
+  .soluzioni__emoji-container--after {
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  /* Before (problem) */
+  .soluzioni__before {
+    padding: var(--space-lg) var(--space-lg) var(--space-sm);
+  }
+
+  /* Divider arrow */
+  .soluzioni__divider {
+    display: flex;
+    justify-content: center;
+    padding: 0.35rem 0;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+
+  .soluzioni__card:hover .soluzioni__divider {
+    opacity: 1;
+  }
+
+  /* After (solution) */
+  .soluzioni__after {
+    padding: var(--space-md) var(--space-lg) var(--space-lg);
+    border-radius: 20px;
+    margin: 0 8px 8px;
+    flex: 1;
+  }
+
+  /* Emoji */
+  .soluzioni__emoji {
+    font-size: 1.5rem;
+    display: block;
+  }
+
+  .soluzioni__before .soluzioni__emoji {
+    opacity: 0.5;
+    filter: grayscale(0.3);
+  }
+
+  /* Tags */
+  .soluzioni__tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    margin-bottom: 0.35rem;
+  }
+
+  .soluzioni__tag--problem {
+    color: var(--gray-300);
+  }
+
+  .soluzioni__tag--solution {
+    color: var(--orange-dark);
+  }
+
+  /* Text */
+  .soluzioni__text {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .soluzioni__text--problem {
+    color: var(--gray-500);
+  }
+
+  .soluzioni__text--solution {
+    color: var(--dark);
+  }
+
+  @media (max-width: 900px) {
+    .soluzioni__grid {
+      grid-template-columns: 1fr;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  }
+</style>

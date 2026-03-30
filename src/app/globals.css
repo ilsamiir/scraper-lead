@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-black: #000000;
+  --color-brand-white: #FFFFFF;
+  --color-brand-accent: #C026D3;
+  --color-brand-gradient-1: #00E5FF;
+  --color-brand-gradient-2: #D500F9;
+  --color-brand-gradient-3: #FF1744;
+  --color-brand-gradient-4: #FF9100;
+  
+  --font-sans: var(--font-inter);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+/* Base custom utility classes */
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl;
+  }
+  .ghost-button {
+    @apply bg-transparent border border-white rounded-full text-white hover:bg-white hover:text-black transition-all duration-300;
+  }
+}

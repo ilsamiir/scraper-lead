@@ -1,0 +1,570 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Fidelizzare i Clienti della Tua Pizzeria: Guida alle Carte Fedeltà Digitali",
+  "description": "Come fidelizzare i clienti della tua pizzeria con carte fedeltà digitali. 4 strategie pratiche per aumentare i ritorni e il valore medio degli ordini.",
+  "datePublished": "2026-03-21",
+  "author": {
+    "@type": "Organization",
+    "name": "FoodBot"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "FoodBot",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ristobot.it/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ristobot.it/blog/fidelizzare-clienti-pizzeria"
+  }
+};
+
+const relatedArticles = [
+  {
+    slug: 'come-gestire-ordini-pizzeria-al-taglio',
+    title: 'Come Gestire gli Ordini in una Pizzeria al Taglio',
+    description: 'Scopri le strategie e gli strumenti per organizzare al meglio gli ordini da asporto nella tua pizzeria al taglio.',
+    category: 'Gestione',
+    date: '21 Mar 2026',
+    readTime: '8 min',
+  },
+  {
+    slug: 'menu-digitale-pizzeria-al-taglio',
+    title: 'Menu Digitale per Pizzeria al Taglio',
+    description: 'Vantaggi e best practice per creare un menu digitale che aumenti gli ordini e semplifichi la gestione.',
+    category: 'Tecnologia',
+    date: '21 Mar 2026',
+    readTime: '6 min',
+  },
+  {
+    slug: 'ridurre-sprechi-pizzeria-al-taglio',
+    title: 'Come Ridurre gli Sprechi in Pizzeria al Taglio',
+    description: 'Tecniche pratiche per minimizzare gli sprechi di impasto, condimenti e prodotto finito.',
+    category: 'Produzione',
+    date: '21 Mar 2026',
+    readTime: '9 min',
+  },
+];
+---
+
+<Layout
+  title="Fidelizzare i Clienti della Tua Pizzeria: Guida alle Carte Fedeltà Digitali"
+  description="Come fidelizzare i clienti della tua pizzeria con carte fedeltà digitali. 4 strategie pratiche per aumentare i ritorni e il valore medio degli ordini."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
+
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Blog", href: "/blog"}, {label: "Fidelizzare i Clienti della Tua Pizzeria"}]} />
+  <main>
+    <!-- Hero -->
+    <section class="article-hero section--dark">
+      <div class="container">
+        <span class="section-label section-label--dark reveal">MARKETING</span>
+        <h1 class="article-hero__title reveal reveal-delay-1">Fidelizzare i Clienti della Tua Pizzeria</h1>
+        <div class="article-hero__meta reveal reveal-delay-2">
+          <span>21 Mar 2026</span>
+          <span class="article-hero__separator">&middot;</span>
+          <span>7 min di lettura</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Article Body -->
+    <section class="article-section">
+      <div class="container container--narrow">
+        <article class="article-body">
+
+          <p class="article-body__lead">
+            Ogni pizzeria al taglio conosce la sfida: attrarre nuovi clienti costa fino a <strong>7 volte di più</strong> che mantenere quelli già acquisiti. Eppure, la maggior parte dei titolari investe più tempo e budget nell'acquisizione che nella fidelizzazione. In questa guida vediamo come invertire la rotta con strumenti digitali concreti, pensati proprio per la realtà della pizza al taglio.
+          </p>
+
+          <h2>Perché la fidelizzazione costa meno dell'acquisizione</h2>
+
+          <p>
+            I dati del settore food parlano chiaro: secondo le ricerche di settore, un cliente fidelizzato spende in media il <strong>67% in più</strong> rispetto a un cliente nuovo. Non solo: il tasso di conversione di un cliente abituale è tra il 60% e il 70%, mentre per un nuovo contatto si ferma al 5-20%. Per una pizzeria al taglio, dove lo scontrino medio si aggira tra i 6 e i 12 euro, anche piccoli incrementi nella frequenza di visita hanno un impatto enorme sul fatturato mensile.
+          </p>
+          <p>
+            Pensiamo a un esempio pratico: se hai 200 clienti abituali che vengono una volta a settimana con uno scontrino medio di 8 euro, il fatturato mensile da clienti fidelizzati è di circa 6.400 euro. Se riesci ad aumentare la frequenza anche solo a 1,3 visite a settimana, arrivi a 8.320 euro, quasi <strong>2.000 euro in più al mese</strong> senza spendere un centesimo in pubblicità.
+          </p>
+
+          <h2>Le tessere cartacee: perché non funzionano più</h2>
+
+          <p>
+            La classica tessera a timbri è stata per anni lo strumento di fidelizzazione prediletto nelle pizzerie al taglio. Il meccanismo è semplice: compri 10 tranci, il decimo è gratis. Ma nella pratica i problemi sono evidenti.
+          </p>
+          <p>
+            I clienti <strong>dimenticano la tessera a casa</strong>, i timbri si sbiadiscono, le tessere si perdono o si rovinano. Il risultato? Meno del 20% delle tessere distribuite viene effettivamente completato. Inoltre, non hai nessun dato su chi sono i tuoi clienti, cosa ordinano, e con quale frequenza tornano. Zero analisi, zero personalizzazione, zero comunicazione diretta.
+          </p>
+          <p>
+            In un mondo dove anche il bar sotto casa ha un'app per i punti, restare ancorati al cartaceo significa perdere opportunità concrete di crescita.
+          </p>
+
+          <h2>La carta fedeltà digitale: come funziona</h2>
+
+          <p>
+            Una carta fedeltà digitale elimina tutti i limiti del cartaceo. Il cliente non deve installare nessuna app: basta un numero di telefono o un QR code per associare ogni acquisto al suo profilo. I punti si accumulano automaticamente, le promozioni arrivano direttamente sul telefono via WhatsApp, e il titolare ha una dashboard con tutti i dati delle abitudini di acquisto.
+          </p>
+          <p>
+            Con piattaforme come <a href="/funzionalita">FoodBot</a>, la carta fedeltà è integrata nel sistema di gestione ordini: ogni ordine, sia al banco che da asporto, accumula punti senza intervento manuale. Il cliente vede il saldo aggiornato, riceve notifiche quando è vicino a un premio, e si sente parte di una community, non solo un acquirente occasionale.
+          </p>
+
+          <h2>4 strategie di fidelizzazione per pizzerie al taglio</h2>
+
+          <h3>1. Punti per ogni ordine</h3>
+
+          <p>
+            Il meccanismo base è il più efficace: ogni euro speso equivale a un punto. Raggiunta una soglia (ad esempio 80 punti), il cliente ottiene un premio. La chiave è rendere il premio <strong>raggiungibile ma non banale</strong>: un trancio omaggio, un upgrade a combo con bibita, o uno sconto del 20% sull'ordine successivo sono tutti incentivi che funzionano bene per la pizza al taglio.
+          </p>
+          <p>
+            Il vantaggio rispetto alla tessera cartacea è che puoi calibrare le soglie in tempo reale: se noti che i clienti abbandonano prima di raggiungere il premio, puoi abbassare la soglia o aggiungere premi intermedi. Con FoodBot, tutto è configurabile dalla dashboard in pochi click.
+          </p>
+
+          <h3>2. Promozioni personalizzate via WhatsApp</h3>
+
+          <p>
+            WhatsApp ha un tasso di apertura superiore al 90%, contro il 20-25% dell'email marketing tradizionale. Inviare una promozione mirata al momento giusto è il modo più diretto per riportare un cliente in pizzeria. Ad esempio: se un cliente non ordina da 15 giorni, un messaggio automatico con un'offerta personalizzata ("Ci manchi! Ecco un 15% di sconto sul tuo prossimo ordine") può fare la differenza.
+          </p>
+
+          <div class="callout-box">
+            <div class="callout-box__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            </div>
+            <div class="callout-box__content">
+              <strong>Consiglio pratico:</strong> non esagerare con la frequenza dei messaggi. Un invio ogni 7-10 giorni è il giusto equilibrio per restare presenti senza risultare invadenti. Segmenta i clienti per frequenza di acquisto e personalizza il tono del messaggio.
+            </div>
+          </div>
+
+          <h3>3. Offerte compleanno e ricorrenze</h3>
+
+          <p>
+            Chiedere la data di compleanno al momento della registrazione è un piccolo gesto che apre grandi possibilità. Un messaggio di auguri con un trancio omaggio o un buono sconto dedicato genera un tasso di riscatto altissimo, spesso superiore al 40%. Il cliente si sente <strong>riconosciuto come persona</strong>, non solo come un numero.
+          </p>
+          <p>
+            Oltre al compleanno, puoi sfruttare anche ricorrenze legate al tuo locale: l'anniversario della prima visita, il raggiungimento di un certo numero di ordini, oppure eventi stagionali come il ritorno dalle vacanze estive. Ogni occasione è buona per comunicare attenzione e generare un ritorno.
+          </p>
+
+          <h3>4. Gamification e livelli</h3>
+
+          <p>
+            La gamification applicata alla ristorazione funziona perché trasforma un'azione quotidiana, comprare la pizza, in un'esperienza coinvolgente. Puoi creare livelli progressivi: <strong>Bronze</strong> (da 0 a 100 punti), <strong>Silver</strong> (100-300), <strong>Gold</strong> (oltre 300), con vantaggi crescenti a ogni livello. I clienti Gold, ad esempio, possono accedere a gusti in anteprima, saltare la coda negli orari di punta, o ricevere un trancio omaggio ogni 5 ordini invece che ogni 10.
+          </p>
+          <p>
+            L'effetto psicologico del "livello successivo" è potente: quando un cliente vede che gli mancano solo 20 punti per passare da Silver a Gold, è molto probabile che torni prima del previsto. Questo meccanismo aumenta sia la frequenza che il valore medio degli ordini.
+          </p>
+
+          <h2>Come FoodBot automatizza tutto il processo</h2>
+
+          <p>
+            Il vero punto di svolta della fidelizzazione digitale è l'automazione. Con <a href="/funzionalita">FoodBot</a>, non devi ricordarti di inviare messaggi, controllare i punti o creare promozioni manualmente. Tutto avviene in automatico:
+          </p>
+          <ul class="article-list">
+            <li>I punti si accumulano a ogni ordine, senza intervento del personale al banco</li>
+            <li>Le notifiche WhatsApp partono automaticamente in base ai trigger che configuri (inattività, soglia punti, compleanno)</li>
+            <li>I livelli si aggiornano in tempo reale e il cliente viene notificato del passaggio</li>
+            <li>La dashboard ti mostra chi sono i tuoi clienti migliori, quanto spendono e con quale frequenza</li>
+            <li>Puoi lanciare promozioni flash direttamente dal pannello, targetizzando segmenti specifici</li>
+          </ul>
+          <p>
+            Il risultato è un sistema di fidelizzazione che lavora per te 24 ore su 24, anche quando sei impegnato a gestire il forno e le teglie. Per approfondire tutte le funzionalità, visita la pagina <a href="/funzionalita">Funzionalità</a>.
+          </p>
+
+          <h2>Caso pratico: esempio di programma fedeltà</h2>
+
+          <p>
+            Immaginiamo una pizzeria al taglio con 3 teglie di punta (Margherita, Diavola, Capricciosa) e uno scontrino medio di 8 euro. Ecco come potrebbe strutturare il suo programma fedeltà con FoodBot:
+          </p>
+
+          <div class="callout-box callout-box--example">
+            <div class="callout-box__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="callout-box__content">
+              <strong>Programma "Pizza Club":</strong><br/>
+              <strong>Regola punti:</strong> 1 punto ogni euro speso.<br/>
+              <strong>Bronze (0-80 punti):</strong> 5% di sconto sull'ordine dopo 80 punti.<br/>
+              <strong>Silver (80-200 punti):</strong> 10% di sconto + trancio omaggio ogni 10 ordini.<br/>
+              <strong>Gold (oltre 200 punti):</strong> 15% di sconto + accesso gusti in anteprima + trancio omaggio ogni 5 ordini.<br/>
+              <strong>Compleanno:</strong> combo trancio + bibita in omaggio.<br/>
+              <strong>Re-engagement:</strong> dopo 14 giorni di inattività, WhatsApp automatico con buono 15%.<br/><br/>
+              Con 150 clienti attivi, questo programma può generare un incremento del fatturato mensile stimato tra il 15% e il 25%.
+            </div>
+          </div>
+
+          <h2>Conclusione: fidelizzare è il miglior investimento</h2>
+
+          <p>
+            In un mercato competitivo come quello della pizza al taglio, la fidelizzazione non è un optional: è la strategia con il miglior rapporto costi-benefici. Una carta fedeltà digitale elimina le frizioni del cartaceo, ti offre dati preziosi sui clienti e ti permette di comunicare in modo diretto e personalizzato.
+          </p>
+          <p>
+            Con FoodBot, tutto questo è integrato nel tuo sistema di gestione ordini: nessun software aggiuntivo, nessuna complessità. Solo più clienti che tornano, più spesso, spendendo di più. Per scoprire i piani disponibili e iniziare subito con la prova gratuita di 30 giorni, visita la pagina <a href="/prezzi">Prezzi</a>. Se hai dubbi o domande, consulta le nostre <a href="/faq">FAQ</a>.
+          </p>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- Leggi anche -->
+    <section class="related-section">
+      <div class="container">
+        <h2 class="related-section__title reveal">Leggi anche</h2>
+        <div class="related-grid">
+          {relatedArticles.map((article, i) => (
+            <a href={`/blog/${article.slug}`} class={`related-card reveal reveal-delay-${i + 1}`}>
+              <span class="related-card__category">{article.category}</span>
+              <h3 class="related-card__title">{article.title}</h3>
+              <p class="related-card__description">{article.description}</p>
+              <div class="related-card__meta">
+                <span>{article.date}</span>
+                <span class="related-card__separator">&middot;</span>
+                <span>{article.readTime} di lettura</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="article-cta section--dark">
+      <div class="container article-cta__inner">
+        <h2 class="article-cta__title reveal">Pronto a fidelizzare i clienti della tua pizzeria?</h2>
+        <p class="article-cta__text reveal reveal-delay-1">
+          Carta fedeltà digitale, notifiche WhatsApp e automazioni incluse. Prova FoodBot gratis per 30 giorni.
+        </p>
+        <a href="/prezzi" class="btn btn--primary reveal reveal-delay-2">
+          Scopri i piani e inizia gratis
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero ── */
+  .article-hero {
+    position: relative;
+    padding: var(--space-2xl) 0 var(--space-2xl);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .article-hero__title {
+    color: var(--white);
+    margin-bottom: var(--space-md);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .article-hero__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+  }
+
+  .article-hero__separator {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* ── Article Section ── */
+  .article-section {
+    padding: var(--space-2xl) 0;
+    background: var(--white);
+  }
+
+  /* ── Article Body ── */
+  .article-body {
+    font-family: var(--font-body);
+    color: var(--gray-700);
+    line-height: 1.8;
+  }
+
+  .article-body__lead {
+    font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+    color: var(--brand-text-dark);
+    line-height: 1.8;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .article-body h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    color: var(--brand-text-dark);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    line-height: 1.2;
+  }
+
+  .article-body h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+    color: var(--brand-text-dark);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    line-height: 1.25;
+  }
+
+  .article-body p {
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    line-height: 1.8;
+    color: var(--gray-700);
+    margin-bottom: var(--space-md);
+  }
+
+  .article-body a {
+    color: var(--orange);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255, 107, 53, 0.3);
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .article-body a:hover {
+    text-decoration-color: var(--orange);
+  }
+
+  .article-body strong {
+    color: var(--brand-text-dark);
+    font-weight: 700;
+  }
+
+  /* ── Article List ── */
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-md) 0 var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .article-list li {
+    position: relative;
+    padding-left: 1.75rem;
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+
+  .article-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    opacity: 0.7;
+  }
+
+  /* ── Callout Box ── */
+  .callout-box {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+    background: var(--pastel-cream);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--orange);
+  }
+
+  .callout-box--example {
+    background: var(--pastel-blue);
+    border-left-color: var(--blue);
+  }
+
+  .callout-box__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 107, 53, 0.12);
+    color: var(--orange);
+  }
+
+  .callout-box--example .callout-box__icon {
+    background: rgba(10, 61, 98, 0.12);
+    color: var(--blue);
+  }
+
+  .callout-box__content {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--gray-700);
+  }
+
+  .callout-box__content strong {
+    color: var(--brand-text-dark);
+  }
+
+  /* ── Related Section ── */
+  .related-section {
+    padding: var(--space-2xl) 0;
+    background: var(--offwhite);
+  }
+
+  .related-section__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    color: var(--brand-text-dark);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                border-color 0.3s ease;
+  }
+
+  .related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+
+  .related-card__category {
+    display: inline-block;
+    width: fit-content;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(255, 107, 53, 0.08);
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    padding: 0.3rem 0.85rem;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-sm);
+  }
+
+  .related-card__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.25;
+    margin-bottom: var(--space-sm);
+  }
+
+  .related-card:hover .related-card__title {
+    color: var(--orange);
+  }
+
+  .related-card__description {
+    font-size: 0.92rem;
+    color: var(--gray-500);
+    line-height: 1.65;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+  }
+
+  .related-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    border-top: 1px solid var(--gray-100);
+    padding-top: var(--space-sm);
+  }
+
+  .related-card__separator {
+    color: var(--gray-300);
+  }
+
+  /* ── CTA ── */
+  .article-cta {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .article-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .article-cta__title {
+    color: var(--white);
+    max-width: 700px;
+  }
+
+  .article-cta__text {
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 550px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .related-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .article-hero {
+      padding-top: var(--space-xl);
+    }
+
+    .related-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .related-card {
+      padding: var(--space-md);
+    }
+
+    .callout-box {
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+    }
+
+    .callout-box__icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+</style>

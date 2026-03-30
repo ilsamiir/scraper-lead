@@ -1,0 +1,356 @@
+---
+---
+<section class="fidelizzazione" id="fidelizzazione" aria-labelledby="fidelizzazione-title">
+  <div class="container">
+    <div class="fidelizzazione__layout">
+      <div class="fidelizzazione__visual reveal">
+        <div class="fidelizzazione__card-preview">
+          <div class="fidelizzazione__fidelity-card">
+            <div class="fidelizzazione__fidelity-top">
+              <span>FoodBot</span>
+              <span class="fidelizzazione__fidelity-badge">FIDELITY</span>
+            </div>
+            <div class="fidelizzazione__fidelity-points">
+              <span class="fidelizzazione__fidelity-num">1.250</span>
+              <span class="fidelizzazione__fidelity-label">punti</span>
+            </div>
+            <div class="fidelizzazione__fidelity-dots">
+              <span class="dot filled"></span>
+              <span class="dot filled"></span>
+              <span class="dot filled"></span>
+              <span class="dot filled"></span>
+              <span class="dot filled"></span>
+              <span class="dot filled"></span>
+              <span class="dot filled"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <div class="fidelizzazione__fidelity-bar">
+              <div class="fidelizzazione__fidelity-progress"></div>
+            </div>
+            <div class="fidelizzazione__fidelity-next">
+              Prossimo premio: <strong>Pizza Margherita Gratis</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fidelizzazione__content reveal reveal-delay-2">
+        <span class="section-label">Fidelizzazione</span>
+        <h2 id="fidelizzazione-title">Carta fedeltà digitale: i clienti abituali valgono <em>più</em> dei nuovi.</h2>
+        <p>FoodBot fidelizza senza richiedere app aggiuntive, software esterni o processi manuali. Tutto integrato, tutto automatico.</p>
+
+        <div class="fidelizzazione__benefits">
+          <div class="fidelizzazione__benefit">
+            <div class="fidelizzazione__benefit-icon">↑</div>
+            <div>
+              <strong>Retention</strong>
+              <p>Clienti che tornano grazie a premi e punti</p>
+            </div>
+          </div>
+          <div class="fidelizzazione__benefit">
+            <div class="fidelizzazione__benefit-icon">↑</div>
+            <div>
+              <strong>Frequenza</strong>
+              <p>Più ordini per cliente con reminder smart</p>
+            </div>
+          </div>
+          <div class="fidelizzazione__benefit">
+            <div class="fidelizzazione__benefit-icon">↑</div>
+            <div>
+              <strong>Scontrino</strong>
+              <p>Valore medio ordine in crescita costante</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="fidelizzazione__features">
+          <div class="fidelizzazione__feature">
+            <span>🎴</span> Carta fedeltà digitale
+          </div>
+          <div class="fidelizzazione__feature">
+            <span>🏆</span> Dashboard premi real-time
+          </div>
+          <div class="fidelizzazione__feature">
+            <span>🔔</span> Reminder automatici
+          </div>
+          <div class="fidelizzazione__feature">
+            <span>💳</span> Saldo ricaricabile
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fidelizzazione {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%);
+    padding: var(--space-3xl) 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fidelizzazione::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.04), transparent 70%);
+    pointer-events: none;
+  }
+
+  .fidelizzazione__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  /* Fidelity card preview */
+  .fidelizzazione__card-preview {
+    display: flex;
+    justify-content: center;
+    perspective: 1200px;
+  }
+
+  .fidelizzazione__fidelity-card {
+    width: 360px;
+    padding: var(--space-xl) var(--space-lg);
+    background: linear-gradient(135deg, #FF6B35, #e85d2c);
+    border-radius: 24px;
+    color: var(--white);
+    box-shadow:
+      0 24px 64px rgba(255,107,53,0.3),
+      0 8px 24px rgba(255,107,53,0.2),
+      0 0 0 1px rgba(255,255,255,0.15) inset;
+    transform: rotateY(-5deg) rotateX(3deg);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fidelizzazione__fidelity-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.12), transparent 50%);
+    pointer-events: none;
+  }
+
+  .fidelizzazione__fidelity-card:hover {
+    transform: rotateY(0deg) rotateX(0deg) scale(1.03);
+    box-shadow:
+      0 32px 80px rgba(255,107,53,0.35),
+      0 12px 32px rgba(255,107,53,0.25),
+      0 0 0 1px rgba(255,255,255,0.2) inset;
+  }
+
+  .fidelizzazione__fidelity-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    position: relative;
+  }
+
+  .fidelizzazione__fidelity-badge {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    padding: 0.3rem 0.75rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+  }
+
+  .fidelizzazione__fidelity-points {
+    margin-bottom: var(--space-sm);
+    position: relative;
+  }
+
+  .fidelizzazione__fidelity-num {
+    font-family: var(--font-display);
+    font-size: 3.2rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .fidelizzazione__fidelity-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-left: 0.35rem;
+  }
+
+  .fidelizzazione__fidelity-dots {
+    display: flex;
+    gap: 6px;
+    margin-bottom: var(--space-sm);
+  }
+
+  .dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.35);
+    transition: all 0.3s ease;
+  }
+
+  .dot.filled {
+    background: var(--white);
+    border-color: var(--white);
+    box-shadow: 0 2px 8px rgba(255,255,255,0.3);
+  }
+
+  .fidelizzazione__fidelity-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    margin-bottom: var(--space-sm);
+    overflow: hidden;
+  }
+
+  .fidelizzazione__fidelity-progress {
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,1));
+    border-radius: 4px;
+    animation: progressGrow 2s ease-out 0.5s both;
+    box-shadow: 0 0 12px rgba(255,255,255,0.4);
+  }
+
+  @keyframes progressGrow {
+    from { width: 0%; }
+    to { width: 70%; }
+  }
+
+  .fidelizzazione__fidelity-next {
+    font-size: 0.85rem;
+    opacity: 0.85;
+    position: relative;
+  }
+
+  .fidelizzazione__fidelity-next strong {
+    opacity: 1;
+    font-weight: 700;
+  }
+
+  /* Content */
+  .fidelizzazione__content h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .fidelizzazione__content h2 em {
+    font-style: normal;
+    color: var(--orange);
+  }
+
+  .fidelizzazione__content > p {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
+  }
+
+  .fidelizzazione__benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .fidelizzazione__benefit {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+  }
+
+  .fidelizzazione__benefit:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    transform: translateX(4px);
+  }
+
+  .fidelizzazione__benefit-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(10,61,98,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: #0A3D62;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(10,61,98,0.06);
+  }
+
+  .fidelizzazione__benefit strong {
+    font-size: 0.98rem;
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .fidelizzazione__benefit p {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+  }
+
+  .fidelizzazione__features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .fidelizzazione__feature {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    padding: 0.65rem 0.9rem;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+  }
+
+  .fidelizzazione__feature:hover {
+    border-color: var(--orange);
+    box-shadow: 0 4px 12px rgba(255,107,53,0.08);
+  }
+
+  @media (max-width: 900px) {
+    .fidelizzazione__layout {
+      grid-template-columns: 1fr;
+    }
+
+    .fidelizzazione__fidelity-card {
+      transform: none;
+      width: 100%;
+      max-width: 360px;
+    }
+  }
+</style>

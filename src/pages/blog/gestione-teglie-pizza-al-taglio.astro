@@ -1,0 +1,486 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Gestione delle Teglie nella Pizza al Taglio: Ottimizzare Produzione e Ordini",
+  "datePublished": "2026-03-21",
+  "author": {
+    "@type": "Organization",
+    "name": "FoodBot"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "FoodBot",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ristobot.it/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ristobot.it/blog/gestione-teglie-pizza-al-taglio"
+  },
+  "description": "Come ottimizzare la gestione delle teglie nella pizza al taglio. La Logica Teglia per sincronizzare produzione e ordini, ridurre sprechi e massimizzare i margini."
+};
+
+const relatedArticles = [
+  {
+    slug: 'come-gestire-ordini-pizzeria-al-taglio',
+    title: 'Come Gestire gli Ordini in una Pizzeria al Taglio',
+    description: 'Scopri le strategie e gli strumenti per organizzare al meglio gli ordini da asporto nella tua pizzeria al taglio.',
+    category: 'Gestione',
+    readTime: '8 min',
+  },
+  {
+    slug: 'ridurre-sprechi-pizzeria-al-taglio',
+    title: 'Come Ridurre gli Sprechi in Pizzeria al Taglio',
+    description: 'Tecniche pratiche per minimizzare gli sprechi di impasto, condimenti e prodotto finito ottimizzando la produzione.',
+    category: 'Produzione',
+    readTime: '9 min',
+  },
+  {
+    slug: 'software-asporto-pizzeria-al-taglio',
+    title: 'Software per Asporto Pizzeria: Come Scegliere',
+    description: 'Guida completa per scegliere il software di gestione asporto ideale per la tua pizzeria al taglio.',
+    category: 'Tecnologia',
+    readTime: '7 min',
+  },
+];
+---
+
+<Layout
+  title="Gestione delle Teglie nella Pizza al Taglio: Ottimizzare Produzione e Ordini"
+  description="Come ottimizzare la gestione delle teglie nella pizza al taglio. La Logica Teglia per sincronizzare produzione e ordini, ridurre sprechi e massimizzare i margini."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} slot="head" />
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Blog", href: "/blog"}, {label: "Gestione delle Teglie nella Pizza al Taglio"}]} />
+  <main>
+    <!-- Hero -->
+    <section class="post-hero section--dark">
+      <div class="container">
+        <span class="section-label section-label--dark reveal">PRODUZIONE</span>
+        <h1 class="post-hero__title reveal reveal-delay-1">Gestione delle Teglie nella Pizza al Taglio</h1>
+        <div class="post-hero__meta reveal reveal-delay-2">
+          <span>21 Mar 2026</span>
+          <span class="post-hero__sep">&middot;</span>
+          <span>8 min di lettura</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Article Body -->
+    <section class="post-body">
+      <div class="container container--narrow">
+        <article class="post-article">
+
+          <h2>La teglia come unita di produzione</h2>
+          <p>
+            Nella pizza al taglio, tutto ruota attorno alla teglia. Ogni teglia produce mediamente <strong>6-8 porzioni</strong>, a seconda del formato e del tipo di pizza. Questo significa che la teglia non e semplicemente un contenitore: e la vera unita di misura della produzione. Ogni decisione operativa — dall'impasto alla cottura, dalla farcitura alla vendita — si misura in teglie.
+          </p>
+          <p>
+            Capire questo concetto e il primo passo per trasformare una pizzeria al taglio da attivita "a sensazione" a impresa organizzata. Quando ragioni in termini di teglie, inizi a vedere la produzione con occhi diversi: non piu "quanta pizza faccio oggi", ma "quante teglie mi servono per coprire la domanda senza sprecare".
+          </p>
+          <p>
+            Una teglia di margherita che resta invenduta non e solo pizza buttata: e impasto, mozzarella, pomodoro, energia del forno e tempo del pizzaiolo. Moltiplicato per 3-4 teglie al giorno, a fine mese il danno e significativo. Al contrario, una teglia che finisce troppo presto significa clienti delusi e vendite perse.
+          </p>
+
+          <h2>Il problema: produrre senza conoscere la domanda</h2>
+          <p>
+            La maggior parte delle pizzerie al taglio lavora ancora "a occhio". Il pizzaiolo arriva la mattina, prepara le teglie in base all'esperienza e spera di azzeccare le quantita. Nei giorni buoni funziona; nei giorni sbagliati si accumulano sprechi o si resta senza prodotto nelle fasce di punta.
+          </p>
+          <p>
+            Il problema di fondo e semplice: <strong>si produce senza sapere cosa chiederanno i clienti</strong>. Gli ordini da asporto arrivano per telefono, di persona o — nel migliore dei casi — tramite un sistema digitale, ma raramente questi dati vengono usati per pianificare la produzione. Il risultato e un disallineamento costante tra offerta e domanda.
+          </p>
+          <p>
+            Questo approccio ha un costo nascosto enorme. Secondo le stime di settore, una pizzeria al taglio media spreca tra il 15% e il 25% della produzione giornaliera. Su un fatturato di 8.000-10.000 euro al mese, parliamo di 1.200-2.500 euro persi in prodotto invenduto. Soldi che potrebbero essere margine.
+          </p>
+
+          <h2>Organizzare la produzione per teglie in base agli ordini</h2>
+          <p>
+            La soluzione inizia dal ribaltare la logica: invece di produrre e poi vendere, si parte dagli ordini per decidere cosa produrre. Non si tratta di eliminare la produzione "a vista" — quella resta fondamentale per il banco e il passaggio — ma di <strong>integrare i dati degli ordini nella pianificazione delle teglie</strong>.
+          </p>
+          <p>
+            In pratica, se sai che tra le 12:00 e le 12:30 hai gia 4 ordini da asporto che includono margherita e diavola, puoi programmare le teglie di conseguenza. Invece di fare 3 teglie di margherita "perche di solito vanno", ne fai 2 per il banco e 1 dedicata agli ordini confermati. Lo spreco si riduce, il servizio migliora.
+          </p>
+          <p>
+            Il concetto e potente ma richiede un flusso di informazioni che il telefono e il block notes non possono garantire. Servono dati in tempo reale, aggregati e leggibili a colpo d'occhio. E qui entra in gioco la tecnologia.
+          </p>
+
+          <h2>La Logica Teglia: raggruppare ordini per ottimizzare ogni cottura</h2>
+          <p>
+            La <strong>Logica Teglia</strong> e un approccio alla produzione che raggruppa gli ordini per tipo di pizza e fascia oraria, cosi da riempire ogni teglia in modo ottimale prima di infornare. L'idea e semplice: se tre clienti diversi ordinano margherita per le 12:30, quei tre ordini diventano porzioni della stessa teglia.
+          </p>
+          <p>
+            Questo meccanismo ha vantaggi immediati. Primo: <strong>si riducono le teglie parzialmente utilizzate</strong>, cioe quelle infornate per 2-3 porzioni quando ne contengono 8. Secondo: si ottimizzano i cicli del forno, che e la risorsa piu preziosa (e costosa) della pizzeria. Terzo: si migliora la freschezza del prodotto, perche ogni teglia esce dal forno con una destinazione precisa.
+          </p>
+
+          <div class="post-callout">
+            <div class="post-callout__icon">💡</div>
+            <div class="post-callout__content">
+              <strong>Consiglio pratico:</strong> Inizia a tracciare quante teglie produci al giorno per ogni tipo di pizza e quante porzioni restano invendute a fine giornata. Dopo una settimana avrai una mappa chiara degli sprechi e saprai dove intervenire. Anche senza software, questo esercizio apre gli occhi.
+            </div>
+          </div>
+
+          <h2>Sincronizzare ordini in arrivo e uscite forno</h2>
+          <p>
+            La Logica Teglia funziona davvero solo quando c'e sincronizzazione tra il momento in cui gli ordini arrivano e il momento in cui le teglie escono dal forno. Un ordine confermato per le 13:00 deve tradursi in una teglia che entra in forno alle 12:40 (considerando 15-20 minuti di cottura) e che viene porzionata e confezionata in tempo per il ritiro.
+          </p>
+          <p>
+            Questa sincronizzazione richiede visibilita sugli <a href="/come-funziona">ordini in arrivo</a> e sulla capacita produttiva. Quante teglie puoi infornare contemporaneamente? Qual e il tempo medio di cottura per tipo di pizza? Quanti ordini hai gia confermati per la prossima fascia oraria? Quando queste informazioni sono visibili in tempo reale, il pizzaiolo puo prendere decisioni informate anziche andare a intuito.
+          </p>
+          <p>
+            Il risultato e un flusso di lavoro piu prevedibile e meno stressante. Meno corse dell'ultimo minuto, meno clienti che aspettano, meno pizza che si raffredda sul banco.
+          </p>
+
+          <h2>Il ruolo della tecnologia nella gestione teglie</h2>
+          <p>
+            Un sistema digitale di <a href="/funzionalita">gestione ordini</a> cambia radicalmente il modo in cui una pizzeria al taglio puo gestire le teglie. Non si tratta di sostituire l'esperienza del pizzaiolo — quella resta insostituibile — ma di dargli strumenti migliori per decidere.
+          </p>
+          <p>
+            Con un software dedicato, gli ordini da asporto arrivano gia organizzati per fascia oraria e tipo di prodotto. Il pizzaiolo vede a colpo d'occhio: "Per le 12:30 ho 5 porzioni di margherita, 3 di diavola e 4 di patate". Sa esattamente quante teglie servono e quando metterle in forno. Il banco viene gestito in parallelo con la produzione pianificata.
+          </p>
+          <p>
+            La tecnologia abilita anche l'analisi storica: quali pizze vendono di piu in quali giorni, quali fasce orarie sono piu intense, quali prodotti generano piu sprechi. Dati che, accumulati nel tempo, permettono di affinare continuamente la produzione.
+          </p>
+
+          <div class="post-callout">
+            <div class="post-callout__icon">📊</div>
+            <div class="post-callout__content">
+              <strong>Dato chiave:</strong> Le pizzerie che adottano un sistema di gestione ordini con logica per teglie riducono gli sprechi di produzione fino al 30% nei primi tre mesi. Il risparmio medio si traduce in 400-700 euro al mese recuperati — piu del costo di qualsiasi software.
+            </div>
+          </div>
+
+          <h2>Come FoodBot implementa la Logica Teglia</h2>
+          <p>
+            <a href="/prezzi">FoodBot</a> e stato progettato specificamente per le pizzerie al taglio, e la Logica Teglia e la funzionalita che lo distingue da qualsiasi altro software di gestione ordini generico. Ecco come funziona in pratica.
+          </p>
+          <p>
+            Quando un cliente effettua un ordine da asporto tramite FoodBot, il sistema non si limita a registrare l'ordine: lo <strong>raggruppa automaticamente</strong> con gli altri ordini per la stessa fascia oraria e lo stesso tipo di pizza. La dashboard mostra al pizzaiolo una vista per teglie: quante teglie di ogni tipo servono, quante porzioni sono gia prenotate, quante restano disponibili.
+          </p>
+          <p>
+            Il forno diventa prevedibile. Se una teglia di margherita ha 6 porzioni prenotate su 8, FoodBot segnala che mancano solo 2 porzioni per completarla — porzioni che possono essere destinate al banco. Nessuna teglia viene infornata "a vuoto", nessun ordine resta scoperto.
+          </p>
+          <p>
+            Le notifiche WhatsApp completano il ciclo: quando la teglia esce dal forno e l'ordine viene porzionato, il cliente riceve automaticamente il messaggio "pronto al ritiro". Produzione, ordini e comunicazione viaggiano sincronizzati, senza telefonate e senza confusione.
+          </p>
+          <p>
+            Questo approccio funziona particolarmente bene per le pizzerie con volumi medio-alti di asporto, dove il numero di ordini giustifica una pianificazione strutturata. Ma anche le piccole pizzerie beneficiano della visibilita sugli ordini: sapere in anticipo cosa serve e il primo passo per eliminare gli sprechi.
+          </p>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- Related Articles -->
+    <section class="post-related">
+      <div class="container">
+        <h2 class="post-related__title reveal">Leggi anche</h2>
+        <div class="post-related__grid">
+          {relatedArticles.map((article, i) => (
+            <a href={`/blog/${article.slug}`} class={`post-related__card reveal reveal-delay-${i + 1}`}>
+              <span class="post-related__category">{article.category}</span>
+              <h3 class="post-related__card-title">{article.title}</h3>
+              <p class="post-related__card-desc">{article.description}</p>
+              <span class="post-related__read-time">{article.readTime} di lettura</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="post-cta section--dark">
+      <div class="container post-cta__inner">
+        <h2 class="post-cta__title reveal">Ottimizza le teglie della tua pizzeria</h2>
+        <p class="post-cta__text reveal reveal-delay-1">
+          La Logica Teglia di FoodBot sincronizza ordini e produzione. Zero sprechi, zero commissioni.
+        </p>
+        <a href="/prezzi" class="btn btn--primary reveal reveal-delay-2">
+          Prova FoodBot Gratis
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero ── */
+  .post-hero {
+    position: relative;
+    padding: var(--space-2xl) 0 var(--space-2xl);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .post-hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-md);
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .post-hero__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+  }
+
+  .post-hero__sep {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* ── Article Body ── */
+  .post-body {
+    padding: var(--space-2xl) 0;
+    background: var(--offwhite);
+  }
+
+  .post-article {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--gray-700);
+  }
+
+  .post-article h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .post-article h2:first-child {
+    margin-top: 0;
+  }
+
+  .post-article p {
+    margin-bottom: var(--space-md);
+    color: var(--gray-700);
+  }
+
+  .post-article strong {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  .post-article a {
+    color: var(--orange);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255, 107, 53, 0.3);
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .post-article a:hover {
+    text-decoration-color: var(--orange);
+  }
+
+  /* ── Callout ── */
+  .post-callout {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--orange);
+    border-radius: var(--radius-md);
+    margin: var(--space-xl) 0;
+  }
+
+  .post-callout__icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .post-callout__content {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+
+  .post-callout__content strong {
+    color: var(--dark);
+    display: block;
+    margin-bottom: 0.35rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+  }
+
+  /* ── Related Articles ── */
+  .post-related {
+    padding: var(--space-2xl) 0;
+    background: var(--white);
+  }
+
+  .post-related__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 800;
+    color: var(--dark);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    letter-spacing: -0.02em;
+  }
+
+  .post-related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .post-related__card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    background: var(--offwhite);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                border-color 0.3s ease;
+  }
+
+  .post-related__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+
+  .post-related__category {
+    display: inline-block;
+    width: fit-content;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(255, 107, 53, 0.08);
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    padding: 0.3rem 0.85rem;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-related__card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.6vw, 1.25rem);
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.3;
+    margin-bottom: var(--space-sm);
+    transition: color 0.2s ease;
+  }
+
+  .post-related__card:hover .post-related__card-title {
+    color: var(--orange);
+  }
+
+  .post-related__card-desc {
+    font-size: 0.92rem;
+    color: var(--gray-500);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+  }
+
+  .post-related__read-time {
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    border-top: 1px solid var(--gray-200);
+    padding-top: var(--space-sm);
+  }
+
+  /* ── CTA ── */
+  .post-cta {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .post-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .post-cta__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 800;
+    color: var(--white);
+    max-width: 700px;
+    letter-spacing: -0.02em;
+  }
+
+  .post-cta__text {
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 550px;
+    line-height: 1.7;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .post-related__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .post-hero {
+      padding-top: var(--space-xl);
+    }
+
+    .post-hero__title {
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+    }
+
+    .post-callout {
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+    }
+
+    .post-related__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .post-related__card {
+      padding: var(--space-md);
+    }
+
+    .post-article {
+      font-size: 1rem;
+    }
+  }
+</style>

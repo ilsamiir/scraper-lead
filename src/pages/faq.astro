@@ -1,0 +1,416 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+
+const categories = [
+  {
+    title: 'Generale',
+    id: 'generale',
+    items: [
+      {
+        q: "Cos'è FoodBot?",
+        a: "FoodBot è una piattaforma di Smart Takeaway Management progettata specificamente per le pizzerie al taglio. Gestisce ordini da asporto, ottimizza la produzione con la Logica Teglia, fidelizza i clienti con carte fedeltà digitali e automatizza le notifiche WhatsApp — tutto da un'unica dashboard.",
+      },
+      {
+        q: 'FoodBot funziona solo per pizzerie al taglio?',
+        a: "FoodBot è nato per le pizzerie al taglio, ma la piattaforma si adatta a qualsiasi attività di ristorazione con asporto: rosticcerie, panifici, gastronomie, piadinerie e street food. La Logica Teglia è pensata per chi produce a lotti, ma le funzionalità di gestione ordini e fidelizzazione sono universali.",
+      },
+      {
+        q: "Serve installare un'app?",
+        a: "No. FoodBot è una WebApp che funziona direttamente dal browser, sia per te che per i tuoi clienti. Nessuna installazione, nessun aggiornamento manuale. Basta aprire il link e sei operativo.",
+      },
+      {
+        q: 'Come funziona la Logica Teglia?',
+        a: "La Logica Teglia è la funzionalità esclusiva di FoodBot. Ogni pizza al taglio nasce in teglia con 6-8 porzioni: FoodBot raggruppa automaticamente gli ordini per riempire le teglie in modo ottimale, sincronizzando gli ordini con i tempi di cottura. Risultato: meno sprechi (fino al 30% in meno), produzione più fluida e clienti più soddisfatti.",
+      },
+      {
+        q: 'I miei dati sono al sicuro?',
+        a: "Assolutamente sì. FoodBot utilizza crittografia SSL/TLS per tutte le comunicazioni, backup giornalieri automatici e server sicuri. I tuoi dati e quelli dei tuoi clienti sono protetti secondo le normative GDPR. Sei sempre il proprietario dei tuoi dati e puoi esportarli in qualsiasi momento.",
+      },
+    ],
+  },
+  {
+    title: 'Prezzi e Pagamenti',
+    id: 'prezzi-pagamenti',
+    items: [
+      {
+        q: 'Quanto costa FoodBot?',
+        a: 'FoodBot parte da €49/mese con il piano Starter. Il piano Professional, il più scelto, costa €89/mese e include la Logica Teglia, il sistema upsell e le analytics. Per catene con più sedi è disponibile il piano Enterprise su misura. Tutti i piani prevedono zero commissioni sugli ordini.',
+      },
+      {
+        q: 'Ci sono commissioni sugli ordini?',
+        a: "No, mai. FoodBot funziona con un canone fisso mensile o annuale, senza alcuna commissione sulle transazioni. Che tu riceva 10 o 1.000 ordini al mese, il costo non cambia. Ordini illimitati, clienti illimitati.",
+      },
+      {
+        q: 'Come funziona la prova gratuita?',
+        a: "Hai 30 giorni per provare FoodBot gratuitamente, senza inserire carta di credito e senza vincoli. Durante la prova accedi a tutte le funzionalità del piano Professional. Al termine, scegli il piano più adatto o semplicemente non fai nulla — nessun addebito automatico.",
+      },
+      {
+        q: "C'è uno sconto per il pagamento annuale?",
+        a: "Sì. Con il pagamento annuale risparmi l'equivalente di 2 mensilità rispetto al canone mensile. Puoi passare dal piano mensile a quello annuale in qualsiasi momento dalla dashboard.",
+      },
+      {
+        q: 'Posso cambiare piano in qualsiasi momento?',
+        a: "Sì, puoi fare upgrade o downgrade quando vuoi. Se fai upgrade, la differenza viene calcolata pro-rata sul periodo rimanente. Se fai downgrade, il nuovo prezzo si applica dal ciclo di fatturazione successivo. Nessun vincolo contrattuale.",
+      },
+    ],
+  },
+  {
+    title: 'Funzionalità',
+    id: 'funzionalita',
+    items: [
+      {
+        q: 'FoodBot funziona con WhatsApp?',
+        a: "Sì. FoodBot invia automaticamente notifiche WhatsApp ai tuoi clienti in ogni fase: conferma ordine, aggiornamento stato di preparazione, avviso \"pronto al ritiro\" e follow-up post-acquisto. Tutto automatico, senza che tu debba toccare il telefono.",
+      },
+      {
+        q: 'Posso gestire più punti vendita?',
+        a: "Sì, con il piano Enterprise. FoodBot offre una dashboard centralizzata multi-sede: menu sincronizzati o indipendenti per sede, report aggregati e per singolo punto vendita, promozioni centralizzate e gestione autonoma per ogni location.",
+      },
+      {
+        q: 'Come funziona la carta fedeltà digitale?',
+        a: "La carta fedeltà di FoodBot è completamente digitale — niente tessere fisiche da stampare. I clienti accumulano punti automaticamente a ogni ordine. Tu definisci le soglie premio (es. ogni 10 pizze, una gratis) e FoodBot gestisce tutto: accumulo punti, notifiche e riscatto premi.",
+      },
+      {
+        q: 'Posso personalizzare il menu digitale?',
+        a: "Certamente. Il menu digitale di FoodBot è completamente personalizzabile: categorie, prodotti, descrizioni, prezzi, foto, varianti e allergeni. Puoi attivare e disattivare prodotti in tempo reale, creare menu diversi per orario o giorno della settimana e gestire le disponibilità in base alla produzione.",
+      },
+      {
+        q: 'FoodBot è compatibile con la mia stampante?',
+        a: "FoodBot funziona con le stampanti termiche più diffuse nel settore (Epson, Star Micronics e compatibili) tramite connessione di rete. Gli ordini vengono stampati automaticamente in cucina nel momento in cui entrano. Il nostro team ti aiuta a configurare la stampante durante il setup.",
+      },
+    ],
+  },
+  {
+    title: 'Supporto e Onboarding',
+    id: 'supporto-onboarding',
+    items: [
+      {
+        q: 'Quanto tempo serve per il setup?',
+        a: "In media, il setup di FoodBot richiede meno di 5 minuti per essere operativi. Crei il tuo account, carichi il menu e sei pronto a ricevere ordini. Per chi vuole una configurazione avanzata (stampante, Logica Teglia, integrazioni), il nostro team ti accompagna passo dopo passo — tutto incluso nel prezzo.",
+      },
+      {
+        q: 'Come funziona il supporto?',
+        a: "Ogni piano include supporto via WhatsApp e email. Il piano Professional offre supporto prioritario con risposte entro 2 ore in orario lavorativo. Il piano Enterprise include un account manager dedicato, supporto telefonico e sessioni di formazione personalizzate per il tuo staff.",
+      },
+      {
+        q: 'Posso importare i miei clienti esistenti?',
+        a: "Sì. Puoi importare la tua lista clienti tramite file CSV o Excel. FoodBot associa automaticamente i dati ai profili cliente e puoi iniziare subito a inviare promozioni e attivare il programma fedeltà per la tua base esistente. Il nostro team ti assiste nell'importazione.",
+      },
+      {
+        q: 'Offrite formazione per il mio staff?',
+        a: "Sì. FoodBot è progettato per essere intuitivo e usabile senza formazione, ma offriamo comunque tutorial video, guide passo-passo e sessioni di onboarding dal vivo (via videocall). Con il piano Enterprise, la formazione è personalizzata e inclusa.",
+      },
+      {
+        q: 'Cosa succede ai miei dati se disdico?',
+        a: "I tuoi dati restano disponibili per 90 giorni dopo la disdetta. Durante questo periodo puoi esportare tutto (clienti, ordini, analytics) in formato CSV. Dopo 90 giorni i dati vengono eliminati definitivamente dai nostri server, come previsto dal GDPR.",
+      },
+    ],
+  },
+];
+
+const allFaqs = categories.flatMap(c => c.items);
+
+const faqPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": allFaqs.map(f => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": f.a,
+    }
+  }))
+};
+---
+
+<Layout
+  title="FAQ FoodBot — Domande Frequenti sul Software per Pizzerie al Taglio"
+  description="Risposte alle domande più frequenti su FoodBot: come funziona, quanto costa, come iniziare, integrazioni e supporto per la tua pizzeria al taglio."
+>
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "FAQ"}]} />
+  <main>
+    <section class="faq-hero section--dark">
+      <div class="container" style="text-align:center;">
+        <span class="section-label section-label--dark" style="justify-content:center;">FAQ</span>
+        <h1 class="faq-hero__title">Domande Frequenti</h1>
+        <p class="faq-hero__subtitle">Tutto quello che devi sapere su FoodBot. Non trovi la risposta che cerchi? <a href="mailto:info@ristobot.it" class="faq-hero__link">Scrivici</a>, rispondiamo in giornata.</p>
+      </div>
+    </section>
+
+    <nav class="faq-nav" aria-label="Categorie FAQ">
+      <div class="container">
+        <ul class="faq-nav__list">
+          {categories.map(cat => (
+            <li><a href={`#${cat.id}`} class="faq-nav__link">{cat.title}</a></li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+
+    {categories.map(cat => (
+      <section class="faq-section" id={cat.id} aria-labelledby={`${cat.id}-title`}>
+        <div class="container container--narrow">
+          <div class="faq-section__header">
+            <span class="section-label" style="justify-content:center;">{cat.title}</span>
+            <h2 id={`${cat.id}-title`} class="faq-section__title">{cat.title}</h2>
+          </div>
+          <div class="faq-section__list">
+            {cat.items.map(faq => (
+              <details class="faq-item">
+                <summary>{faq.q}</summary>
+                <p>{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <section class="faq-cta section--dark">
+      <div class="container" style="text-align:center;">
+        <h2 class="faq-cta__title">Non hai trovato la risposta?</h2>
+        <p class="faq-cta__text">Scrivici e ti rispondiamo in giornata. Oppure scopri i nostri piani.</p>
+        <div class="faq-cta__buttons">
+          <a href="mailto:info@ristobot.it" class="btn btn--primary">Scrivici: info@ristobot.it</a>
+          <a href="/prezzi" class="btn btn--secondary brand-orange">Vedi i prezzi</a>
+        </div>
+        <p class="faq-cta__home"><a href="/">← Torna alla homepage</a></p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageSchema)} />
+</Layout>
+
+<style>
+  /* ── Hero ── */
+  .faq-hero {
+    padding: var(--space-2xl) 0 var(--space-xl);
+    background: var(--deep-dark);
+  }
+
+  .faq-hero__title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: var(--space-md);
+  }
+
+  .faq-hero__subtitle {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .faq-hero__link {
+    color: var(--orange);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .faq-hero__link:hover {
+    color: var(--orange-light);
+  }
+
+  /* ── Category Nav ── */
+  .faq-nav {
+    background: var(--white);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: var(--space-md) 0;
+    position: sticky;
+    top: 72px;
+    z-index: 90;
+  }
+
+  .faq-nav__list {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .faq-nav__link {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--gray-700);
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .faq-nav__link:hover {
+    background: var(--orange);
+    color: var(--white);
+  }
+
+  /* ── FAQ Sections ── */
+  .faq-section {
+    padding: var(--space-2xl) 0 var(--space-xl);
+    background: var(--white);
+  }
+
+  .faq-section:nth-child(odd) {
+    background: var(--brand-bg-light);
+  }
+
+  .faq-section__header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .faq-section__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    color: var(--dark);
+  }
+
+  .faq-section__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* ── FAQ Item (details/summary) ── */
+  .faq-item {
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: var(--white);
+  }
+
+  .faq-item:hover {
+    border-color: var(--orange);
+  }
+
+  .faq-item[open] {
+    border-color: var(--orange);
+    box-shadow: 0 4px 16px rgba(255,107,53,0.08);
+  }
+
+  .faq-item summary {
+    padding: var(--space-md) var(--space-lg);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--dark);
+    gap: var(--space-sm);
+  }
+
+  .faq-item summary::-webkit-details-marker { display: none; }
+
+  .faq-item summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    color: var(--orange);
+    font-weight: 300;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] summary::after {
+    content: '\2212';
+  }
+
+  .faq-item p {
+    padding: 0 var(--space-lg) var(--space-md);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--brand-text-medium);
+  }
+
+  /* ── Bottom CTA ── */
+  .faq-cta {
+    padding: var(--space-2xl) 0;
+    background: var(--deep-dark);
+  }
+
+  .faq-cta__title {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: var(--space-md);
+  }
+
+  .faq-cta__text {
+    max-width: 480px;
+    margin: 0 auto var(--space-lg);
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .faq-cta__buttons {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn--secondary-brand-orange {
+    border-color: rgba(255,255,255,0.3);
+    color: var(--white);
+  }
+
+  .btn--secondary-brand-orange:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+    background: transparent;
+  }
+
+  .faq-cta__home {
+    margin-top: var(--space-lg);
+  }
+
+  .faq-cta__home a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .faq-cta__home a:hover {
+    color: var(--orange);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .faq-nav__list {
+      gap: 0.5rem;
+    }
+
+    .faq-nav__link {
+      font-size: 0.8rem;
+      padding: 0.4rem 1rem;
+    }
+
+    .faq-item summary {
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.95rem;
+    }
+
+    .faq-item p {
+      padding: 0 var(--space-md) var(--space-sm);
+      font-size: 0.9rem;
+    }
+  }
+</style>

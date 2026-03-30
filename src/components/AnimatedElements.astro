@@ -1,0 +1,254 @@
+---
+/**
+ * AnimatedElements.astro
+ * Provides animated counters, progress bars, keyframe animations,
+ * and utility CSS classes for the FoodBot website.
+ * Import this component once in Layout.astro.
+ */
+---
+
+<!-- Animated Counter + Progress Bar Observer -->
+<script>
+  function formatNumber(n) {
+    return Math.floor(n)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function easeOut(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function animateCounter(el) {
+    const target = parseFloat(el.dataset.target) || 0;
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const duration = 2000;
+    const start = performance.now();
+
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const value = easeOut(progress) * target;
+
+      el.textContent = prefix + formatNumber(value) + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent = prefix + formatNumber(target) + suffix;
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  function initObservers() {
+    // Counter observer
+    const counterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    document.querySelectorAll('.count-up').forEach((el) => {
+      el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || '');
+      counterObserver.observe(el);
+    });
+
+    // Progress bar observer
+    const progressObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target;
+            target.style.width = (target.dataset.width || '0') + '%';
+            progressObserver.unobserve(target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    document.querySelectorAll('.progress-animate').forEach((el) => {
+      el.style.width = '0%';
+      progressObserver.observe(el);
+    });
+
+    // Generic visibility observer for slide / scale animations
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            visibilityObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    document
+      .querySelectorAll(
+        '.animate-slide-left, .animate-slide-right, .animate-scale-in'
+      )
+      .forEach((el) => visibilityObserver.observe(el));
+  }
+
+  // Run on initial load and after Astro client-side navigations
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initObservers, { passive: true });
+  } else {
+    initObservers();
+  }
+  document.addEventListener('astro:after-swap', initObservers, { passive: true });
+</script>
+
+<!-- Global keyframes + utility classes -->
+<style is:global>
+  /* ──────────────────────────────
+     Keyframe Animations
+     ────────────────────────────── */
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes countPulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes floatSlow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  /* ──────────────────────────────
+     Animation Utility Classes
+     ────────────────────────────── */
+
+  .animate-slide-left,
+  .animate-slide-right,
+  .animate-scale-in {
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+
+  .animate-slide-left.visible {
+    animation: slideInLeft 0.7s ease-out forwards;
+  }
+
+  .animate-slide-right.visible {
+    animation: slideInRight 0.7s ease-out forwards;
+  }
+
+  .animate-scale-in.visible {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+
+  /* ──────────────────────────────
+     Progress Bar
+     ────────────────────────────── */
+
+  .progress-animate {
+    height: 10px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--orange), var(--teal));
+    transition: width 1.5s ease-out;
+    will-change: width;
+  }
+
+  /* ──────────────────────────────
+     Gradient Text
+     ────────────────────────────── */
+
+  .gradient-text-animate {
+    background: linear-gradient(90deg, var(--orange), var(--teal), var(--orange));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientFlow 4s linear infinite;
+  }
+
+  /* ──────────────────────────────
+     Glow Effects
+     ────────────────────────────── */
+
+  .glow-orange {
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.25);
+  }
+
+  .glow-teal {
+    box-shadow: 0 0 20px rgba(78, 205, 196, 0.25);
+  }
+
+  /* ──────────────────────────────
+     Hover Lift
+     ────────────────────────────── */
+
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  }
+</style>

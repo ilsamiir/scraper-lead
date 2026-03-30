@@ -1,0 +1,150 @@
+---
+---
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer__accent-line"></div>
+    <div class="footer__top">
+      <div class="footer__brand">
+        <span class="footer__logo">FoodBot</span>
+        <p>Smart Takeaway Management.<br/>Pensato per le pizzerie al taglio.</p>
+      </div>
+
+      <div class="footer__links">
+        <div class="footer__col">
+          <h4>Prodotto</h4>
+          <a href="/funzionalita">Funzionalità</a>
+          <a href="/come-funziona">Come Funziona</a>
+          <a href="/prezzi">Prezzi</a>
+          <a href="/faq">FAQ</a>
+        </div>
+        <div class="footer__col">
+          <h4>Blog</h4>
+          <a href="/blog/come-gestire-ordini-pizzeria-al-taglio">Gestione Ordini</a>
+          <a href="/blog/ridurre-sprechi-pizzeria-al-taglio">Ridurre Sprechi</a>
+          <a href="/blog/fidelizzare-clienti-pizzeria">Fidelizzazione</a>
+          <a href="/blog">Tutti gli articoli →</a>
+        </div>
+        <div class="footer__col">
+          <h4>Confronti</h4>
+          <a href="/confronto/foodbot-vs-deliverart">FoodBot vs Deliverart</a>
+          <a href="/confronto/foodbot-vs-gloriafood">FoodBot vs GloriaFood</a>
+          <a href="/confronto/foodbot-vs-plateform">FoodBot vs Plateform</a>
+        </div>
+        <div class="footer__col">
+          <h4>Contatti</h4>
+          <a href="mailto:info@ristobot.it">info@ristobot.it</a>
+          <a href="https://ristobot.it" target="_blank" rel="noopener">ristobot.it</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© 2026 FoodBot. Tutti i diritti riservati.</span>
+      <span class="footer__made">Fatto con amore in Italia</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #0D1B2A;
+    padding: var(--space-2xl) 0 var(--space-lg);
+    color: rgba(255,255,255,0.6);
+    position: relative;
+  }
+
+  .footer__accent-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #FF6B35, transparent);
+    margin-bottom: var(--space-xl);
+    border-radius: 1px;
+    opacity: 0.4;
+  }
+
+  .footer__top {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: var(--space-lg);
+  }
+
+  .footer__logo {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--white);
+    display: block;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.02em;
+  }
+
+  .footer__brand p {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.4);
+    max-width: 280px;
+    line-height: 1.6;
+  }
+
+  .footer__links {
+    display: flex;
+    gap: var(--space-2xl);
+  }
+
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .footer__col h4 {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 0.35rem;
+  }
+
+  .footer__col a {
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.6);
+    transition: color 0.25s ease;
+    text-decoration: none;
+  }
+
+  .footer__col a:hover {
+    color: var(--white);
+  }
+
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .footer__made {
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer__top {
+      flex-direction: column;
+    }
+
+    .footer__links {
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .footer__bottom {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+  }
+</style>

@@ -1,0 +1,596 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const blogPostSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Software per Asporto Pizzeria: Come Scegliere Quello Giusto nel 2026",
+  "description": "Guida alla scelta del miglior software per l'asporto della tua pizzeria. I 7 criteri fondamentali, cosa evitare e come risparmiare sulle commissioni.",
+  "datePublished": "2026-03-21",
+  "author": {
+    "@type": "Organization",
+    "name": "FoodBot"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "FoodBot",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ristobot.it/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ristobot.it/blog/software-asporto-pizzeria-al-taglio"
+  }
+};
+---
+
+<Layout
+  title="Software per Asporto Pizzeria: Come Scegliere Quello Giusto nel 2026"
+  description="Guida alla scelta del miglior software per l'asporto della tua pizzeria. I 7 criteri fondamentali, cosa evitare e come risparmiare sulle commissioni."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />
+
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Blog", href: "/blog"}, {label: "Software per Asporto Pizzeria: Come Scegliere Quello Giusto"}]} />
+
+  <!-- Hero -->
+  <section class="blog-hero section--dark">
+    <div class="container">
+      <div class="blog-hero__content">
+        <span class="section-label section-label--dark">TECNOLOGIA</span>
+        <h1 class="reveal">Software per Asporto Pizzeria: Come Scegliere Quello Giusto</h1>
+        <p class="blog-hero__meta reveal reveal-delay-1">21 Mar 2026 &middot; 7 min di lettura</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article Body -->
+  <section class="blog-body">
+    <div class="container container--narrow">
+      <article class="prose">
+
+        <h2>Perche serve un software dedicato per l'asporto</h2>
+
+        <p>
+          Gestire gli ordini da asporto con WhatsApp, fogli di carta o post-it attaccati alla cassa sembra
+          la soluzione piu semplice. Ma chi lavora ogni giorno dietro al bancone sa quanto velocemente
+          il caos prende il sopravvento: ordini persi, orari sbagliati, clienti che chiamano per sapere
+          se la pizza e pronta. Il risultato? Stress per lo staff, clienti insoddisfatti e margini che si assottigliano.
+        </p>
+
+        <p>
+          Un software dedicato per l'asporto non e un lusso: e uno strumento operativo che ti fa risparmiare
+          tempo, ridurre gli errori e aumentare lo scontrino medio. Ma non tutti i software sono uguali, e
+          scegliere quello sbagliato puo costare piu che non averne uno. Ecco i criteri che contano davvero.
+        </p>
+
+        <h2>I 7 criteri fondamentali per scegliere</h2>
+
+        <h3>1. Zero commissioni sulle transazioni</h3>
+        <p>
+          Le grandi piattaforme di delivery trattengono dal 15% al 35% su ogni ordine. Su un fatturato
+          mensile di 10.000 euro, significa cedere fino a 3.500 euro. Un software a canone fisso ti
+          permette di sapere esattamente quanto spendi ogni mese, senza sorprese. Cerca soluzioni con
+          <strong>modello a canone mensile o annuale</strong>, senza commissioni per transazione.
+        </p>
+
+        <h3>2. Facilita d'uso per tutto lo staff</h3>
+        <p>
+          Il miglior software del mondo e inutile se il tuo team non lo usa. La curva di apprendimento
+          deve essere minima: interfaccia pulita, flussi intuitivi, formazione in meno di un'ora. Se devi
+          leggere un manuale di 50 pagine per accettare un ordine, qualcosa non va.
+        </p>
+
+        <h3>3. Notifiche automatiche ai clienti</h3>
+        <p>
+          Il cliente vuole sapere quando il suo ordine e confermato e quando e pronto al ritiro. Le
+          <strong>notifiche WhatsApp automatiche</strong> eliminano le telefonate ripetitive e danno
+          un'immagine professionale alla tua pizzeria. Cerca un software che invii conferma ordine,
+          aggiornamento stato e notifica "pronto al ritiro" senza intervento manuale.
+        </p>
+
+        <h3>4. Integrazione con stampante ordini</h3>
+        <p>
+          Stampare automaticamente ogni ordine appena arriva e fondamentale per la produzione. Niente
+          piu trascrizioni a mano, niente errori di comunicazione tra chi prende l'ordine e chi prepara.
+          Il software deve supportare <strong>stampanti termiche</strong> con stampa automatica istantanea.
+        </p>
+
+        <h3>5. Menu digitale personalizzabile</h3>
+        <p>
+          Il tuo menu digitale e il primo punto di contatto con il cliente online. Deve essere veloce,
+          aggiornabile in tempo reale (finita la margherita? La togli in un click) e riflettere il tuo
+          brand. Bonus: un buon menu digitale con <strong>foto e descrizioni</strong> aumenta lo scontrino
+          medio del 15-20% rispetto a un semplice elenco testuale.
+        </p>
+
+        <h3>6. Sistema di fidelizzazione integrato</h3>
+        <p>
+          Acquisire un nuovo cliente costa 5-7 volte piu che mantenerne uno esistente. Una
+          <strong>carta fedelta digitale</strong> integrata nel software di gestione ordini crea un circolo
+          virtuoso: il cliente ordina, accumula punti, torna a ordinare. Senza tessere fisiche da stampare
+          o app separate da scaricare.
+        </p>
+
+        <h3>7. Assistenza rapida e in italiano</h3>
+        <p>
+          Quando il software si blocca alle 12:30 di sabato con 40 ordini in coda, hai bisogno di qualcuno
+          che risponda subito e in italiano. Evita piattaforme con supporto solo via email o in inglese.
+          Cerca <strong>assistenza WhatsApp o telefonica</strong> con tempi di risposta garantiti.
+        </p>
+
+        <div class="callout">
+          <div class="callout__icon">&#128161;</div>
+          <div class="callout__content">
+            <strong>Consiglio pratico:</strong> prima di scegliere, fai un test reale. Simula una giornata tipo
+            con 20-30 ordini. Un software che funziona bene con 3 ordini di prova potrebbe mostrare
+            i suoi limiti sotto pressione.
+          </div>
+        </div>
+
+        <h2>Cosa evitare nella scelta</h2>
+
+        <h3>Piattaforme generaliste</h3>
+        <p>
+          Un software pensato per ristoranti, bar, gelaterie, hotel e pizzerie insieme non puo
+          eccellere in nessuna di queste categorie. La pizzeria al taglio ha esigenze specifiche:
+          la <strong>logica della teglia</strong> (raggruppare ordini per ottimizzare le cotture),
+          la gestione delle varianti per trancio, i tempi di produzione legati ai cicli di forno.
+          Un gestionale generico ignora tutto questo.
+        </p>
+
+        <h3>Costi nascosti per transazione</h3>
+        <p>
+          Attenzione al modello "gratis ma con commissione". Alcune piattaforme offrono il software
+          a costo zero e poi trattengono una percentuale su ogni ordine. Con volumi alti, questo modello
+          diventa molto piu costoso di un canone fisso. Fai sempre il calcolo sul tuo volume mensile
+          reale prima di firmare.
+        </p>
+
+        <div class="callout callout--warning">
+          <div class="callout__icon">&#9888;&#65039;</div>
+          <div class="callout__content">
+            <strong>Attenzione:</strong> se una piattaforma ti chiede il 3-5% per transazione e fai 800 ordini
+            al mese con scontrino medio di 12 euro, stai pagando circa 300-480 euro al mese di commissioni.
+            Confronta sempre questo importo con il canone fisso delle alternative.
+          </div>
+        </div>
+
+        <h2>Software verticale per pizzeria al taglio vs soluzioni generiche</h2>
+
+        <p>
+          La differenza tra un software verticale e uno generico e la stessa che c'e tra un abito
+          su misura e uno taglia unica. Entrambi ti coprono, ma solo uno ti sta davvero bene.
+        </p>
+
+        <p>
+          Un software verticale per pizzeria al taglio conosce il tuo flusso di lavoro: sa che una teglia
+          di margherita ha 6-8 porzioni, che puoi raggruppare gli ordini per riempire le teglie e ridurre
+          gli sprechi, che il tempo di preparazione dipende dal ciclo del forno e non da una stima generica.
+          Queste funzionalita specifiche possono <a href="/funzionalita">ridurre gli sprechi fino al 30%</a>
+          e aumentare l'efficienza produttiva in modo misurabile.
+        </p>
+
+        <h2>Tabella comparativa: cosa cercare</h2>
+
+        <div class="table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Caratteristica</th>
+                <th>Software Generico</th>
+                <th>Software Verticale Pizzeria</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Logica teglia / raggruppamento ordini</td>
+                <td class="table-no">Assente</td>
+                <td class="table-yes">Integrata</td>
+              </tr>
+              <tr>
+                <td>Commissioni per ordine</td>
+                <td class="table-no">2-5% per transazione</td>
+                <td class="table-yes">Zero (canone fisso)</td>
+              </tr>
+              <tr>
+                <td>Notifiche WhatsApp automatiche</td>
+                <td class="table-no">Spesso assenti o a pagamento extra</td>
+                <td class="table-yes">Incluse</td>
+              </tr>
+              <tr>
+                <td>Menu digitale con gestione varianti</td>
+                <td class="table-neutral">Base</td>
+                <td class="table-yes">Avanzata (per trancio, teglia)</td>
+              </tr>
+              <tr>
+                <td>Stampa automatica ordini</td>
+                <td class="table-neutral">Da configurare</td>
+                <td class="table-yes">Plug & play</td>
+              </tr>
+              <tr>
+                <td>Carta fedelta integrata</td>
+                <td class="table-no">Plugin esterno</td>
+                <td class="table-yes">Nativa</td>
+              </tr>
+              <tr>
+                <td>Assistenza in italiano</td>
+                <td class="table-neutral">Variabile</td>
+                <td class="table-yes">Dedicata</td>
+              </tr>
+              <tr>
+                <td>Tempo di setup</td>
+                <td class="table-no">Giorni / settimane</td>
+                <td class="table-yes">Meno di 1 ora</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Conclusione: scegli pensando al tuo lavoro quotidiano</h2>
+
+        <p>
+          Il software giusto per la tua pizzeria non e quello con piu funzionalita in assoluto. E quello
+          che risolve i problemi specifici del tuo lavoro quotidiano: ridurre gli sprechi, velocizzare
+          la produzione, fidelizzare i clienti e liberarti dalle telefonate ripetitive.
+        </p>
+
+        <p>
+          Prima di scegliere, chiediti: questo strumento e pensato per come lavoro io? Capisce la logica
+          della teglia? Mi permette di gestire gli ordini senza commissioni? Ha un'assistenza che risponde
+          quando ne ho bisogno? Se la risposta e si a tutte e tre, sei sulla strada giusta.
+        </p>
+
+        <p>
+          Se vuoi provare un software pensato specificamente per le pizzerie al taglio, puoi
+          <a href="/prezzi">vedere i piani di FoodBot</a> e iniziare con una prova gratuita di 30 giorni
+          senza carta di credito. Oppure <a href="/confronto/foodbot-vs-gloriafood">confrontalo con le alternative</a>
+          per farti un'idea chiara.
+        </p>
+
+      </article>
+    </div>
+  </section>
+
+  <!-- Leggi anche -->
+  <section class="blog-related">
+    <div class="container">
+      <h2 class="blog-related__title reveal">Leggi anche</h2>
+      <div class="blog-related__grid">
+        <a href="/confronto/foodbot-vs-gloriafood" class="blog-related__card reveal reveal-delay-1">
+          <span class="blog-related__card-label">CONFRONTO</span>
+          <h3>FoodBot vs GloriaFood: quale scegliere per la tua pizzeria?</h3>
+          <p>Analisi dettagliata delle differenze tra le due piattaforme per la gestione degli ordini da asporto.</p>
+        </a>
+        <a href="/funzionalita" class="blog-related__card reveal reveal-delay-2">
+          <span class="blog-related__card-label">PRODOTTO</span>
+          <h3>Tutte le funzionalita di FoodBot</h3>
+          <p>Logica Teglia, notifiche WhatsApp, carta fedelta e tutto quello che serve per gestire l'asporto.</p>
+        </a>
+        <a href="/prezzi" class="blog-related__card reveal reveal-delay-3">
+          <span class="blog-related__card-label">PREZZI</span>
+          <h3>Piani e prezzi: quanto costa FoodBot?</h3>
+          <p>Zero commissioni, canone fisso trasparente. Scopri il piano giusto per la tua pizzeria al taglio.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="blog-cta section--dark">
+    <div class="container">
+      <div class="blog-cta__content reveal">
+        <h2>Pronto a semplificare la gestione degli ordini?</h2>
+        <p>Prova FoodBot gratis per 30 giorni. Zero commissioni, nessuna carta di credito richiesta.</p>
+        <a href="/prezzi" class="btn btn--primary">Scopri i Piani &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Blog Hero ── */
+  .blog-hero {
+    padding: var(--space-2xl) 0 var(--space-2xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blog-hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,107,53,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .blog-hero__content {
+    max-width: 800px;
+  }
+
+  .blog-hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
+    color: var(--white);
+  }
+
+  .blog-hero__meta {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Article Prose ── */
+  .blog-body {
+    padding: var(--space-2xl) 0;
+    background: var(--white);
+  }
+
+  .prose h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--deep-dark);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    line-height: 1.15;
+  }
+
+  .prose h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    font-weight: 700;
+    color: var(--deep-dark);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    line-height: 1.25;
+  }
+
+  .prose p {
+    font-family: var(--font-body);
+    font-size: 1.08rem;
+    line-height: 1.8;
+    color: var(--gray-700);
+    margin-bottom: var(--space-md);
+  }
+
+  .prose a {
+    color: var(--orange);
+    text-decoration: underline;
+    text-decoration-color: rgba(255,107,53,0.3);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .prose a:hover {
+    text-decoration-color: var(--orange);
+  }
+
+  .prose strong {
+    color: var(--deep-dark);
+    font-weight: 600;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-lg) 0;
+    background: var(--pastel-cream);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+
+  .callout--warning {
+    background: #FFF4E4;
+    border-left-color: #E5A100;
+  }
+
+  .callout__icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .callout__content {
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+
+  .callout__content strong {
+    color: var(--deep-dark);
+  }
+
+  /* ── Comparison Table ── */
+  .table-wrapper {
+    margin: var(--space-lg) 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+  }
+
+  .comparison-table thead {
+    background: var(--deep-dark);
+    color: var(--white);
+  }
+
+  .comparison-table th {
+    padding: 1rem 1.25rem;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .comparison-table td {
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+    vertical-align: top;
+  }
+
+  .comparison-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .comparison-table tbody tr:hover {
+    background: rgba(255,107,53,0.03);
+  }
+
+  .comparison-table td:first-child {
+    font-weight: 600;
+    color: var(--deep-dark);
+    min-width: 200px;
+  }
+
+  .table-yes {
+    color: #2D8B4E;
+    font-weight: 600;
+  }
+
+  .table-no {
+    color: #C0392B;
+  }
+
+  .table-neutral {
+    color: var(--gray-500);
+  }
+
+  /* ── Related Posts ── */
+  .blog-related {
+    padding: var(--space-2xl) 0;
+    background: var(--light);
+  }
+
+  .blog-related__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--deep-dark);
+    margin-bottom: var(--space-xl);
+  }
+
+  .blog-related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .blog-related__card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    background: var(--white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .blog-related__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+
+  .blog-related__card-label {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: var(--space-sm);
+  }
+
+  .blog-related__card h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--deep-dark);
+    line-height: 1.3;
+    margin-bottom: var(--space-xs);
+  }
+
+  .blog-related__card p {
+    font-size: 0.92rem;
+    color: var(--gray-500);
+    line-height: 1.6;
+  }
+
+  /* ── CTA Section ── */
+  .blog-cta {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .blog-cta__content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .blog-cta h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    color: var(--white);
+    margin-bottom: var(--space-md);
+  }
+
+  .blog-cta p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .blog-hero {
+      padding: var(--space-xl) 0 var(--space-xl);
+    }
+
+    .blog-related__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .callout {
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 0.7rem 0.9rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>

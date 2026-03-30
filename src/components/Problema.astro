@@ -1,0 +1,175 @@
+---
+const problems = [
+  {
+    emoji: '💸',
+    title: 'Ordini Anti-Economici',
+    description: 'Prenotazioni singole che non riempiono la teglia. Il margine si erode ad ogni ordine, perché i software standard non capiscono la logica del taglio.',
+    color: 'rose',
+  },
+  {
+    emoji: '⚖️',
+    title: 'Produzione Sbilanciata',
+    description: 'Impossibile sincronizzare cottura e domanda in tempo reale. Ogni pizza nasce in teglia: 6–8 porzioni, tipologie che non si cuociono insieme.',
+    color: 'cream',
+  },
+  {
+    emoji: '📞',
+    title: 'Gestione Caotica',
+    description: 'Telefono, carta e disorganizzazione: zero tracciabilità, zero controllo. Errori continui e stress operativo alle stelle.',
+    color: 'green',
+  },
+  {
+    emoji: '📉',
+    title: 'Margini Erosi dal Delivery',
+    description: 'Le piattaforme di delivery trattengono il 30–35% su ogni ordine. Perdi margine, perdi il contatto diretto col cliente e diventi dipendente da chi fissa le regole.',
+    color: 'lavender',
+  },
+];
+---
+
+<section class="problema" id="problema" aria-labelledby="problema-title">
+  <div class="container">
+    <div class="section-intro reveal">
+      <span class="section-label">Il Problema</span>
+      <h2 id="problema-title">Software generici, commissioni del delivery e zero controllo: la trappola della <em>pizza al taglio</em>.</h2>
+      <p>Le pizzerie al taglio funzionano diversamente. Ogni pizza nasce in teglia: porzioni multiple, tipologie con tempi diversi, domanda imprevedibile. I software sono pensati per i ristoranti, le piattaforme di delivery si mangiano i margini — e tu perdi il controllo.</p>
+    </div>
+
+    <div class="problema__grid">
+      {problems.map((p, i) => (
+        <div class={`problema__card problema__card--${p.color} reveal reveal-delay-${i + 1}`}>
+          <div class="problema__card-emoji">{p.emoji}</div>
+          <h3>{p.title}</h3>
+          <p>{p.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .problema {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .problema::before {
+    content: '';
+    position: absolute;
+    top: -300px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.04), transparent 70%);
+    pointer-events: none;
+  }
+
+  .problema h2 em {
+    font-style: normal;
+    color: var(--orange);
+    position: relative;
+  }
+
+  .problema h2 em::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: 10px;
+    background: linear-gradient(90deg, rgba(255,107,53,0.18), rgba(255,107,53,0.08));
+    border-radius: 5px;
+    z-index: -1;
+  }
+
+  .problema__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .problema__card {
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: 24px;
+    border: 1px solid transparent;
+    transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+  }
+
+  .problema__card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.04);
+  }
+
+  .problema__card--rose {
+    background: var(--pastel-rose);
+    border-color: rgba(255,107,53,0.1);
+  }
+
+  .problema__card--rose:hover {
+    border-color: rgba(255,107,53,0.2);
+  }
+
+  .problema__card--cream {
+    background: var(--pastel-cream);
+    border-color: rgba(255,180,100,0.15);
+  }
+
+  .problema__card--cream:hover {
+    border-color: rgba(255,180,100,0.3);
+  }
+
+  .problema__card--green {
+    background: var(--pastel-green);
+    border-color: rgba(45,139,78,0.1);
+  }
+
+  .problema__card--green:hover {
+    border-color: rgba(45,139,78,0.2);
+  }
+
+  .problema__card--lavender {
+    background: #f0ecf8;
+    border-color: rgba(120,80,200,0.1);
+  }
+
+  .problema__card--lavender:hover {
+    border-color: rgba(120,80,200,0.2);
+  }
+
+  .problema__card-emoji {
+    font-size: 2.2rem;
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    backdrop-filter: blur(8px);
+  }
+
+  .problema__card h3 {
+    margin-bottom: var(--space-xs);
+    color: var(--dark);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  .problema__card p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--gray-600);
+  }
+
+  @media (max-width: 768px) {
+    .problema__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

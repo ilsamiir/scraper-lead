@@ -1,0 +1,599 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+---
+
+<Layout
+  title="Funzionalità FoodBot — Software Completo per Pizzerie al Taglio"
+  description="Scopri tutte le funzionalità di FoodBot: gestione ordini, logica teglia, menu digitale, notifiche WhatsApp, carta fedeltà, stampa ordini, multi-sede e centralino smart."
+>
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Funzionalità"}]} />
+  <main>
+
+    <!-- Hero -->
+    <section class="section--dark hero-features">
+      <div class="container">
+        <div class="hero-features__inner reveal">
+          <span class="section-label section-label--dark">Funzionalita</span>
+          <h1>Tutte le funzionalità per la tua pizzeria al taglio</h1>
+          <p class="hero-features__sub">Una piattaforma completa che copre ogni aspetto della gestione asporto: dagli ordini alla fidelizzazione, dalla produzione all'analisi dei dati.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. Gestione Ordini — light, text-left -->
+    <section class="feat" id="gestione-ordini">
+      <div class="container">
+        <div class="feat__row">
+          <div class="feat__text reveal">
+            <span class="section-label">Gestione Ordini</span>
+            <h2>Dashboard centralizzata per ogni ordine</h2>
+            <p>Tutti gli ordini in un unico pannello: niente più fogli volanti, telefonate perse o confusione tra comande. FoodBot sincronizza ordini e laboratorio in tempo reale.</p>
+            <ul class="feat__list">
+              <li>Dashboard centralizzata con vista in tempo reale</li>
+              <li>Prenotazioni real-time da webapp cliente</li>
+              <li>Sincronizzazione istantanea con il laboratorio</li>
+              <li>Stato ordine aggiornato automaticamente</li>
+              <li>Storico ordini consultabile e filtrabile</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--rose">
+              <span class="feat__icon-emoji">📋</span>
+              <span class="feat__icon-label">Ordini in tempo reale</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Logica Teglia — dark, text-right -->
+    <section class="section--dark feat" id="logica-teglia">
+      <div class="container">
+        <div class="feat__row feat__row--reverse">
+          <div class="feat__text reveal">
+            <span class="section-label section-label--dark">Logica Teglia</span>
+            <h2>Raggruppa, ottimizza, riduci gli sprechi</h2>
+            <p>Ogni pizza al taglio nasce in teglia con 6-8 porzioni. FoodBot organizza gli ordini per riempire le teglie al massimo, eliminando le porzioni invendute.</p>
+            <ul class="feat__list feat__list--dark">
+              <li>Raggruppamento automatico degli ordini per teglia</li>
+              <li>Ottimizzazione intelligente delle cotture</li>
+              <li>Riduzione sprechi fino al 30%</li>
+              <li>Pianificazione produzione sincronizzata</li>
+              <li>Alert automatici per teglie incomplete</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--green">
+              <span class="feat__icon-emoji">🍕</span>
+              <span class="feat__icon-label">-30% sprechi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Menu Digitale — light, text-left -->
+    <section class="feat" id="menu-digitale">
+      <div class="container">
+        <div class="feat__row">
+          <div class="feat__text reveal">
+            <span class="section-label">Menu Digitale</span>
+            <h2>Il tuo menu sempre aggiornato, ovunque</h2>
+            <p>Crea e gestisci il tuo menu digitale con categorie, foto e offerte speciali. Ogni modifica si riflette istantaneamente sulla webapp dei clienti.</p>
+            <ul class="feat__list">
+              <li>Categorie e prodotti personalizzabili</li>
+              <li>Foto prodotto per aumentare le conversioni</li>
+              <li>Offerte e promozioni configurabili</li>
+              <li>Aggiornamenti istantanei senza attese</li>
+              <li>Disponibilità prodotti in tempo reale</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--cream">
+              <span class="feat__icon-emoji">📱</span>
+              <span class="feat__icon-label">Menu sempre aggiornato</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Notifiche WhatsApp — dark, text-right -->
+    <section class="section--dark feat" id="notifiche-whatsapp">
+      <div class="container">
+        <div class="feat__row feat__row--reverse">
+          <div class="feat__text reveal">
+            <span class="section-label section-label--dark">Notifiche WhatsApp</span>
+            <h2>Comunica con i clienti dove sono già</h2>
+            <p>Il 98% dei messaggi WhatsApp viene letto entro 3 minuti. FoodBot sfrutta questo canale per tenere i clienti aggiornati su ogni fase dell'ordine.</p>
+            <ul class="feat__list feat__list--dark">
+              <li>Conferma ordine automatica via WhatsApp</li>
+              <li>Aggiornamento stato preparazione</li>
+              <li>Notifica "pronto al ritiro"</li>
+              <li>Follow-up post-acquisto per fidelizzare</li>
+              <li>Template personalizzabili per il tuo brand</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--green">
+              <span class="feat__icon-emoji">💬</span>
+              <span class="feat__icon-label">98% open rate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Carta Fedelta Digitale — light, text-left -->
+    <section class="feat" id="carta-fedelta">
+      <div class="container">
+        <div class="feat__row">
+          <div class="feat__text reveal">
+            <span class="section-label">Carta Fedelta Digitale</span>
+            <h2>Fidelizza senza app extra</h2>
+            <p>Un programma fedelta completo integrato nella webapp: i clienti accumulano punti, riscattano premi e ricaricano il saldo senza installare nulla.</p>
+            <ul class="feat__list">
+              <li>Sistema punti automatico a ogni ordine</li>
+              <li>Catalogo premi personalizzabile</li>
+              <li>Saldo ricaricabile prepagato</li>
+              <li>Nessuna app aggiuntiva da scaricare</li>
+              <li>Storico punti e transazioni per il cliente</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--lavender">
+              <span class="feat__icon-emoji">🎁</span>
+              <span class="feat__icon-label">Zero app extra</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Stampa Ordini — dark, text-right -->
+    <section class="section--dark feat" id="stampa-ordini">
+      <div class="container">
+        <div class="feat__row feat__row--reverse">
+          <div class="feat__text reveal">
+            <span class="section-label section-label--dark">Stampa Ordini</span>
+            <h2>Dalla dashboard alla stampante, automaticamente</h2>
+            <p>Ogni ordine confermato viene stampato in automatico sulla tua stampante termica. Formato personalizzabile, zero intervento manuale.</p>
+            <ul class="feat__list feat__list--dark">
+              <li>Stampa automatica alla conferma ordine</li>
+              <li>Compatibilita con stampanti termiche</li>
+              <li>Formato scontrino personalizzabile</li>
+              <li>Stampa multipla per laboratorio e banco</li>
+              <li>Nessun click necessario</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--blue">
+              <span class="feat__icon-emoji">🖨️</span>
+              <span class="feat__icon-label">Stampa automatica</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Multi Punto Vendita — light, text-left -->
+    <section class="feat" id="multi-sede">
+      <div class="container">
+        <div class="feat__row">
+          <div class="feat__text reveal">
+            <span class="section-label">Multi Punto Vendita</span>
+            <h2>Una dashboard, tutte le sedi</h2>
+            <p>Gestisci piu punti vendita da un unico pannello. Menu, ordini e promozioni sincronizzati su tutte le sedi, con report dettagliati per ciascuna.</p>
+            <ul class="feat__list">
+              <li>Dashboard multi-sede centralizzata</li>
+              <li>Menu sincronizzati tra i punti vendita</li>
+              <li>Report e statistiche per singola sede</li>
+              <li>Promozioni globali o per sede</li>
+              <li>Gestione staff differenziata</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--cream">
+              <span class="feat__icon-emoji">🏪</span>
+              <span class="feat__icon-label">Tutte le sedi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Centralino Smart — dark, text-right -->
+    <section class="section--dark feat" id="centralino-smart">
+      <div class="container">
+        <div class="feat__row feat__row--reverse">
+          <div class="feat__text reveal">
+            <span class="section-label section-label--dark">Centralino Smart</span>
+            <h2>Meno telefonate, piu ordini</h2>
+            <p>Il centralino smart redirige automaticamente le chiamate verso la webapp di ordinazione, riducendo le telefonate fino al 60% e liberando il personale.</p>
+            <ul class="feat__list feat__list--dark">
+              <li>Redirect automatico alla webapp di ordinazione</li>
+              <li>Riduzione chiamate fino al 60%</li>
+              <li>Messaggio personalizzabile</li>
+              <li>Fallback a operatore per casi speciali</li>
+              <li>Meno errori di trascrizione ordini</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--rose">
+              <span class="feat__icon-emoji">📞</span>
+              <span class="feat__icon-label">-60% chiamate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Sistema Upsell — light, text-left -->
+    <section class="feat" id="upsell">
+      <div class="container">
+        <div class="feat__row">
+          <div class="feat__text reveal">
+            <span class="section-label">Sistema Upsell</span>
+            <h2>Aumenta lo scontrino medio, automaticamente</h2>
+            <p>FoodBot suggerisce ai clienti prodotti complementari e combo al momento giusto, aumentando il valore medio di ogni ordine senza alcuno sforzo.</p>
+            <ul class="feat__list">
+              <li>Suggerimenti contestuali basati sul carrello</li>
+              <li>Cross-sell di prodotti complementari</li>
+              <li>Combo e offerte configurabili</li>
+              <li>A/B test automatico delle proposte</li>
+              <li>Report conversioni upsell</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--green">
+              <span class="feat__icon-emoji">📈</span>
+              <span class="feat__icon-label">Scontrino medio +</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Analytics (coming soon) — dark, text-right -->
+    <section class="section--dark feat" id="analytics">
+      <div class="container">
+        <div class="feat__row feat__row--reverse">
+          <div class="feat__text reveal">
+            <div class="feat__label-row">
+              <span class="section-label section-label--dark">Analytics</span>
+              <span class="badge badge--soon">Coming Soon</span>
+            </div>
+            <h2>Dati e insight per decisioni migliori</h2>
+            <p>Report vendite, trend clienti, orari di punta e analisi delle performance: tutto in dashboard interattive per guidare le tue scelte di business.</p>
+            <ul class="feat__list feat__list--dark">
+              <li>Report vendite giornalieri, settimanali, mensili</li>
+              <li>Trend clienti e frequenza d'acquisto</li>
+              <li>Analisi orari di punta</li>
+              <li>Confronto performance tra periodi</li>
+              <li>Export dati in formato CSV</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--lavender feat__icon-block--soon">
+              <span class="feat__icon-emoji">📊</span>
+              <span class="feat__icon-label">In arrivo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Food Cost (coming soon) — light, text-left -->
+    <section class="feat" id="food-cost">
+      <div class="container">
+        <div class="feat__row">
+          <div class="feat__text reveal">
+            <div class="feat__label-row">
+              <span class="section-label">Food Cost</span>
+              <span class="badge badge--soon">Coming Soon</span>
+            </div>
+            <h2>Marginalita sotto controllo, teglia per teglia</h2>
+            <p>Calcola il costo reale di ogni prodotto e di ogni teglia. Scopri dove guadagni di piu e dove puoi ottimizzare per massimizzare i margini.</p>
+            <ul class="feat__list">
+              <li>Calcolo marginalita per prodotto</li>
+              <li>Costo per teglia in tempo reale</li>
+              <li>Analisi ingredient cost</li>
+              <li>Alert su prodotti sotto-margine</li>
+              <li>Simulazione scenari di prezzo</li>
+            </ul>
+          </div>
+          <div class="feat__visual reveal reveal-delay-2">
+            <div class="feat__icon-block feat__icon-block--yellow feat__icon-block--soon">
+              <span class="feat__icon-emoji">💰</span>
+              <span class="feat__icon-label">In arrivo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA finale -->
+    <section class="section--dark feat-cta">
+      <div class="container">
+        <div class="feat-cta__inner reveal">
+          <h2>Prova tutte le funzionalità gratis per 30 giorni</h2>
+          <p>Nessuna carta di credito richiesta. Zero commissioni. Attivazione in 5 minuti.</p>
+          <div class="feat-cta__actions">
+            <a href="#contatti" class="btn btn--primary">Inizia la Prova Gratuita</a>
+            <a href="/prezzi" class="btn btn--secondary brand-orange">Vedi i Prezzi</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero ── */
+  .hero-features {
+    padding: var(--space-2xl) 0 var(--space-2xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-features::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-features__inner {
+    max-width: 780px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero-features__inner h1 {
+    color: var(--white);
+    margin-bottom: var(--space-md);
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+
+  .hero-features__sub {
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+    color: rgba(255,255,255,0.6);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Feature Row ── */
+  .feat {
+    padding: var(--space-2xl) 0;
+  }
+
+  .feat__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .feat__row--reverse {
+    direction: rtl;
+  }
+
+  .feat__row--reverse > * {
+    direction: ltr;
+  }
+
+  .feat__label-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .feat__text h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .feat__text p {
+    margin-bottom: var(--space-lg);
+  }
+
+  /* ── Feature List ── */
+  .feat__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .feat__list li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--gray-700);
+  }
+
+  .feat__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 6px rgba(255,107,53,0.35);
+  }
+
+  .feat__list--dark li {
+    color: rgba(255,255,255,0.65);
+  }
+
+  .feat__list--dark li::before {
+    background: var(--orange-light);
+    box-shadow: 0 0 8px rgba(255,143,96,0.45);
+  }
+
+  /* ── Feature Visual ── */
+  .feat__visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .feat__icon-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 220px;
+    height: 220px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .feat__icon-block:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .feat__icon-block--rose {
+    background: var(--pastel-rose);
+  }
+
+  .feat__icon-block--green {
+    background: var(--pastel-green);
+  }
+
+  .feat__icon-block--cream {
+    background: var(--pastel-cream);
+  }
+
+  .feat__icon-block--lavender {
+    background: var(--pastel-lavender);
+  }
+
+  .feat__icon-block--blue {
+    background: var(--pastel-blue);
+  }
+
+  .feat__icon-block--yellow {
+    background: var(--pastel-yellow);
+  }
+
+  .feat__icon-block--soon {
+    opacity: 0.75;
+    border: 2px dashed rgba(108,79,189,0.3);
+  }
+
+  .feat__icon-emoji {
+    font-size: 3.5rem;
+    line-height: 1;
+  }
+
+  .feat__icon-label {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gray-700);
+    text-align: center;
+  }
+
+  /* ── CTA Section ── */
+  .feat-cta {
+    padding: var(--space-3xl) 0;
+  }
+
+  .feat-cta__inner {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .feat-cta__inner h2 {
+    color: var(--white);
+    margin-bottom: var(--space-md);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  }
+
+  .feat-cta__inner p {
+    color: rgba(255,255,255,0.6);
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    margin-bottom: var(--space-xl);
+  }
+
+  .feat-cta__actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn--secondary-brand-orange {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.25);
+  }
+
+  .btn--secondary-brand-orange:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+    background: transparent;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .feat__row,
+    .feat__row--reverse {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+      direction: ltr;
+    }
+
+    .feat__visual {
+      order: -1;
+    }
+
+    .feat__icon-block {
+      width: 160px;
+      height: 160px;
+    }
+
+    .feat__icon-emoji {
+      font-size: 2.8rem;
+    }
+
+    .hero-features {
+      padding: var(--space-2xl) 0 var(--space-xl);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .feat__icon-block {
+      width: 130px;
+      height: 130px;
+    }
+
+    .feat__icon-emoji {
+      font-size: 2.2rem;
+    }
+
+    .feat__icon-label {
+      font-size: 0.75rem;
+    }
+  }
+</style>

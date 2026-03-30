@@ -1,0 +1,339 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const features = [
+  { name: 'Logica Teglia', foodbot: true, competitor: false },
+  { name: 'Zero Commissioni', foodbot: true, competitor: false },
+  { name: 'Notifiche WhatsApp', foodbot: true, competitor: true },
+  { name: 'Carta Fedeltà Inclusa', foodbot: true, competitor: true },
+  { name: 'Multi Punto Vendita', foodbot: true, competitor: true },
+  { name: 'Centralino Smart', foodbot: true, competitor: false },
+  { name: 'Stampa Ordini', foodbot: true, competitor: true },
+  { name: 'Upsell', foodbot: true, competitor: false },
+  { name: 'Pensato per pizzerie al taglio', foodbot: true, competitor: false },
+  { name: 'Prova Gratuita', foodbot: true, competitor: true },
+];
+
+const comparisonSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "FoodBot vs Deliverart — Confronto Software Ordini Pizzeria 2025",
+  "description": "Confronto dettagliato tra FoodBot e Deliverart per la gestione ordini della tua pizzeria. Scopri perché FoodBot è la scelta migliore per le pizzerie al taglio.",
+  "url": "https://ristobot.it/confronto/foodbot-vs-deliverart"
+};
+---
+
+<Layout
+  title="FoodBot vs Deliverart — Confronto Software Ordini Pizzeria 2025"
+  description="Confronto dettagliato tra FoodBot e Deliverart per la gestione ordini della tua pizzeria. Scopri perché FoodBot è la scelta migliore per le pizzerie al taglio."
+>
+  <Navbar />
+  <Breadcrumb items={[{label: "Home", href: "/"}, {label: "Confronti", href: "/confronto"}, {label: "FoodBot vs Deliverart"}]} />
+  <main>
+    <!-- Hero -->
+    <section class="compare-hero section--dark">
+      <div class="container" style="text-align:center;">
+        <span class="section-label section-label--dark" style="justify-content:center;">Confronto</span>
+        <h1 class="compare-hero__title">FoodBot vs Deliverart</h1>
+        <p class="compare-hero__subtitle">Confronto dettagliato tra le due piattaforme per la gestione ordini della tua pizzeria al taglio. Quale software ti offre di più?</p>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="compare-table-section" aria-labelledby="compare-table-title">
+      <div class="container">
+        <div class="section-intro" style="text-align:center;margin-left:auto;margin-right:auto;">
+          <span class="section-label" style="justify-content:center;">Funzionalità a confronto</span>
+          <h2 id="compare-table-title">Chi offre cosa?</h2>
+        </div>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th class="compare-table__feature-col">Funzionalità</th>
+                <th class="compare-table__brand-col compare-table__brand-col--foodbot">FoodBot</th>
+                <th class="compare-table__brand-col">Deliverart</th>
+              </tr>
+            </thead>
+            <tbody>
+              {features.map((f) => (
+                <tr>
+                  <td class="compare-table__feature-name">{f.name}</td>
+                  <td class="compare-table__check">
+                    <span class={f.foodbot ? 'check check--yes' : 'check check--no'}>{f.foodbot ? '✓' : '✗'}</span>
+                  </td>
+                  <td class="compare-table__check">
+                    <span class={f.competitor ? 'check check--yes' : 'check check--no'}>{f.competitor ? '✓' : '✗'}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Differences -->
+    <section class="compare-differences" aria-labelledby="differences-title">
+      <div class="container">
+        <div class="section-intro" style="text-align:center;margin-left:auto;margin-right:auto;">
+          <span class="section-label" style="justify-content:center;">Differenze chiave</span>
+          <h2 id="differences-title">Perché FoodBot è diverso</h2>
+        </div>
+        <div class="differences-grid">
+          <div class="difference-card">
+            <h3>Verticale sulle pizzerie al taglio</h3>
+            <p>FoodBot è progettato esclusivamente per pizzerie al taglio. Deliverart è una piattaforma generica per la ristorazione, senza funzionalità specifiche per la pizza al taglio come la Logica Teglia.</p>
+          </div>
+          <div class="difference-card">
+            <h3>Zero commissioni, sempre</h3>
+            <p>Con FoodBot paghi solo un canone fisso mensile. Deliverart applica commissioni sulle transazioni che erodono i tuoi margini ad ogni ordine ricevuto.</p>
+          </div>
+          <div class="difference-card">
+            <h3>Logica Teglia esclusiva</h3>
+            <p>Solo FoodBot raggruppa automaticamente gli ordini per ottimizzare ogni cottura. Riduci gli sprechi fino al 30% e sincronizza la produzione con la domanda reale.</p>
+          </div>
+          <div class="difference-card">
+            <h3>Centralino Smart e Upsell</h3>
+            <p>FoodBot include un centralino intelligente che reindirizza le chiamate verso gli ordini digitali e un sistema di upsell integrato per aumentare lo scontrino medio. Deliverart non offre queste funzionalità.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Verdetto -->
+    <section class="compare-verdict section--dark" aria-labelledby="verdict-title">
+      <div class="container" style="text-align:center;">
+        <span class="section-label section-label--dark" style="justify-content:center;">Verdetto</span>
+        <h2 id="verdict-title">FoodBot vince per le pizzerie al taglio</h2>
+        <p class="verdict-text">Deliverart è una buona piattaforma generica per la ristorazione, ma non è pensata per le esigenze specifiche delle pizzerie al taglio. FoodBot offre Logica Teglia, zero commissioni, centralino smart e upsell integrato: tutto ciò che serve per ottimizzare la produzione e aumentare i margini della tua pizzeria.</p>
+        <div class="verdict-ctas">
+          <a href="/prezzi" class="btn btn--primary">Scopri i prezzi</a>
+          <a href="/funzionalita" class="btn btn--secondary brand-orange verdict-btn-secondary">Vedi tutte le funzionalità</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="compare-cta">
+      <div class="container" style="text-align:center;">
+        <h2>Prova FoodBot gratis per 30 giorni</h2>
+        <p style="max-width:550px;margin:var(--space-md) auto var(--space-lg);">Nessuna carta di credito richiesta. Scopri come FoodBot può trasformare la gestione della tua pizzeria al taglio.</p>
+        <a href="mailto:info@ristobot.it" class="btn btn--primary">Scrivici: info@ristobot.it</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(comparisonSchema)} />
+</Layout>
+
+<style>
+  /* Hero */
+  .compare-hero {
+    padding: var(--space-2xl) 0 var(--space-xl);
+    background: var(--deep-dark);
+  }
+
+  .compare-hero__title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: var(--space-md);
+  }
+
+  .compare-hero__subtitle {
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.65) !important;
+  }
+
+  /* Table Section */
+  .compare-table-section {
+    padding: var(--space-2xl) 0;
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%);
+  }
+
+  .compare-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--shadow-md);
+    background: var(--white);
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+  }
+
+  .compare-table thead {
+    background: var(--deep-dark);
+  }
+
+  .compare-table th {
+    padding: var(--space-md) var(--space-lg);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--white);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .compare-table__feature-col {
+    text-align: left !important;
+    min-width: 240px;
+  }
+
+  .compare-table__brand-col {
+    min-width: 140px;
+  }
+
+  .compare-table__brand-col--foodbot {
+    background: rgba(255,107,53,0.2);
+  }
+
+  .compare-table tbody tr {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: background 0.2s ease;
+  }
+
+  .compare-table tbody tr:hover {
+    background: rgba(255,107,53,0.03);
+  }
+
+  .compare-table td {
+    padding: var(--space-sm) var(--space-lg);
+    text-align: center;
+  }
+
+  .compare-table__feature-name {
+    text-align: left !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--dark);
+  }
+
+  .compare-table__check {
+    font-size: 1.3rem;
+  }
+
+  .check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .check--yes {
+    background: var(--pastel-green);
+    color: #2D8B4E;
+  }
+
+  .check--no {
+    background: #FFE8E8;
+    color: #D32F2F;
+  }
+
+  /* Differences */
+  .compare-differences {
+    padding: var(--space-2xl) 0;
+    background: var(--white);
+  }
+
+  .differences-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .difference-card {
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0,0,0,0.06);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+  }
+
+  .difference-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--orange);
+  }
+
+  .difference-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--dark);
+    margin-bottom: var(--space-xs);
+  }
+
+  .difference-card p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  /* Verdict */
+  .compare-verdict {
+    padding: var(--space-2xl) 0;
+  }
+
+  .verdict-text {
+    max-width: 680px;
+    margin: var(--space-md) auto var(--space-lg);
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7) !important;
+    line-height: 1.7;
+  }
+
+  .verdict-ctas {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .verdict-btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+
+  .verdict-btn-secondary:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  /* CTA */
+  .compare-cta {
+    padding: var(--space-2xl) 0;
+    background: linear-gradient(180deg, #f5f7fa 0%, #ffffff 100%);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .differences-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      padding: var(--space-sm);
+    }
+
+    .compare-table__feature-col {
+      min-width: 160px;
+    }
+  }
+</style>

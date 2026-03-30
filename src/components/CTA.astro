@@ -1,0 +1,242 @@
+---
+---
+<section class="cta" id="contatti">
+  <div class="container">
+    <div class="cta__inner reveal">
+      <div class="cta__glow cta__glow--1"></div>
+      <div class="cta__glow cta__glow--2"></div>
+
+      <span class="cta__pretitle">Pronto a rivoluzionare il tuo asporto?</span>
+      <h2>Inizia <span class="cta__highlight">gratis</span>.<br/>Nessuna carta di credito.</h2>
+      <p>30 giorni di prova gratuita. Zero commissioni. Setup in 5 minuti.<br/>Scopri perché 500+ pizzerie hanno già scelto FoodBot.</p>
+
+      <div class="cta__actions">
+        <a href="mailto:info@ristobot.it" class="cta__btn-primary">
+          Scrivici: info@ristobot.it
+        </a>
+        <a href="https://ristobot.it" class="cta__btn-secondary" target="_blank" rel="noopener">
+          Visita ristobot.it
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+      </div>
+
+      <div class="cta__guarantees">
+        <div class="cta__guarantee">
+          <div class="cta__guarantee-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A3D62" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          30 giorni gratis
+        </div>
+        <div class="cta__guarantee">
+          <div class="cta__guarantee-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A3D62" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          Zero commissioni
+        </div>
+        <div class="cta__guarantee">
+          <div class="cta__guarantee-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A3D62" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          Setup in 5 minuti
+        </div>
+        <div class="cta__guarantee">
+          <div class="cta__guarantee-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A3D62" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          Supporto WhatsApp
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: #0A3D62;
+    padding: var(--space-2xl) 0 var(--space-3xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta__inner {
+    position: relative;
+    text-align: center;
+    padding: var(--space-2xl) var(--space-xl);
+    z-index: 1;
+  }
+
+  .cta__glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(100px);
+  }
+
+  .cta__glow--1 {
+    width: 400px;
+    height: 400px;
+    top: -150px;
+    right: -100px;
+    background: rgba(255,107,53,0.15);
+  }
+
+  .cta__glow--2 {
+    width: 300px;
+    height: 300px;
+    bottom: -100px;
+    left: -80px;
+    background: rgba(78,205,196,0.1);
+  }
+
+  .cta__pretitle {
+    display: inline-block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .cta h2 {
+    margin-bottom: var(--space-md);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-weight: 900;
+  }
+
+  .cta__highlight {
+    color: #FF6B35;
+    position: relative;
+  }
+
+  @keyframes textGlow {
+    0%, 100% { text-shadow: 0 0 20px rgba(255,107,53,0.3); }
+    50% { text-shadow: 0 0 40px rgba(255,107,53,0.5), 0 0 60px rgba(255,107,53,0.2); }
+  }
+
+  .cta__highlight {
+    animation: textGlow 3s ease-in-out infinite;
+  }
+
+  .cta p {
+    max-width: 550px;
+    margin: 0 auto var(--space-lg);
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.7;
+  }
+
+  .cta__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-lg);
+  }
+
+  .cta__btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    background: var(--white);
+    color: #0A3D62;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .cta__btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,107,53,0.1), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .cta__btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .cta__btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+
+  .cta__btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 14px;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.25);
+    transition: all 0.3s ease;
+  }
+
+  .cta__btn-secondary:hover {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.05);
+    transform: translateY(-2px);
+  }
+
+  .cta__guarantees {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .cta__guarantee {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .cta__guarantee-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .cta__inner {
+      padding: var(--space-xl) var(--space-md);
+    }
+
+    .cta__actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta__guarantees {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+  }
+</style>

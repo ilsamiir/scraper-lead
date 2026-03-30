@@ -1,0 +1,319 @@
+---
+const features = [
+  {
+    emoji: '📋',
+    title: 'Gestione Ordini',
+    subtitle: 'Il cuore del tuo asporto',
+    description: 'Tutti gli ordini in un unico pannello: asporto, prenotazioni e sincronizzazione con la produzione in tempo reale. Nessuna notifica persa, nessun errore di gestione.',
+    details: ['Dashboard centralizzata', 'Prenotazioni in tempo reale', 'Sincronizzazione laboratorio', 'Conferma automatica o manuale'],
+    color: 'rose',
+    badge: null,
+  },
+  {
+    emoji: '🧮',
+    title: 'Logica Teglia',
+    subtitle: 'L\'intelligenza che fa margine',
+    description: 'FoodBot raggruppa gli ordini per ottimizzare ogni teglia: 6-8 porzioni per cottura, tipologie organizzate, produzione sincronizzata. Meno sprechi, più margine.',
+    details: ['Raggruppamento automatico ordini', 'Ottimizzazione cotture', 'Riduzione sprechi fino al 30%', 'Pianificazione produzione'],
+    color: 'cream',
+    badge: null,
+  },
+  {
+    emoji: '📖',
+    title: 'Menu Digitale',
+    subtitle: 'Aggiorna in autonomia',
+    description: 'Il tuo menu sempre aggiornato: categorie, prodotti, offerte e promozioni. Modificabile in un click, visibile ai clienti in tempo reale.',
+    details: ['Categorie personalizzabili', 'Offerte e promozioni', 'Foto prodotti', 'Aggiornamenti istantanei'],
+    color: 'green',
+    badge: null,
+  },
+  {
+    emoji: '💬',
+    title: 'Notifiche WhatsApp',
+    subtitle: 'Comunicazione automatica',
+    description: 'Conferma ordine, aggiornamenti di stato e follow-up automatici direttamente su WhatsApp. Il cliente è sempre informato, senza alcuno sforzo.',
+    details: ['Conferma ordine automatica', 'Stato preparazione', 'Notifica "pronto al ritiro"', 'Follow-up post-acquisto'],
+    color: 'blue',
+    badge: null,
+  },
+  {
+    emoji: '🎁',
+    title: 'Loyalty Integrata',
+    subtitle: 'Fidelizza senza app extra',
+    description: 'Carta fedeltà digitale, accumulo punti, premi e saldo ricaricabile — tutto incluso nella piattaforma. Senza app aggiuntive, senza costi extra.',
+    details: ['Carta fedeltà digitale', 'Accumulo punti automatico', 'Premi personalizzabili', 'Saldo ricaricabile'],
+    color: 'lavender',
+    badge: null,
+  },
+  {
+    emoji: '🖨️',
+    title: 'Stampa Ordini',
+    subtitle: 'Dal display alla stampante',
+    description: 'Ogni ordine confermato viene inviato automaticamente alla stampante del laboratorio. Zero errori di trascrizione, zero comunicazioni verbali.',
+    details: ['Stampa automatica', 'Formato personalizzato', 'Compatibilità stampanti termiche', 'Coda intelligente'],
+    color: 'cream',
+    badge: null,
+  },
+  {
+    emoji: '🏪',
+    title: 'Multi Punto Vendita',
+    subtitle: 'Gestione centralizzata',
+    description: 'Gestisci più sedi da un\'unica dashboard. Ogni punto vendita è sempre allineato: menu, ordini, promozioni e report.',
+    details: ['Dashboard multi-sede', 'Menu sincronizzati', 'Report per sede', 'Configurazione indipendente'],
+    color: 'rose',
+    badge: null,
+  },
+  {
+    emoji: '📞',
+    title: 'Centralino Smart',
+    subtitle: 'Dalle chiamate alla webapp',
+    description: 'Gestione intelligente delle chiamate in entrata con redirect automatico alla webapp. Il cliente ordina online, tu risparmi tempo.',
+    details: ['Redirect automatico', 'Messaggio personalizzato', 'Riduzione chiamate 60%', 'Ordini self-service'],
+    color: 'green',
+    badge: null,
+  },
+  {
+    emoji: '⬆️',
+    title: 'Sistema Upsell',
+    subtitle: 'Aumenta lo scontrino medio',
+    description: 'Suggerimenti intelligenti integrati nel flusso d\'ordine. Bibite, dolci, contorni: ogni ordine è un\'opportunità per aumentare il valore.',
+    details: ['Suggerimenti contestuali', 'Cross-sell automatico', 'Combo e offerte', 'A/B testing suggerimenti'],
+    color: 'cream',
+    badge: null,
+  },
+  {
+    emoji: '📊',
+    title: 'Analytics',
+    subtitle: 'Vendite e comportamento clienti',
+    description: 'Dashboard completa con vendite, trend, comportamento clienti e performance per prodotto. Decisioni guidate dai dati, non dall\'intuizione.',
+    details: ['Report vendite', 'Trend clienti', 'Performance prodotti', 'Export dati'],
+    color: 'lavender',
+    badge: 'soon',
+  },
+  {
+    emoji: '💰',
+    title: 'Food Cost',
+    subtitle: 'Marginalità sotto controllo',
+    description: 'Traccia i costi di ogni prodotto, calcola la marginalità reale e identifica dove stai perdendo denaro. Il primo passo per guadagnare di più.',
+    details: ['Calcolo marginalità', 'Costo per teglia', 'Alert margini bassi', 'Pricing ottimale'],
+    color: 'blue',
+    badge: 'soon',
+  },
+];
+
+const colorMap: Record<string, string> = {
+  rose: 'var(--pastel-rose)',
+  cream: 'var(--pastel-cream)',
+  green: 'var(--pastel-green)',
+  blue: 'var(--pastel-blue)',
+  lavender: 'var(--pastel-lavender)',
+};
+---
+
+<section class="funzionalita" id="funzionalita" aria-labelledby="funzionalita-title">
+  <div class="container">
+    <div class="section-intro reveal" style="text-align:center;margin-left:auto;margin-right:auto;">
+      <span class="section-label" style="justify-content:center;">Funzionalità</span>
+      <h2 id="funzionalita-title">Tutto ciò che serve per la tua pizzeria.<br/><span style="color:var(--orange)">In un unico software.</span></h2>
+      <p>Una piattaforma completa per gestire ordini, produzione, fidelizzazione e analytics. Progettata per chi lavora con le mani in pasta.</p>
+    </div>
+
+    <div class="funzionalita__grid">
+      {features.map((f, i) => (
+        <div class={`funzionalita__card reveal reveal-delay-${(i % 3) + 1}`}>
+          <div class="funzionalita__card-top">
+            <div class="funzionalita__card-icon">
+              <span class="funzionalita__card-emoji">{f.emoji}</span>
+            </div>
+            {f.badge === 'soon' && (
+              <span class="badge badge--soon">In arrivo</span>
+            )}
+          </div>
+          <div class="funzionalita__card-body">
+            <span class="funzionalita__card-subtitle">{f.subtitle}</span>
+            <h3>{f.title}</h3>
+            <p>{f.description}</p>
+            <ul class="funzionalita__card-details">
+              {f.details.map((d) => (
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="funzionalita__glow funzionalita__glow--orange"></div>
+  <div class="funzionalita__glow funzionalita__glow--blue"></div>
+</section>
+
+<style>
+  .funzionalita {
+    background: #0D1B2A;
+    padding: var(--space-3xl) 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .funzionalita .section-intro h2 {
+    color: var(--white);
+  }
+
+  .funzionalita .section-intro p {
+    color: rgba(255,255,255,0.6);
+  }
+
+  .funzionalita .section-label {
+    color: var(--orange);
+  }
+
+  .funzionalita__glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(120px);
+    opacity: 0.15;
+  }
+
+  .funzionalita__glow--orange {
+    top: -100px;
+    right: -100px;
+    background: #FF6B35;
+  }
+
+  .funzionalita__glow--blue {
+    bottom: -100px;
+    left: -100px;
+    background: #0A3D62;
+    opacity: 0.25;
+  }
+
+  .funzionalita__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    position: relative;
+    z-index: 1;
+  }
+
+  .funzionalita__card {
+    background: rgba(255,255,255,0.03);
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .funzionalita__card:hover {
+    background: rgba(255,255,255,0.055);
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 40px rgba(78,205,196,0.06);
+  }
+
+  .funzionalita__card-top {
+    padding: var(--space-lg) var(--space-lg) var(--space-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .funzionalita__card-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(255,107,53,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  .funzionalita__card:hover .funzionalita__card-icon {
+    transform: scale(1.08) rotate(-3deg);
+  }
+
+  .funzionalita__card-emoji {
+    font-size: 2rem;
+    display: flex;
+  }
+
+  .badge--soon {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    background: rgba(255,107,53,0.15);
+    color: #FF6B35;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,107,53,0.25);
+  }
+
+  .funzionalita__card-body {
+    padding: 0 var(--space-lg) var(--space-lg);
+  }
+
+  .funzionalita__card-subtitle {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #FF6B35;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.4rem;
+  }
+
+  .funzionalita__card-body h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .funzionalita__card-body p {
+    font-size: 0.9rem;
+    margin-bottom: var(--space-sm);
+    color: rgba(255,255,255,0.7);
+    line-height: 1.65;
+  }
+
+  .funzionalita__card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .funzionalita__card-details li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .funzionalita__card-details svg {
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 1024px) {
+    .funzionalita__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .funzionalita__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

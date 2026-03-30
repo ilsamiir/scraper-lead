@@ -1,0 +1,118 @@
+---
+interface Props {
+  items: { label: string; href?: string }[];
+  dark?: boolean;
+}
+
+const { items, dark = true } = Astro.props;
+
+const baseUrl = 'https://ristobot.it';
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": items.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.label,
+    ...(item.href ? { "item": `${baseUrl}${item.href}` } : {}),
+  })),
+};
+---
+
+<nav aria-label="Breadcrumb" class:list={["breadcrumb", { "breadcrumb--dark": dark, "breadcrumb--light": !dark }]}>
+  <div class="container">
+    <ol class="breadcrumb__list">
+      {items.map((item, index) => (
+        <li class="breadcrumb__item">
+          {index > 0 && <span class="breadcrumb__separator" aria-hidden="true">&rsaquo;</span>}
+          {item.href ? (
+            <a href={item.href} class="breadcrumb__link">{item.label}</a>
+          ) : (
+            <span class="breadcrumb__current" aria-current="page">{item.label}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+<style>
+  .breadcrumb {
+    padding: 0.75rem 0 0;
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 10;
+    margin-top: 72px;
+  }
+
+  .breadcrumb--dark {
+    background: var(--deep-dark);
+  }
+
+  .breadcrumb--light {
+    background: var(--white);
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumb__separator {
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  /* Dark mode */
+  .breadcrumb--dark .breadcrumb__link {
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb--dark .breadcrumb__link:hover {
+    color: var(--orange);
+  }
+
+  .breadcrumb--dark .breadcrumb__current {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+  }
+
+  .breadcrumb--dark .breadcrumb__separator {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  /* Light mode */
+  .breadcrumb--light .breadcrumb__link {
+    color: rgba(0, 0, 0, 0.45);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb--light .breadcrumb__link:hover {
+    color: var(--orange);
+  }
+
+  .breadcrumb--light .breadcrumb__current {
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+  }
+
+  .breadcrumb--light .breadcrumb__separator {
+    color: rgba(0, 0, 0, 0.3);
+  }
+</style>

@@ -86,6 +86,7 @@ export function SavedClientsTable() {
     const [emailDraft, setEmailDraft] = useState({ subject: "", body: "" });
     const [isGeneratingEmail, setIsGeneratingEmail] = useState(false);
     const [isSendingEmail, setIsSendingEmail] = useState(false);
+    const [emailGenerationError, setEmailGenerationError] = useState<string | null>(null);
 
     const selectedClient = useMemo(
         () => clients.find((client) => client.id === selectedClientId) ?? null,
@@ -428,6 +429,7 @@ export function SavedClientsTable() {
 
         setIsGeneratingEmail(true);
         setIsEmailModalOpen(true);
+        setEmailGenerationError(null);
         setEmailDraft({ subject: "", body: "" });
 
         try {
@@ -441,14 +443,24 @@ export function SavedClientsTable() {
                 }),
             });
 
-            if (!res.ok) throw new Error("Errore nella generazione dell'email");
-
             const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(
+                    typeof data?.error === "string" && data.error.trim().length > 0
+                        ? data.error
+                        : "Errore nella generazione dell'email"
+                );
+            }
+
             setEmailDraft({ subject: data.subject, body: data.body });
         } catch (error) {
             console.error(error);
-            alert("Impossibile generare l'email. Riprova.");
-            setIsEmailModalOpen(false);
+            setEmailGenerationError(
+                error instanceof Error && error.message.trim().length > 0
+                    ? error.message
+                    : "Impossibile generare l'email. Riprova."
+            );
         } finally {
             setIsGeneratingEmail(false);
         }
@@ -483,9 +495,11 @@ export function SavedClientsTable() {
             alert("Email inviata con successo!");
             setIsEmailModalOpen(false);
             await logContact("email");
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            alert(`Errore invio email: ${error.message}`);
+            alert(
+                `Errore invio email: ${error instanceof Error ? error.message : "Errore sconosciuto"}`
+            );
         } finally {
             setIsSendingEmail(false);
         }
@@ -891,6 +905,11 @@ export function SavedClientsTable() {
                                 </div>
                             ) : (
                                 <>
+                                    {emailGenerationError ? (
+                                        <div className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-200">
+                                            {emailGenerationError}
+                                        </div>
+                                    ) : null}
                                     <div className="space-y-2">
                                         <label className="text-sm text-brand-text">Oggetto</label>
                                         <input

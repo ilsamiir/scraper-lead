@@ -2,9 +2,103 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
+type EmailGenerationPayload = {
+    subject: string;
+    body: string;
+};
+
+class EmailGenerationError extends Error {
+    code: string;
+    status: number;
+    userMessage: string;
+
+    constructor(code: string, userMessage: string, status = 500, message?: string) {
+        super(message ?? userMessage);
+        this.code = code;
+        this.status = status;
+        this.userMessage = userMessage;
+    }
+}
+
+const extractJsonObject = (rawContent: string) => {
+    const trimmed = rawContent.trim();
+    const withoutFence = trimmed
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/\s*```$/, '')
+        .trim();
+
+    const firstBrace = withoutFence.indexOf('{');
+    const lastBrace = withoutFence.lastIndexOf('}');
+
+    if (firstBrace === -1 || lastBrace === -1 || lastBrace < firstBrace) {
+        throw new EmailGenerationError(
+            'INVALID_AI_RESPONSE',
+            'L\'AI ha restituito una risposta non valida. Riprova tra qualche minuto.',
+            502,
+            'No JSON object found in AI response'
+        );
+    }
+
+    return withoutFence.slice(firstBrace, lastBrace + 1);
+};
+
+const parseEmailGenerationPayload = (content: unknown): EmailGenerationPayload => {
+    if (typeof content !== 'string' || content.trim().length === 0) {
+        throw new EmailGenerationError(
+            'INVALID_AI_RESPONSE',
+            'L\'AI non ha restituito un contenuto utilizzabile. Riprova tra qualche minuto.',
+            502,
+            'AI response content is empty or not a string'
+        );
+    }
+
+    let parsed: unknown;
+    try {
+        parsed = JSON.parse(extractJsonObject(content));
+    } catch (error) {
+        if (error instanceof EmailGenerationError) {
+            throw error;
+        }
+
+        throw new EmailGenerationError(
+            'INVALID_AI_RESPONSE',
+            'L\'AI ha restituito un formato inatteso. Riprova tra qualche minuto.',
+            502,
+            error instanceof Error ? error.message : 'Unable to parse AI response'
+        );
+    }
+
+    const subject = typeof (parsed as { subject?: unknown }).subject === 'string'
+        ? (parsed as { subject: string }).subject.trim()
+        : '';
+    const body = typeof (parsed as { body?: unknown }).body === 'string'
+        ? (parsed as { body: string }).body.trim()
+        : '';
+
+    if (!subject || !body) {
+        throw new EmailGenerationError(
+            'INVALID_AI_RESPONSE',
+            'L\'AI non ha generato oggetto e messaggio completi. Riprova tra qualche minuto.',
+            502,
+            'AI response payload is missing subject or body'
+        );
+    }
+
+    return { subject, body };
+};
+
 export async function POST(request: Request) {
     try {
         const { clientName, website, notes } = await request.json();
+
+        if (!process.env.OPENROUTER_API_KEY) {
+            throw new EmailGenerationError(
+                'OPENROUTER_NOT_CONFIGURED',
+                'La generazione email AI non e disponibile al momento. Configura OPENROUTER_API_KEY sul deploy live.',
+                500
+            );
+        }
 
         // Read brand identity
         const brandIdentityPath = path.join(process.cwd(), 'public', 'brand_identity.md');
@@ -69,29 +163,39 @@ Restituisci ESATTAMENTE un oggetto JSON con questa struttura, senza markdown o t
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`Status: ${response.status}, Error: ${errorText}`);
-            throw new Error(`OpenRouter API error: HTTP ${response.status}`);
+            throw new EmailGenerationError(
+                'OPENROUTER_REQUEST_FAILED',
+                'Il provider AI non e riuscito a generare l\'email. Riprova tra qualche minuto.',
+                502,
+                `OpenRouter API error: HTTP ${response.status}`
+            );
         }
 
         const data = await response.json();
-        let content = data.choices[0].message.content;
+        const content = data?.choices?.[0]?.message?.content;
         
         console.log("Raw LLM Response:", content);
 
-        // Strip markdown backticks if present
-        if (content.startsWith('```json')) {
-            content = content.substring(7);
-        } else if (content.startsWith('```')) {
-            content = content.substring(3);
-        }
-        if (content.endsWith('```')) {
-            content = content.substring(0, content.length - 3);
-        }
-        
-        const parsed = JSON.parse(content.trim());
+        const parsed = parseEmailGenerationPayload(content);
 
         return NextResponse.json(parsed);
-    } catch (error: any) {
-        console.error('Error generating email:', error.message || error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        if (error instanceof EmailGenerationError) {
+            console.error('Error generating email:', error.code, error.message);
+            return NextResponse.json(
+                { error: error.userMessage, code: error.code },
+                { status: error.status }
+            );
+        }
+
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error generating email:', message);
+        return NextResponse.json(
+            {
+                error: 'Si e verificato un errore durante la generazione dell\'email.',
+                code: 'EMAIL_GENERATION_FAILED',
+            },
+            { status: 500 }
+        );
     }
 }

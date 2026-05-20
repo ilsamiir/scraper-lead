@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Home, Users, ChartColumn } from "lucide-react";
+import { LogOut, Home, Users, ChartColumn, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
@@ -40,6 +40,9 @@ export default function ClientiPage() {
                             </Link>
                             <Link href="/analytics" className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2">
                                 <ChartColumn className="w-4 h-4" /> <span className="hidden sm:inline">Analytics</span>
+                            </Link>
+                            <Link href="/posta" className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2">
+                                <Mail className="w-4 h-4" /> <span className="hidden sm:inline">Posta</span>
                             </Link>
                             <div className="flex items-center gap-2 ml-4 border-l border-brand-border pl-4">
                                 <ThemeToggle />

@@ -7,6 +7,8 @@ import {
     Calendar as CalendarIcon,
     ExternalLink,
     GripVertical,
+    LayoutGrid,
+    List,
     Mail,
     Phone,
     Plus,
@@ -16,6 +18,7 @@ import {
     X,
 } from "lucide-react";
 import { AddClientActions } from "@/components/AddClientActions";
+import { EmailHistoryPanel } from "@/components/EmailHistoryPanel";
 import { FollowUpHistory } from "@/components/FollowUpHistory";
 
 type SavedClient = {
@@ -43,6 +46,8 @@ type BoardColumn = {
     colorClass: string;
 };
 
+type ViewMode = "board" | "list";
+
 const DEFAULT_COLUMNS: BoardColumn[] = [
     { id: "Da contattare", title: "Da contattare", colorClass: "bg-sky-100 dark:bg-blue-500/15 text-sky-900 dark:text-blue-300 border-sky-300 dark:border-blue-400/30" },
     { id: "In lavorazione", title: "In lavorazione", colorClass: "bg-amber-100 dark:bg-amber-500/15 text-amber-950 dark:text-amber-300 border-amber-300 dark:border-amber-400/30" },
@@ -51,8 +56,18 @@ const DEFAULT_COLUMNS: BoardColumn[] = [
 ];
 
 const STORAGE_KEY = "lead-intelligence:clienti-columns:v1";
+const VIEW_MODE_STORAGE_KEY = "lead-intelligence:clienti-view-mode:v1";
 
 const sanitizeColumnName = (value: string) => value.trim().replace(/\s+/g, " ");
+const formatLastContactDate = (value?: string | null) => {
+    if (!value) return "Nessuno";
+
+    return new Date(value).toLocaleDateString("it-IT", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+    });
+};
 
 export function SavedClientsTable() {
     const [supabase] = useState(() => createClient());
@@ -63,6 +78,7 @@ export function SavedClientsTable() {
     const [loading, setLoading] = useState(true);
     const [contactCounts, setContactCounts] = useState<Record<string, number>>({});
     const [columns, setColumns] = useState<BoardColumn[]>(DEFAULT_COLUMNS);
+    const [viewMode, setViewMode] = useState<ViewMode>("board");
     const [newColumnName, setNewColumnName] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [draggedClientId, setDraggedClientId] = useState<string | null>(null);
@@ -87,6 +103,7 @@ export function SavedClientsTable() {
     const [isGeneratingEmail, setIsGeneratingEmail] = useState(false);
     const [isSendingEmail, setIsSendingEmail] = useState(false);
     const [emailGenerationError, setEmailGenerationError] = useState<string | null>(null);
+    const [emailHistoryRefreshToken, setEmailHistoryRefreshToken] = useState(0);
 
     const selectedClient = useMemo(
         () => clients.find((client) => client.id === selectedClientId) ?? null,
@@ -158,6 +175,19 @@ export function SavedClientsTable() {
             // ignore malformed local value
         }
     }, []);
+
+    useEffect(() => {
+        const raw = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+        if (raw === "board" || raw === "list") {
+            queueMicrotask(() => {
+                setViewMode(raw);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
+    }, [viewMode]);
 
     // Wait for auth session to be ready before fetching data
     useEffect(() => {
@@ -266,6 +296,14 @@ export function SavedClientsTable() {
             clients: filteredClients.filter((client) => (client.status || defaultColumn) === column.id),
         }));
     }, [columns, filteredClients]);
+
+    const defaultColumnId = columns[0]?.id ?? "Da contattare";
+
+    const getStatusBadgeClass = (status?: string | null) => {
+        const normalizedStatus = status || defaultColumnId;
+        return columns.find((column) => column.id === normalizedStatus)?.colorClass
+            ?? "bg-slate-100 dark:bg-brand-surface text-slate-800 dark:text-brand-text border-slate-300 dark:border-brand-border";
+    };
 
     const persistColumns = (nextColumns: BoardColumn[]) => {
         setColumns(nextColumns);
@@ -481,20 +519,53 @@ export function SavedClientsTable() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
+                    clientId: selectedClient.id,
                     to: targetEmail,
                     subject: emailDraft.subject,
                     body: emailDraft.body,
+                    source: "manual",
                 }),
             });
 
+            const responseData = await res.json();
+
             if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.error?.message || "Errore durante l'invio");
+                throw new Error(
+                    typeof responseData?.error?.message === "string"
+                        ? responseData.error.message
+                        : typeof responseData?.error === "string"
+                            ? responseData.error
+                            : "Errore durante l'invio"
+                );
             }
 
-            alert("Email inviata con successo!");
+            if (responseData.historyLogged !== false) {
+                const sentAt = typeof responseData.sentAt === "string"
+                    ? responseData.sentAt
+                    : new Date().toISOString();
+
+                setClients((prev) => prev.map((client) => (
+                    client.id === selectedClient.id
+                        ? {
+                            ...client,
+                            last_contact_method: "email",
+                            last_contact_date: sentAt,
+                        }
+                        : client
+                )));
+                setContactCounts((prev) => ({
+                    ...prev,
+                    [selectedClient.id]: (prev[selectedClient.id] ?? 0) + 1,
+                }));
+                setEmailHistoryRefreshToken((prev) => prev + 1);
+            }
+
             setIsEmailModalOpen(false);
-            await logContact("email");
+            alert(
+                responseData.historyLogged === false
+                    ? "Email inviata, ma lo storico non e stato salvato correttamente."
+                    : "Email inviata con successo!"
+            );
         } catch (error: unknown) {
             console.error(error);
             alert(
@@ -565,48 +636,73 @@ export function SavedClientsTable() {
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <div className="relative w-full md:max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted pointer-events-none" />
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Cerca nominativi, città, telefono, email..."
-                        className="w-full rounded-lg border border-brand-border bg-brand-surface py-2.5 pl-9 pr-10 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
-                    />
-                    {searchQuery && (
+        <div className="flex flex-col gap-4" data-view-mode={viewMode}>
+            <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
+                <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-center">
+                    <div className="relative w-full lg:max-w-md">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted pointer-events-none" />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Cerca nominativi, città, telefono, email..."
+                            className="w-full rounded-lg border border-brand-border bg-brand-surface py-2.5 pl-9 pr-10 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
+                        />
+                        {searchQuery && (
+                            <button
+                                onClick={() => setSearchQuery("")}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-text"
+                                aria-label="Pulisci ricerca"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="inline-flex w-full rounded-xl border border-brand-border bg-brand-surface p-1 lg:w-auto dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
                         <button
-                            onClick={() => setSearchQuery("")}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-text"
-                            aria-label="Pulisci ricerca"
+                            type="button"
+                            onClick={() => setViewMode("board")}
+                            className={`inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:flex-none ${viewMode === "board" ? "bg-brand-accent text-white shadow-sm" : "text-brand-muted hover:bg-brand-background hover:text-brand-text dark:hover:bg-brand-surface"}`}
+                            aria-pressed={viewMode === "board"}
                         >
-                            <X className="w-4 h-4" />
+                            <LayoutGrid className="h-4 w-4" /> Board
                         </button>
-                    )}
+                        <button
+                            type="button"
+                            onClick={() => setViewMode("list")}
+                            className={`inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:flex-none ${viewMode === "list" ? "bg-brand-accent text-white shadow-sm" : "text-brand-muted hover:bg-brand-background hover:text-brand-text dark:hover:bg-brand-surface"}`}
+                            aria-pressed={viewMode === "list"}
+                        >
+                            <List className="h-4 w-4" /> Lista
+                        </button>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-2 w-full md:w-auto">
-                    <input
-                        type="text"
-                        value={newColumnName}
-                        onChange={(e) => setNewColumnName(e.target.value)}
-                        placeholder="Nuova colonna"
-                        className="flex-1 rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60 md:w-52 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                e.preventDefault();
-                                handleAddColumn();
-                            }
-                        }}
-                    />
-                    <button
-                        onClick={handleAddColumn}
-                        className="px-3 py-2 rounded-lg bg-brand-accent hover:opacity-90 text-white text-sm font-medium flex items-center gap-1.5"
-                    >
-                        <Plus className="w-4 h-4" /> Colonna
-                    </button>
+                <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-end xl:w-auto">
+                    {viewMode === "board" && (
+                        <>
+                            <input
+                                type="text"
+                                value={newColumnName}
+                                onChange={(e) => setNewColumnName(e.target.value)}
+                                placeholder="Nuova colonna"
+                                className="flex-1 rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60 sm:w-52 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        handleAddColumn();
+                                    }
+                                }}
+                            />
+                            <button
+                                onClick={handleAddColumn}
+                                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-accent px-3 py-2 text-sm font-medium text-white hover:opacity-90"
+                            >
+                                <Plus className="w-4 h-4" /> Colonna
+                            </button>
+                        </>
+                    )}
                     <AddClientActions onClientAdded={fetchClients} />
                 </div>
             </div>
@@ -619,119 +715,179 @@ export function SavedClientsTable() {
                     </p>
                 </div>
             ) : (
-                <div className={selectedClient ? "grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-4" : ""}>
-                    <div className={selectedClient ? "glass-panel p-4 overflow-x-auto" : "glass-panel p-4 overflow-x-auto w-full"}>
-                        <div className="flex gap-4 min-h-[560px]">
-                            {groupedClients.map((column) => (
-                                <div
-                                    key={column.id}
-                                    className={`flex w-[300px] shrink-0 flex-col rounded-xl border border-brand-border surface-strong shadow-[0_14px_30px_rgba(15,23,42,0.05)] transition-shadow dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_96%,white_4%)] dark:shadow-none ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
-                                    draggable={!draggedClientId}
-                                    onDragStart={(e) => {
-                                        if (draggedClientId) { e.preventDefault(); return; }
-                                        setDraggedColumnId(column.id);
-                                    }}
-                                    onDragEnd={() => setDraggedColumnId(null)}
-                                    onDragOver={(e) => {
-                                        if (draggedColumnId || draggedClientId) e.preventDefault();
-                                    }}
-                                    onDrop={() => {
-                                        if (draggedColumnId) {
-                                            moveColumn(draggedColumnId, column.id);
-                                            setDraggedColumnId(null);
-                                        } else {
-                                            handleDropOnColumn(column.id);
-                                        }
-                                    }}
-                                >
-                                    <div className="flex cursor-move items-start justify-between gap-2 border-b border-brand-border px-3 py-3">
-                                        <div>
-                                            <div className="flex items-center gap-2">
-                                                <h3 className="font-medium text-brand-text text-sm">{column.title}</h3>
-                                                <span className={`text-xs px-2 py-0.5 rounded-full border ${column.colorClass}`}>
-                                                    {column.clients.length}
-                                                </span>
+                <div className={selectedClient ? "grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]" : ""}>
+                    <div className={selectedClient ? "glass-panel p-4 overflow-x-auto" : "glass-panel w-full overflow-x-auto p-4"}>
+                        {viewMode === "board" ? (
+                            <div className="flex gap-4 min-h-[560px]">
+                                {groupedClients.map((column) => (
+                                    <div
+                                        key={column.id}
+                                        className={`flex w-[300px] shrink-0 flex-col rounded-xl border border-brand-border surface-strong shadow-[0_14px_30px_rgba(15,23,42,0.05)] transition-shadow dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_96%,white_4%)] dark:shadow-none ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
+                                        draggable={!draggedClientId}
+                                        onDragStart={(e) => {
+                                            if (draggedClientId) { e.preventDefault(); return; }
+                                            setDraggedColumnId(column.id);
+                                        }}
+                                        onDragEnd={() => setDraggedColumnId(null)}
+                                        onDragOver={(e) => {
+                                            if (draggedColumnId || draggedClientId) e.preventDefault();
+                                        }}
+                                        onDrop={() => {
+                                            if (draggedColumnId) {
+                                                moveColumn(draggedColumnId, column.id);
+                                                setDraggedColumnId(null);
+                                            } else {
+                                                handleDropOnColumn(column.id);
+                                            }
+                                        }}
+                                    >
+                                        <div className="flex cursor-move items-start justify-between gap-2 border-b border-brand-border px-3 py-3">
+                                            <div>
+                                                <div className="flex items-center gap-2">
+                                                    <h3 className="font-medium text-brand-text text-sm">{column.title}</h3>
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full border ${column.colorClass}`}>
+                                                        {column.clients.length}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <button
+                                                    onClick={() => handleRenameColumn(column.id)}
+                                                    className="rounded px-2 py-1 text-xs text-brand-muted surface-subtle hover:bg-brand-background dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_84%,white_16%)]"
+                                                    title="Modifica nome colonna"
+                                                >
+                                                    Modifica
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteColumn(column.id)}
+                                                    className="p-1.5 rounded bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
+                                                    title="Elimina colonna"
+                                                >
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <button
-                                                onClick={() => handleRenameColumn(column.id)}
-                                                className="rounded px-2 py-1 text-xs text-brand-muted surface-subtle hover:bg-brand-background dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_84%,white_16%)]"
-                                                title="Modifica nome colonna"
-                                            >
-                                                Modifica
-                                            </button>
-                                            <button
-                                                onClick={() => handleDeleteColumn(column.id)}
-                                                className="p-1.5 rounded bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
-                                                title="Elimina colonna"
-                                            >
-                                                <Trash2 className="w-3.5 h-3.5" />
-                                            </button>
-                                        </div>
-                                    </div>
 
-                                    <div className="p-3 space-y-3 overflow-y-auto min-h-[420px] max-h-[620px]">
-                                        {column.clients.length === 0 ? (
-                                            <div className="rounded-lg border border-dashed border-brand-border p-4 text-center text-xs text-brand-muted">
-                                                Trascina qui i nominativi
-                                            </div>
-                                        ) : (
-                                            column.clients.map((client) => {
-                                                const isActive = selectedClientId === client.id;
-                                                const contactCounter = contactCounts[client.id] ?? 0;
+                                        <div className="p-3 space-y-3 overflow-y-auto min-h-[420px] max-h-[620px]">
+                                            {column.clients.length === 0 ? (
+                                                <div className="rounded-lg border border-dashed border-brand-border p-4 text-center text-xs text-brand-muted">
+                                                    Trascina qui i nominativi
+                                                </div>
+                                            ) : (
+                                                column.clients.map((client) => {
+                                                    const isActive = selectedClientId === client.id;
+                                                    const contactCounter = contactCounts[client.id] ?? 0;
 
-                                                return (
-                                                    <button
-                                                        key={client.id}
-                                                        draggable
-                                                        onDragStart={(e) => { e.stopPropagation(); setDraggedClientId(client.id); }}
-                                                        onDragEnd={(e) => { e.stopPropagation(); setDraggedClientId(null); }}
-                                                        onClick={() => setSelectedClientId(client.id)}
-                                                        className={`w-full text-left rounded-lg border p-3 transition-all ${
-                                                            isActive
-                                                                ? "border-brand-accent/60 bg-brand-accent/10 shadow-[0_10px_24px_rgba(109,40,217,0.12)]"
-                                                                : "border-brand-border bg-brand-surface hover:bg-brand-background/70 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_88%,white_12%)]"
-                                                        }`}
-                                                    >
-                                                        <div className="flex items-start justify-between gap-2">
-                                                            <div>
-                                                                <p className="text-sm font-medium text-brand-text leading-tight">
-                                                                    {client.business_name || "Senza nome"}
-                                                                </p>
-                                                                <p className="text-xs text-brand-muted mt-1">
-                                                                    {client.city || "-"}
-                                                                    {client.province ? ` (${client.province})` : ""}
-                                                                </p>
+                                                    return (
+                                                        <button
+                                                            key={client.id}
+                                                            draggable
+                                                            onDragStart={(e) => { e.stopPropagation(); setDraggedClientId(client.id); }}
+                                                            onDragEnd={(e) => { e.stopPropagation(); setDraggedClientId(null); }}
+                                                            onClick={() => setSelectedClientId(client.id)}
+                                                            className={`w-full text-left rounded-lg border p-3 transition-all ${
+                                                                isActive
+                                                                    ? "border-brand-accent/60 bg-brand-accent/10 shadow-[0_10px_24px_rgba(109,40,217,0.12)]"
+                                                                    : "border-brand-border bg-brand-surface hover:bg-brand-background/70 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_88%,white_12%)]"
+                                                            }`}
+                                                        >
+                                                            <div className="flex items-start justify-between gap-2">
+                                                                <div>
+                                                                    <p className="text-sm font-medium text-brand-text leading-tight">
+                                                                        {client.business_name || "Senza nome"}
+                                                                    </p>
+                                                                    <p className="text-xs text-brand-muted mt-1">
+                                                                        {client.city || "-"}
+                                                                        {client.province ? ` (${client.province})` : ""}
+                                                                    </p>
+                                                                </div>
+                                                                <GripVertical className="w-4 h-4 text-brand-muted shrink-0 mt-0.5" />
                                                             </div>
-                                                            <GripVertical className="w-4 h-4 text-brand-muted shrink-0 mt-0.5" />
-                                                        </div>
 
-                                                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-brand-muted">
-                                                            {client.phone && (
-                                                                <span className="inline-flex items-center gap-1">
-                                                                    <Phone className="w-3 h-3" /> {client.phone}
-                                                                </span>
-                                                            )}
-                                                            {client.email && (
-                                                                <span className="inline-flex items-center gap-1 max-w-full truncate">
-                                                                    <Mail className="w-3 h-3" /> {client.email}
-                                                                </span>
-                                                            )}
-                                                        </div>
+                                                            <div className="mt-2 flex flex-wrap gap-2 text-xs text-brand-muted">
+                                                                {client.phone && (
+                                                                    <span className="inline-flex items-center gap-1">
+                                                                        <Phone className="w-3 h-3" /> {client.phone}
+                                                                    </span>
+                                                                )}
+                                                                {client.email && (
+                                                                    <span className="inline-flex items-center gap-1 max-w-full truncate">
+                                                                        <Mail className="w-3 h-3" /> {client.email}
+                                                                    </span>
+                                                                )}
+                                                            </div>
 
-                                                        <div className="mt-2 flex items-center justify-between text-[11px] text-brand-muted">
-                                                            <span>{client.keyword || "-"}</span>
-                                                            <span>{contactCounter} contatti</span>
-                                                        </div>
-                                                    </button>
-                                                );
-                                            })
-                                        )}
+                                                            <div className="mt-2 flex items-center justify-between text-[11px] text-brand-muted">
+                                                                <span>{client.keyword || "-"}</span>
+                                                                <span>{contactCounter} contatti</span>
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })
+                                            )}
+                                        </div>
                                     </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="min-h-[560px] overflow-hidden rounded-2xl border border-brand-border bg-brand-surface dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
+                                <div className="grid min-w-[760px] grid-cols-[minmax(240px,2.2fr)_minmax(160px,1.1fr)_minmax(150px,1fr)_minmax(160px,1fr)_minmax(170px,1fr)] gap-4 border-b border-brand-border px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-brand-muted">
+                                    <span>Cliente</span>
+                                    <span>Metodo</span>
+                                    <span>Ultimo contatto</span>
+                                    <span>Stato</span>
+                                    <span>Città</span>
                                 </div>
-                            ))}
-                        </div>
+
+                                {filteredClients.length === 0 ? (
+                                    <div className="flex min-h-[500px] items-center justify-center px-6 text-center text-sm text-brand-muted">
+                                        Nessun cliente trovato con i filtri correnti.
+                                    </div>
+                                ) : (
+                                    <div className="divide-y divide-brand-border">
+                                        {filteredClients.map((client) => {
+                                            const isActive = selectedClientId === client.id;
+                                            const statusLabel = client.status || defaultColumnId;
+
+                                            return (
+                                                <button
+                                                    key={client.id}
+                                                    type="button"
+                                                    onClick={() => setSelectedClientId(client.id)}
+                                                    className={`grid w-full min-w-[760px] grid-cols-[minmax(240px,2.2fr)_minmax(160px,1.1fr)_minmax(150px,1fr)_minmax(160px,1fr)_minmax(170px,1fr)] gap-4 px-4 py-4 text-left transition-colors ${isActive ? "bg-brand-accent/10" : "hover:bg-brand-background/70 dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_88%,white_12%)]"}`}
+                                                >
+                                                    <span className="min-w-0">
+                                                        <span className="block truncate text-sm font-medium text-brand-text">
+                                                            {client.business_name || "Senza nome"}
+                                                        </span>
+                                                        <span className="mt-1 flex flex-wrap items-center gap-3 text-xs text-brand-muted">
+                                                            <span>{contactCounts[client.id] ?? 0} contatti</span>
+                                                            {client.phone ? <span>{client.phone}</span> : null}
+                                                            {client.email ? <span className="truncate">{client.email}</span> : null}
+                                                        </span>
+                                                    </span>
+                                                    <span className="text-sm text-brand-text capitalize">
+                                                        {client.last_contact_method || "Nessuno"}
+                                                    </span>
+                                                    <span className="text-sm text-brand-text">
+                                                        {formatLastContactDate(client.last_contact_date)}
+                                                    </span>
+                                                    <span>
+                                                        <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-medium ${getStatusBadgeClass(statusLabel)}`}>
+                                                            {statusLabel}
+                                                        </span>
+                                                    </span>
+                                                    <span className="text-sm text-brand-text">
+                                                        {client.city || "-"}
+                                                        {client.province ? ` (${client.province})` : ""}
+                                                    </span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {selectedClient && (
@@ -874,6 +1030,8 @@ export function SavedClientsTable() {
                                     </div>
                                     <FollowUpHistory clientId={selectedClient.id} />
                                 </div>
+
+                                <EmailHistoryPanel clientId={selectedClient.id} refreshToken={emailHistoryRefreshToken} />
                             </div>
                         </aside>
                     )}

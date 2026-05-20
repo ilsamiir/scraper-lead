@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
+import { logEmailHistory } from '@/lib/email-history';
 
 // Create a Resend client
 // If RESEND_API_KEY is not set, we'll handle it gracefully
@@ -95,16 +96,34 @@ export async function GET(request: Request) {
 
             if (error) {
                 console.error(`Failed to send email for ${client.business_name}:`, error);
+                try {
+                    await logEmailHistory({
+                        clientId: client.id,
+                        recipientEmail: 'commerciale@saksagency.it',
+                        subject,
+                        body: emailHtml,
+                        source: 'cron',
+                        status: 'failed',
+                        errorMessage: typeof error.message === 'string' ? error.message : JSON.stringify(error),
+                    });
+                } catch (historyError) {
+                    console.error(`Failed to log email history for ${client.business_name}:`, historyError);
+                }
                 emailResults.push({ client: client.id, status: 'error', error });
             } else {
-                // Log the sent email to contact_history so it appears in analytics
-                const now = new Date().toISOString();
-                await supabaseAdmin.from('contact_history').insert([{
-                    client_id: client.id,
-                    contact_method: 'email',
-                    contact_date: now,
-                    notes: `Follow-up automatico inviato via cron`,
-                }]);
+                try {
+                    await logEmailHistory({
+                        clientId: client.id,
+                        recipientEmail: 'commerciale@saksagency.it',
+                        subject,
+                        body: emailHtml,
+                        source: 'cron',
+                        status: 'sent',
+                        providerMessageId: typeof data?.id === 'string' ? data.id : null,
+                    });
+                } catch (historyError) {
+                    console.error(`Failed to log sent email for ${client.business_name}:`, historyError);
+                }
                 emailResults.push({ client: client.id, status: 'sent', data });
             }
         }

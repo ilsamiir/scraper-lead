@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Home, Users, ChartColumn } from "lucide-react";
+import { LogOut, Home, Users, ChartColumn, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
@@ -40,6 +40,9 @@ export default function AnalyticsPage() {
               </Link>
               <Link href="/analytics" className="inline-flex items-center gap-2 rounded-full border border-brand-accent/35 bg-brand-accent/18 px-3 py-2 text-sm font-semibold text-brand-accent shadow-[0_0_0_1px_rgba(196,181,253,0.08)] dark:bg-brand-accent/20 dark:text-[#F3EEFF] dark:shadow-[0_0_0_1px_rgba(196,181,253,0.16)]">
                 <ChartColumn className="w-4 h-4" /> <span className="hidden sm:inline">Analytics</span>
+              </Link>
+              <Link href="/posta" className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2">
+                <Mail className="w-4 h-4" /> <span className="hidden sm:inline">Posta</span>
               </Link>
               <div className="flex items-center gap-2 ml-4 border-l border-brand-border pl-4">
                 <ThemeToggle />

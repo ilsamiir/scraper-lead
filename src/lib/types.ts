@@ -41,6 +41,24 @@ export type ContactHistoryRow = {
   operator_id?: string | null;
 };
 
+export type EmailHistoryStatus = "sent" | "failed";
+
+export type EmailHistorySource = "manual" | "cron";
+
+export type EmailHistoryRow = {
+  id: string;
+  client_id: string;
+  recipient_email: string;
+  subject: string;
+  body: string;
+  provider_message_id?: string | null;
+  status: EmailHistoryStatus;
+  source: EmailHistorySource;
+  sent_at: string;
+  error_message?: string | null;
+  created_at?: string | null;
+};
+
 export type DatePreset = "1d" | "7d" | "1m" | "3m" | "12m" | "max" | "custom";
 
 export const CONTACT_METHODS = ["chiamata", "email", "messaggio", "nota"] as const;

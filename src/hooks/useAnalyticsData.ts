@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import type { SavedClient, ContactHistoryRow, Operator, DatePreset } from "@/lib/types";
 import { CONTACT_METHODS } from "@/lib/types";
@@ -14,17 +14,16 @@ import {
 import { scoreClientTotal } from "@/lib/scoring";
 
 export function useAnalyticsData() {
-  const supabaseRef = useRef(createClient());
-  const supabase = supabaseRef.current;
+  const [supabase] = useState(() => createClient());
 
   const [authReady, setAuthReady] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [clients, setClients] = useState<SavedClient[]>([]);
   const [history, setHistory] = useState<ContactHistoryRow[]>([]);
   const [operators, setOperators] = useState<Operator[]>([]);
 
-  const todayRef = useRef(new Date());
-  const today = todayRef.current;
+  const [today] = useState(() => new Date());
 
   // --- Filtri ---
   const [preset, setPreset] = useState<DatePreset>("1m");
@@ -39,9 +38,17 @@ export function useAnalyticsData() {
   const [methodFilter, setMethodFilter] = useState("all");
   const [operatorFilter, setOperatorFilter] = useState("all");
 
+  const isMissingColumnError = (error: { code?: string; message?: string } | null) => {
+    return error?.code === "42703" && error.message?.includes("operator_id");
+  };
+
+  const isMissingOperatorsTableError = (error: { code?: string; message?: string } | null) => {
+    return error?.code === "PGRST205" && error.message?.includes("public.operators");
+  };
+
   // --- Fetch ---
   const fetchData = useCallback(async () => {
-    setLoading(true);
+    setDataLoading(true);
     const [clientsRes, historyRes, operatorsRes] = await Promise.all([
       supabase.from("saved_clients").select("*").order("created_at", { ascending: false }),
       supabase
@@ -52,30 +59,84 @@ export function useAnalyticsData() {
     ]);
 
     if (clientsRes.error) console.error(clientsRes.error);
-    if (historyRes.error) console.error(historyRes.error);
-    if (operatorsRes.error) console.error(operatorsRes.error);
+
+    let historyData = (historyRes.data || []) as ContactHistoryRow[];
+    if (historyRes.error) {
+      if (isMissingColumnError(historyRes.error)) {
+        const fallbackHistoryRes = await supabase
+          .from("contact_history")
+          .select("id, client_id, contact_method, contact_date, notes")
+          .order("contact_date", { ascending: false });
+
+        if (fallbackHistoryRes.error) {
+          console.error(fallbackHistoryRes.error);
+          historyData = [];
+        } else {
+          historyData = ((fallbackHistoryRes.data || []) as ContactHistoryRow[]).map((row) => ({
+            ...row,
+            operator_id: null,
+          }));
+        }
+      } else {
+        console.error(historyRes.error);
+        historyData = [];
+      }
+    }
+
+    let operatorsData = (operatorsRes.data || []) as Operator[];
+    if (operatorsRes.error) {
+      if (isMissingOperatorsTableError(operatorsRes.error)) {
+        operatorsData = [];
+      } else {
+        console.error(operatorsRes.error);
+        operatorsData = [];
+      }
+    }
 
     setClients((clientsRes.data || []) as SavedClient[]);
-    setHistory((historyRes.data || []) as ContactHistoryRow[]);
-    setOperators((operatorsRes.data || []) as Operator[]);
-    setLoading(false);
+    setHistory(historyData);
+    setOperators(operatorsData);
+    setDataLoading(false);
   }, [supabase]);
 
   // Wait for auth session to be ready before fetching data
   useEffect(() => {
+    let active = true;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) setAuthReady(true);
+      if (!active) return;
+      setAuthReady(Boolean(session));
+      setAuthChecked(true);
     });
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) setAuthReady(true);
-    });
-    return () => subscription.unsubscribe();
+
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        if (!active) return;
+        setAuthReady(Boolean(session));
+      })
+      .catch((error) => {
+        console.error(error);
+        if (!active) return;
+        setAuthReady(false);
+      })
+      .finally(() => {
+        if (active) setAuthChecked(true);
+      });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
   }, [supabase]);
 
   useEffect(() => {
     if (!authReady) return;
-    fetchData();
+    queueMicrotask(() => {
+      void fetchData();
+    });
   }, [authReady, fetchData]);
+
+  const loading = !authChecked || (authReady && dataLoading);
 
   // --- Date preset ---
   const minAvailableDate = useMemo(() => {
@@ -369,6 +430,9 @@ export function useAnalyticsData() {
   ].filter(Boolean) as Array<{ key: string; label: string }>;
 
   return {
+    authChecked,
+    authReady,
+    requiresAuth: authChecked && !authReady,
     loading,
     clients,
     history,

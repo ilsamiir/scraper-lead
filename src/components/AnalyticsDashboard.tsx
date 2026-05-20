@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { SavedClient } from "@/lib/types";
 import { useAnalyticsData } from "@/hooks/useAnalyticsData";
 import { FilterBar } from "./analytics/FilterBar";
@@ -17,9 +18,24 @@ export function AnalyticsDashboard() {
   const data = useAnalyticsData();
   const [selectedClient, setSelectedClient] = useState<SavedClient | null>(null);
 
-  if (data.loading) {
+  if (!data.authChecked || data.loading) {
     return (
       <div className="text-center p-8 text-brand-muted">Caricamento analytics...</div>
+    );
+  }
+
+  if (data.requiresAuth) {
+    return (
+      <div className="rounded-2xl border border-brand-border bg-brand-surface px-6 py-10 text-center text-brand-muted">
+        <p className="text-base text-brand-text">Sessione non valida o scaduta.</p>
+        <p className="mt-2 text-sm">Effettua di nuovo l&apos;accesso per aprire la dashboard analytics.</p>
+        <Link
+          href="/login"
+          className="mt-5 inline-flex items-center justify-center rounded-full border border-brand-accent/30 bg-brand-accent/12 px-5 py-2 text-sm font-semibold text-brand-primary"
+        >
+          Vai al login
+        </Link>
+      </div>
     );
   }
 

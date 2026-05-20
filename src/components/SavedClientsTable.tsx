@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import {
     Calendar as CalendarIcon,
@@ -54,7 +54,9 @@ const STORAGE_KEY = "lead-intelligence:clienti-columns:v1";
 const sanitizeColumnName = (value: string) => value.trim().replace(/\s+/g, " ");
 
 export function SavedClientsTable() {
-    const supabase = createClient();
+    const supabaseRef = useRef(createClient());
+    const supabase = supabaseRef.current;
+    const [authReady, setAuthReady] = useState(false);
 
     const [clients, setClients] = useState<SavedClient[]>([]);
     const [loading, setLoading] = useState(true);
@@ -147,10 +149,25 @@ export function SavedClientsTable() {
         }
     }, []);
 
+    // Wait for auth session to be ready before fetching data
     useEffect(() => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session) {
+                setAuthReady(true);
+            }
+        });
+        // Also check current session immediately (for cases where session is already set)
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) setAuthReady(true);
+        });
+        return () => subscription.unsubscribe();
+    }, [supabase]);
+
+    useEffect(() => {
+        if (!authReady) return;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchClients();
-    }, [fetchClients]);
+    }, [authReady, fetchClients]);
 
     useEffect(() => {
         if (!selectedClient) return;
@@ -479,12 +496,14 @@ export function SavedClientsTable() {
                                 <div
                                     key={column.id}
                                     className={`w-[300px] shrink-0 rounded-xl border border-white/10 bg-black/35 flex flex-col transition-shadow ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
-                                    draggable
-                                    onDragStart={() => setDraggedColumnId(column.id)}
+                                    draggable={!draggedClientId}
+                                    onDragStart={(e) => {
+                                        if (draggedClientId) { e.preventDefault(); return; }
+                                        setDraggedColumnId(column.id);
+                                    }}
                                     onDragEnd={() => setDraggedColumnId(null)}
                                     onDragOver={(e) => {
-                                        // Permetti drop solo tra colonne
-                                        if (draggedColumnId) e.preventDefault();
+                                        if (draggedColumnId || draggedClientId) e.preventDefault();
                                     }}
                                     onDrop={(e) => {
                                         if (draggedColumnId) {
@@ -536,8 +555,8 @@ export function SavedClientsTable() {
                                                     <button
                                                         key={client.id}
                                                         draggable
-                                                        onDragStart={() => setDraggedClientId(client.id)}
-                                                        onDragEnd={() => setDraggedClientId(null)}
+                                                        onDragStart={(e) => { e.stopPropagation(); setDraggedClientId(client.id); }}
+                                                        onDragEnd={(e) => { e.stopPropagation(); setDraggedClientId(null); }}
                                                         onClick={() => setSelectedClientId(client.id)}
                                                         className={`w-full text-left rounded-lg border p-3 transition-all ${
                                                             isActive

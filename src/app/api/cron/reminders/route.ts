@@ -97,6 +97,14 @@ export async function GET(request: Request) {
                 console.error(`Failed to send email for ${client.business_name}:`, error);
                 emailResults.push({ client: client.id, status: 'error', error });
             } else {
+                // Log the sent email to contact_history so it appears in analytics
+                const now = new Date().toISOString();
+                await supabaseAdmin.from('contact_history').insert([{
+                    client_id: client.id,
+                    contact_method: 'email',
+                    contact_date: now,
+                    notes: `Follow-up automatico inviato via cron`,
+                }]);
                 emailResults.push({ client: client.id, status: 'sent', data });
             }
         }

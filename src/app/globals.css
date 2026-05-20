@@ -1,32 +1,77 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-black: #000000;
-  --color-brand-white: #FFFFFF;
-  --color-brand-accent: #C026D3;
-  --color-brand-gradient-1: #00E5FF;
-  --color-brand-gradient-2: #D500F9;
-  --color-brand-gradient-3: #FF1744;
-  --color-brand-gradient-4: #FF9100;
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-background: var(--brand-background);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-border: var(--brand-border);
+  --color-brand-text: var(--brand-text);
+  --color-brand-muted: var(--brand-muted);
   
   --font-sans: var(--font-inter);
+  --font-heading: var(--font-poppins);
 }
 
 :root {
+  /* Light Mode Colors */
+  --brand-primary: #2E0D57;
+  --brand-accent: #6D28D9;
+  --brand-background: #F3F6FB;
+  --brand-surface: #FFFFFF;
+  --brand-border: #CBD5E1;
+  --brand-text: #0F172A;
+  --brand-muted: #475569;
+  
+  color-scheme: light;
+}
+
+.dark {
+  /* Dark Mode Colors */
+  --brand-primary: #2E0D57;
+  --brand-accent: #A98EFF;
+  --brand-background: #0D0D12;
+  --brand-surface: #16161F;
+  --brand-border: #2A2A38;
+  --brand-text: #F5F5FA;
+  --brand-muted: #A1A1B5;
+  
   color-scheme: dark;
 }
 
+html {
+  font-size: 120%; /* Aumenta la grandezza del font generale del 20% */
+}
+
 body {
-  background-color: #000000;
-  color: #FFFFFF;
+  background-color: var(--brand-background);
+  color: var(--brand-text);
 }
 
 /* Base custom utility classes */
 @layer utilities {
   .glass-panel {
-    @apply bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl;
+    @apply bg-brand-surface/95 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.08] backdrop-blur-[18px] rounded-[24px];
   }
-  .ghost-button {
-    @apply bg-transparent border border-white rounded-full text-white hover:bg-white hover:text-black transition-all duration-300;
+  .card-panel {
+    @apply bg-brand-surface border border-brand-border rounded-[24px] shadow-[0_12px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.25)];
+  }
+  .primary-button {
+    @apply bg-gradient-to-br from-brand-primary to-brand-accent text-white rounded-[14px] px-6 py-[14px] font-semibold hover:-translate-y-[2px] hover:shadow-[0_0_20px_rgba(124,58,237,0.3)] dark:hover:shadow-[0_0_40px_rgba(169,142,255,0.20)] transition-all duration-250;
+  }
+  .secondary-button {
+    @apply bg-brand-surface dark:bg-white/[0.03] border border-brand-border text-brand-text rounded-[14px] px-6 py-[14px] hover:border-brand-accent hover:bg-brand-background hover:-translate-y-[2px] transition-all duration-250;
+  }
+  .input-field {
+    @apply bg-brand-surface dark:bg-[#111118] border border-brand-border rounded-[14px] text-brand-text focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/12 focus:outline-none transition-all duration-250;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-brand-primary via-[#5B21B6] to-brand-accent;
+  }
+  .surface-subtle {
+    background-color: color-mix(in srgb, var(--brand-surface) 88%, var(--brand-background));
+  }
+  .surface-strong {
+    background-color: color-mix(in srgb, var(--brand-surface) 96%, var(--brand-background));
   }
 }

@@ -2,10 +2,10 @@
 
 import { LogOut, Home, Users, ChartColumn } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function AnalyticsPage() {
   const router = useRouter();
@@ -18,43 +18,46 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-brand-accent selection:text-white">
+    <div className="min-h-screen bg-brand-background text-brand-text selection:bg-brand-accent/30 selection:text-brand-text font-sans">
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-accent/20 blur-[120px] rounded-full mix-blend-screen" />
-        <div className="absolute top-[20%] right-[-10%] w-[30%] h-[50%] bg-brand-gradient-1/10 blur-[120px] rounded-full mix-blend-screen" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/20 blur-[120px] rounded-full mix-blend-screen dark:mix-blend-screen mix-blend-multiply" />
+        <div className="absolute top-[20%] right-[-10%] w-[30%] h-[50%] bg-brand-accent/10 blur-[120px] rounded-full mix-blend-screen dark:mix-blend-screen mix-blend-multiply" />
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-xl">
-          <div className="container flex items-center justify-between h-16 px-4 mx-auto sm:px-8">
-            <div className="flex items-center gap-2">
-              <Image src="/saksweb.png" alt="Saks Logo" width={120} height={40} className="object-contain" />
-              <span className="px-2 py-0.5 text-xs font-medium tracking-wider text-brand-accent border border-brand-accent/30 rounded-full uppercase bg-brand-accent/10">mini-crm</span>
+        <header className="sticky top-0 z-50 w-full border-b border-brand-border bg-brand-surface/80 shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:bg-brand-background/80 dark:shadow-none">
+          <div className="container flex items-center justify-between h-16 px-4 mx-auto sm:px-8 max-w-[1440px]">
+            <div className="flex items-center gap-3">
+              <span className="text-xl font-bold font-heading tracking-tight">WebNovation</span>
+              <span className="px-2.5 py-1 text-[10px] font-semibold tracking-wider text-brand-accent border border-brand-accent/30 rounded-full uppercase bg-brand-accent/10">Intelligence</span>
             </div>
             <nav className="flex items-center gap-6">
-              <Link href="/" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+              <Link href="/" className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2">
                 <Home className="w-4 h-4" /> <span className="hidden sm:inline">Ricerca</span>
               </Link>
-              <Link href="/clienti" className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2">
+              <Link href="/clienti" className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2">
                 <Users className="w-4 h-4" /> <span className="hidden sm:inline">Clienti Selezionati</span>
               </Link>
-              <Link href="/analytics" className="text-sm font-medium text-brand-accent flex items-center gap-2">
+              <Link href="/analytics" className="inline-flex items-center gap-2 rounded-full bg-brand-accent/12 px-3 py-2 text-sm font-semibold text-brand-primary border border-brand-accent/20 dark:bg-transparent dark:border-transparent dark:text-brand-accent">
                 <ChartColumn className="w-4 h-4" /> <span className="hidden sm:inline">Analytics</span>
               </Link>
-              <button onClick={handleLogout} className="text-sm font-medium text-white/70 hover:text-white transition-colors flex items-center gap-2 ml-4">
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Esci</span>
-              </button>
+              <div className="flex items-center gap-2 ml-4 border-l border-brand-border pl-4">
+                <ThemeToggle />
+                <button onClick={handleLogout} className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2 rounded-full px-3 py-2 hover:bg-brand-background dark:hover:bg-white/5">
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline">Esci</span>
+                </button>
+              </div>
             </nav>
           </div>
         </header>
 
-        <main className="flex-1 container px-4 py-12 mx-auto sm:px-8 max-w-7xl">
+        <main className="flex-1 container px-4 py-12 mx-auto sm:px-8 max-w-[1440px]">
           <div className="flex flex-col items-center justify-center max-w-3xl mx-auto text-center mb-10 space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-normal tracking-tight">
-              Dashboard <span className="font-semibold text-brand-accent">Analytics.</span>
+            <h1 className="text-[40px] sm:text-[56px] font-bold font-heading tracking-tight leading-[1.1]">
+              Dashboard <span className="text-gradient">Analytics.</span>
             </h1>
-            <p className="text-lg text-white/60 max-w-2xl">
+            <p className="text-lg text-brand-muted max-w-2xl leading-[1.6]">
               Analisi dinamica del funnel clienti, performance contatti, segmentazione per data e azioni batch operative.
             </p>
           </div>

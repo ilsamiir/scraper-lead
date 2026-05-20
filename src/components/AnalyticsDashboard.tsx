@@ -19,7 +19,7 @@ export function AnalyticsDashboard() {
 
   if (data.loading) {
     return (
-      <div className="text-center p-8 text-white/50">Caricamento analytics...</div>
+      <div className="text-center p-8 text-brand-muted">Caricamento analytics...</div>
     );
   }
 

@@ -26,20 +26,20 @@ export function SearchForm({ onSearch }: { onSearch: (keyword: string, location:
         <div className="w-full max-w-2xl mt-8 glass-panel p-2">
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 relative z-20">
                 <div className="relative flex-1 flex items-center">
-                    <Search className="absolute left-4 w-5 h-5 text-white/40" />
+                    <Search className="absolute left-4 w-5 h-5 text-brand-muted" />
                     <input
                         type="text"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                         placeholder="es. Dentisti"
-                        className="w-full bg-transparent border-none focus:ring-0 text-white placeholder-white/40 pl-12 pr-4 py-3 outline-none"
+                        className="w-full bg-transparent border-none focus:ring-0 text-brand-text placeholder:text-brand-muted pl-12 pr-4 py-3 outline-none"
                         required
                         disabled={loading}
                     />
                 </div>
-                <div className="hidden sm:block w-px h-8 bg-white/10 my-auto" />
-                <div className="relative flex-1 flex items-center border-t sm:border-t-0 border-white/10">
-                    <MapPin className="absolute left-4 w-5 h-5 text-white/40" />
+                <div className="hidden sm:block w-px h-8 bg-brand-border my-auto" />
+                <div className="relative flex-1 flex items-center border-t sm:border-t-0 border-brand-border">
+                    <MapPin className="absolute left-4 w-5 h-5 text-brand-muted" />
                     <Autocomplete
                         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
                         onPlaceSelected={(place: PlaceResult) => {
@@ -53,7 +53,7 @@ export function SearchForm({ onSearch }: { onSearch: (keyword: string, location:
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => setLocation(event.target.value)}
                         defaultValue={location}
                         placeholder="es. Milano, Italia"
-                        className="w-full bg-transparent border-none focus:ring-0 text-white placeholder-white/40 pl-12 pr-4 py-3 outline-none"
+                        className="w-full bg-transparent border-none focus:ring-0 text-brand-text placeholder:text-brand-muted pl-12 pr-4 py-3 outline-none"
                         required
                         disabled={loading}
                     />
@@ -61,10 +61,10 @@ export function SearchForm({ onSearch }: { onSearch: (keyword: string, location:
                 <button
                     type="submit"
                     disabled={loading}
-                    className="bg-white text-black font-medium px-8 py-3 rounded-xl hover:bg-white/90 transition-all active:scale-95 flex items-center justify-center gap-2 m-1 disabled:opacity-50 disabled:active:scale-100 min-w-[140px]"
+                    className="primary-button m-1 flex items-center justify-center gap-2 min-w-[140px] disabled:opacity-50 disabled:hover:-translate-y-0 disabled:hover:shadow-none"
                 >
                     {loading ? (
-                        <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                     ) : (
                         <>
                             <Sparkles className="w-4 h-4" />

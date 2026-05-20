@@ -43,10 +43,10 @@ type BoardColumn = {
 };
 
 const DEFAULT_COLUMNS: BoardColumn[] = [
-    { id: "Da contattare", title: "Da contattare", colorClass: "bg-blue-500/15 text-blue-300 border-blue-400/30" },
-    { id: "In lavorazione", title: "In lavorazione", colorClass: "bg-amber-500/15 text-amber-300 border-amber-400/30" },
-    { id: "Da richiamare", title: "Da richiamare", colorClass: "bg-purple-500/15 text-purple-300 border-purple-400/30" },
-    { id: "Convertiti", title: "Convertiti", colorClass: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30" },
+    { id: "Da contattare", title: "Da contattare", colorClass: "bg-sky-100 dark:bg-blue-500/15 text-sky-900 dark:text-blue-300 border-sky-300 dark:border-blue-400/30" },
+    { id: "In lavorazione", title: "In lavorazione", colorClass: "bg-amber-100 dark:bg-amber-500/15 text-amber-950 dark:text-amber-300 border-amber-300 dark:border-amber-400/30" },
+    { id: "Da richiamare", title: "Da richiamare", colorClass: "bg-violet-100 dark:bg-purple-500/15 text-violet-900 dark:text-purple-300 border-violet-300 dark:border-purple-400/30" },
+    { id: "Convertiti", title: "Convertiti", colorClass: "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-400/30" },
 ];
 
 const STORAGE_KEY = "lead-intelligence:clienti-columns:v1";
@@ -79,6 +79,12 @@ export function SavedClientsTable() {
         };
     const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
     const [savingDetails, setSavingDetails] = useState(false);
+
+    // Email Modal State
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [emailDraft, setEmailDraft] = useState({ subject: "", body: "" });
+    const [isGeneratingEmail, setIsGeneratingEmail] = useState(false);
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
 
     const selectedClient = useMemo(
         () => clients.find((client) => client.id === selectedClientId) ?? null,
@@ -199,7 +205,7 @@ export function SavedClientsTable() {
             const appended: BoardColumn[] = missingStatuses.map((status) => ({
                 id: status,
                 title: status,
-                colorClass: "bg-white/10 text-white border-white/20",
+                colorClass: "bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-white border-slate-300 dark:border-white/20",
             }));
 
             const next = [...previous, ...appended];
@@ -281,7 +287,7 @@ export function SavedClientsTable() {
             {
                 id: label,
                 title: label,
-                colorClass: "bg-white/10 text-white border-white/20",
+                colorClass: "bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white border-gray-200 dark:border-white/20",
             },
         ];
 
@@ -390,6 +396,78 @@ export function SavedClientsTable() {
         setSavingDetails(false);
     };
 
+    const handleGenerateEmail = async () => {
+        if (!selectedClient) return;
+        if (!detailDraft.email && !selectedClient.email) {
+            alert("Inserisci un indirizzo email per questo cliente prima di procedere.");
+            return;
+        }
+
+        setIsGeneratingEmail(true);
+        setIsEmailModalOpen(true);
+        setEmailDraft({ subject: "", body: "" });
+
+        try {
+            const res = await fetch("/api/generate-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    clientName: selectedClient.business_name,
+                    website: detailDraft.website || selectedClient.website,
+                    notes: detailDraft.notes || selectedClient.notes,
+                }),
+            });
+
+            if (!res.ok) throw new Error("Errore nella generazione dell'email");
+
+            const data = await res.json();
+            setEmailDraft({ subject: data.subject, body: data.body });
+        } catch (error) {
+            console.error(error);
+            alert("Impossibile generare l'email. Riprova.");
+            setIsEmailModalOpen(false);
+        } finally {
+            setIsGeneratingEmail(false);
+        }
+    };
+
+    const handleSendEmail = async () => {
+        if (!selectedClient) return;
+        const targetEmail = detailDraft.email || selectedClient.email;
+        
+        if (!targetEmail) {
+            alert("Indirizzo email mancante.");
+            return;
+        }
+
+        setIsSendingEmail(true);
+        try {
+            const res = await fetch("/api/send-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    to: targetEmail,
+                    subject: emailDraft.subject,
+                    body: emailDraft.body,
+                }),
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error?.message || "Errore durante l'invio");
+            }
+
+            alert("Email inviata con successo!");
+            setIsEmailModalOpen(false);
+            await logContact("email");
+        } catch (error: any) {
+            console.error(error);
+            alert(`Errore invio email: ${error.message}`);
+        } finally {
+            setIsSendingEmail(false);
+        }
+    };
+
     const logContact = async (method: "chiamata" | "email") => {
         if (!selectedClient) return;
 
@@ -431,25 +509,25 @@ export function SavedClientsTable() {
     };
 
     if (loading) {
-        return <div className="text-center p-8 text-white/50">Caricamento clienti...</div>;
+        return <div className="text-center p-8 text-brand-muted">Caricamento clienti...</div>;
     }
 
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="relative w-full md:max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted pointer-events-none" />
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Cerca nominativi, città, telefono, email..."
-                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-10 py-2.5 text-sm text-white placeholder-white/35 focus:outline-none focus:border-brand-accent/60"
+                        className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg pl-9 pr-10 py-2.5 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60"
                     />
                     {searchQuery && (
                         <button
                             onClick={() => setSearchQuery("")}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-text"
                             aria-label="Pulisci ricerca"
                         >
                             <X className="w-4 h-4" />
@@ -463,7 +541,7 @@ export function SavedClientsTable() {
                         value={newColumnName}
                         onChange={(e) => setNewColumnName(e.target.value)}
                         placeholder="Nuova colonna"
-                        className="flex-1 md:w-52 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/35 focus:outline-none focus:border-brand-accent/60"
+                        className="flex-1 md:w-52 bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60"
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 e.preventDefault();
@@ -483,8 +561,8 @@ export function SavedClientsTable() {
 
             {clients.length === 0 ? (
                 <div className="w-full glass-panel p-8 min-h-[380px] flex flex-col items-center justify-center text-center border-dashed">
-                    <h3 className="text-xl font-medium text-white/80">Nessun cliente salvato</h3>
-                    <p className="text-white/45 mt-2 max-w-sm">
+                    <h3 className="text-xl font-medium text-brand-text">Nessun cliente salvato</h3>
+                    <p className="text-brand-muted mt-2 max-w-sm">
                         Aggiungi nominativi dal pulsante in alto, poi trascinali tra le colonne del board.
                     </p>
                 </div>
@@ -495,7 +573,7 @@ export function SavedClientsTable() {
                             {groupedClients.map((column) => (
                                 <div
                                     key={column.id}
-                                    className={`w-[300px] shrink-0 rounded-xl border border-white/10 bg-black/35 flex flex-col transition-shadow ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
+                                    className={`w-[300px] shrink-0 rounded-xl border border-brand-border dark:border-white/10 surface-strong dark:bg-black/35 shadow-[0_14px_30px_rgba(15,23,42,0.05)] dark:shadow-none flex flex-col transition-shadow ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
                                     draggable={!draggedClientId}
                                     onDragStart={(e) => {
                                         if (draggedClientId) { e.preventDefault(); return; }
@@ -514,10 +592,10 @@ export function SavedClientsTable() {
                                         }
                                     }}
                                 >
-                                    <div className="px-3 py-3 border-b border-white/10 flex items-start justify-between gap-2 cursor-move">
+                                    <div className="px-3 py-3 border-b border-brand-border dark:border-white/10 flex items-start justify-between gap-2 cursor-move">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h3 className="font-medium text-white text-sm">{column.title}</h3>
+                                                <h3 className="font-medium text-brand-text text-sm">{column.title}</h3>
                                                 <span className={`text-xs px-2 py-0.5 rounded-full border ${column.colorClass}`}>
                                                     {column.clients.length}
                                                 </span>
@@ -526,14 +604,14 @@ export function SavedClientsTable() {
                                         <div className="flex items-center gap-1">
                                             <button
                                                 onClick={() => handleRenameColumn(column.id)}
-                                                className="text-xs px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-white/70"
+                                                className="text-xs px-2 py-1 rounded surface-subtle dark:bg-white/5 hover:bg-brand-background dark:hover:bg-white/10 text-brand-muted dark:text-white/70"
                                                 title="Modifica nome colonna"
                                             >
                                                 Modifica
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteColumn(column.id)}
-                                                className="p-1.5 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400"
+                                                className="p-1.5 rounded bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
                                                 title="Elimina colonna"
                                             >
                                                 <Trash2 className="w-3.5 h-3.5" />
@@ -543,7 +621,7 @@ export function SavedClientsTable() {
 
                                     <div className="p-3 space-y-3 overflow-y-auto min-h-[420px] max-h-[620px]">
                                         {column.clients.length === 0 ? (
-                                            <div className="rounded-lg border border-dashed border-white/15 text-center text-xs text-white/35 p-4">
+                                            <div className="rounded-lg border border-dashed border-brand-border dark:border-white/15 text-center text-xs text-brand-muted p-4">
                                                 Trascina qui i nominativi
                                             </div>
                                         ) : (
@@ -560,24 +638,24 @@ export function SavedClientsTable() {
                                                         onClick={() => setSelectedClientId(client.id)}
                                                         className={`w-full text-left rounded-lg border p-3 transition-all ${
                                                             isActive
-                                                                ? "border-brand-accent/60 bg-brand-accent/10"
-                                                                : "border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"
+                                                                ? "border-brand-accent/60 bg-brand-accent/10 shadow-[0_10px_24px_rgba(109,40,217,0.12)]"
+                                                                : "border-brand-border dark:border-white/10 bg-brand-surface dark:bg-white/[0.02] hover:bg-brand-background/70 dark:hover:bg-white/[0.05]"
                                                         }`}
                                                     >
                                                         <div className="flex items-start justify-between gap-2">
                                                             <div>
-                                                                <p className="text-sm font-medium text-white leading-tight">
+                                                                <p className="text-sm font-medium text-brand-text leading-tight">
                                                                     {client.business_name || "Senza nome"}
                                                                 </p>
-                                                                <p className="text-xs text-white/50 mt-1">
+                                                                <p className="text-xs text-brand-muted mt-1">
                                                                     {client.city || "-"}
                                                                     {client.province ? ` (${client.province})` : ""}
                                                                 </p>
                                                             </div>
-                                                            <GripVertical className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
+                                                            <GripVertical className="w-4 h-4 text-brand-muted shrink-0 mt-0.5" />
                                                         </div>
 
-                                                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-white/70">
+                                                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-brand-muted">
                                                             {client.phone && (
                                                                 <span className="inline-flex items-center gap-1">
                                                                     <Phone className="w-3 h-3" /> {client.phone}
@@ -590,7 +668,7 @@ export function SavedClientsTable() {
                                                             )}
                                                         </div>
 
-                                                        <div className="mt-2 flex items-center justify-between text-[11px] text-white/45">
+                                                        <div className="mt-2 flex items-center justify-between text-[11px] text-brand-muted">
                                                             <span>{client.keyword || "-"}</span>
                                                             <span>{contactCounter} contatti</span>
                                                         </div>
@@ -605,14 +683,14 @@ export function SavedClientsTable() {
                     </div>
 
                     {selectedClient && (
-                        <aside className="glass-panel p-4 min-h-[560px]">
+                        <aside className="glass-panel p-4 min-h-[560px] bg-brand-surface dark:bg-white/[0.02] border border-brand-border dark:border-white/10 shadow-[0_14px_30px_rgba(15,23,42,0.05)] dark:shadow-none">
                             <div className="space-y-4">
                                 <div className="flex items-start justify-between gap-2">
                                     <div>
-                                        <h3 className="text-base font-medium text-white leading-tight">
+                                        <h3 className="text-base font-medium text-brand-text leading-tight">
                                             {selectedClient.business_name}
                                         </h3>
-                                        <p className="text-xs text-white/50 mt-1">
+                                        <p className="text-xs text-brand-muted mt-1">
                                             {selectedClient.city || "-"}
                                             {selectedClient.province ? ` (${selectedClient.province})` : ""}
                                         </p>
@@ -620,7 +698,7 @@ export function SavedClientsTable() {
                                     <div className="flex gap-2 items-center">
                                         <button
                                             onClick={() => setSelectedClientId(null)}
-                                            className="p-2 rounded-md bg-white/5 hover:bg-white/10 text-white/60"
+                                            className="p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-brand-muted dark:text-white/60"
                                             title="Chiudi pannello"
                                             style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         >
@@ -628,7 +706,7 @@ export function SavedClientsTable() {
                                         </button>
                                         <button
                                             onClick={() => handleDeleteClient(selectedClient.id)}
-                                            className="p-2 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400"
+                                            className="p-2 rounded-md bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
                                             title="Elimina nominativo"
                                             style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         >
@@ -638,32 +716,32 @@ export function SavedClientsTable() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs text-white/55">Email</label>
+                                    <label className="text-xs text-brand-muted">Email</label>
                                     <input
                                         type="email"
                                         value={detailDraft.email}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, email: e.target.value }))}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs text-white/55">Telefono</label>
+                                    <label className="text-xs text-brand-muted">Telefono</label>
                                     <input
                                         type="text"
                                         value={detailDraft.phone}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, phone: e.target.value }))}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs text-white/55">Sito web</label>
+                                    <label className="text-xs text-brand-muted">Sito web</label>
                                     <input
                                         type="text"
                                         value={detailDraft.website}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, website: e.target.value }))}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
                                     />
                                     <div className="flex items-center gap-2 text-xs">
                                         {selectedClient.website && (
@@ -671,7 +749,7 @@ export function SavedClientsTable() {
                                                 href={selectedClient.website}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="text-brand-gradient-1 hover:underline inline-flex items-center gap-1"
+                                                className="text-brand-primary hover:text-brand-accent hover:underline inline-flex items-center gap-1 font-medium"
                                             >
                                                 Sito <ExternalLink className="w-3 h-3" />
                                             </a>
@@ -690,37 +768,37 @@ export function SavedClientsTable() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs text-white/55">Data follow-up</label>
+                                    <label className="text-xs text-brand-muted">Data follow-up</label>
                                     <input
                                         type="date"
                                         value={detailDraft.follow_up_date}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, follow_up_date: e.target.value }))}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs text-white/55">Note</label>
+                                    <label className="text-xs text-brand-muted">Note</label>
                                     <textarea
                                         value={detailDraft.notes}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, notes: e.target.value }))}
                                         rows={4}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent/60 resize-y"
+                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 resize-y"
                                     />
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2">
                                     <button
                                         onClick={() => logContact("chiamata")}
-                                        className="px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 text-sm flex items-center justify-center gap-1.5"
+                                        className="px-3 py-2 rounded-lg bg-sky-100 dark:bg-blue-500/10 hover:bg-sky-200 dark:hover:bg-blue-500/20 text-sky-900 dark:text-blue-300 text-sm font-medium flex items-center justify-center gap-1.5"
                                     >
                                         <Phone className="w-4 h-4" /> Chiamata
                                     </button>
                                     <button
-                                        onClick={() => logContact("email")}
-                                        className="px-3 py-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-sm flex items-center justify-center gap-1.5"
+                                        onClick={handleGenerateEmail}
+                                        className="px-3 py-2 rounded-lg bg-violet-100 dark:bg-purple-500/10 hover:bg-violet-200 dark:hover:bg-purple-500/20 text-violet-900 dark:text-purple-300 text-sm font-medium flex items-center justify-center gap-1.5"
                                     >
-                                        <Mail className="w-4 h-4" /> Email
+                                        <Mail className="w-4 h-4" /> Email AI
                                     </button>
                                 </div>
 
@@ -732,8 +810,8 @@ export function SavedClientsTable() {
                                     <Save className="w-4 h-4" /> {savingDetails ? "Salvataggio..." : "Salva dettagli"}
                                 </button>
 
-                                <div className="pt-2 border-t border-white/10">
-                                    <div className="flex items-center justify-between text-xs text-white/50 mb-2">
+                                <div className="pt-2 border-t border-brand-border dark:border-white/10">
+                                    <div className="flex items-center justify-between text-xs text-brand-muted mb-2">
                                         <span>Ultimo contatto</span>
                                         <span className="inline-flex items-center gap-1">
                                             <CalendarIcon className="w-3 h-3" />
@@ -747,6 +825,81 @@ export function SavedClientsTable() {
                             </div>
                         </aside>
                     )}
+                </div>
+            )}
+
+            {/* Email Modal */}
+            {isEmailModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="bg-brand-surface dark:bg-[#111] border border-brand-border dark:border-white/10 rounded-xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh]">
+                        <div className="flex items-center justify-between p-4 border-b border-brand-border dark:border-white/10">
+                            <h3 className="text-lg font-medium text-brand-text flex items-center gap-2">
+                                <Mail className="w-5 h-5 text-brand-accent" />
+                                Bozza Email per {selectedClient?.business_name}
+                            </h3>
+                            <button
+                                onClick={() => setIsEmailModalOpen(false)}
+                                    className="p-2 rounded-md hover:bg-brand-background dark:hover:bg-white/10 text-brand-muted dark:text-white/60"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        
+                        <div className="p-4 overflow-y-auto flex-1 space-y-4">
+                            {isGeneratingEmail ? (
+                                <div className="flex flex-col items-center justify-center py-12 text-brand-muted dark:text-white/50 space-y-4">
+                                    <div className="w-8 h-8 border-2 border-brand-accent border-t-transparent rounded-full animate-spin"></div>
+                                    <p>Generazione email in corso con AI...</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-brand-text dark:text-white/70">Oggetto</label>
+                                        <input
+                                            type="text"
+                                            value={emailDraft.subject}
+                                            onChange={(e) => setEmailDraft(prev => ({ ...prev, subject: e.target.value }))}
+                                            className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-brand-text dark:text-white/70">Messaggio</label>
+                                        <textarea
+                                            value={emailDraft.body}
+                                            onChange={(e) => setEmailDraft(prev => ({ ...prev, body: e.target.value }))}
+                                            rows={12}
+                                            className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 resize-y"
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        <div className="p-4 border-t border-brand-border dark:border-white/10 flex justify-end gap-3">
+                            <button
+                                onClick={() => setIsEmailModalOpen(false)}
+                                className="px-4 py-2 rounded-lg surface-subtle dark:bg-white/5 hover:bg-brand-background dark:hover:bg-white/10 text-brand-text dark:text-white text-sm font-medium"
+                            >
+                                Annulla
+                            </button>
+                            <button
+                                onClick={handleSendEmail}
+                                disabled={isGeneratingEmail || isSendingEmail || !emailDraft.subject || !emailDraft.body}
+                                className="px-4 py-2 rounded-lg bg-brand-accent text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
+                            >
+                                {isSendingEmail ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                        Invio in corso...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Mail className="w-4 h-4" /> Invia Email
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

@@ -49,14 +49,14 @@ function SelectWithClear({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 pr-9 text-sm text-white"
+        className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 pr-9 text-sm text-brand-text"
       >
         {children}
       </select>
       {value !== "all" && (
         <button
           onClick={onClear}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-text"
         >
           <X className="w-4 h-4" />
         </button>
@@ -77,7 +77,7 @@ export function FilterBar(props: Props) {
 
   return (
     <div className="glass-panel p-4 md:p-5">
-      <div className="flex items-center gap-2 text-white/70 text-sm mb-3">
+      <div className="flex items-center gap-2 text-brand-muted text-sm mb-3">
         <Filter className="w-4 h-4" />
         <span>Stack filtri segmento</span>
       </div>
@@ -86,7 +86,7 @@ export function FilterBar(props: Props) {
         <select
           value={preset}
           onChange={(e) => setPreset(e.target.value as DatePreset)}
-          className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white"
+          className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text"
         >
           <option value="1d">1 giorno</option>
           <option value="7d">1 settimana</option>
@@ -101,13 +101,13 @@ export function FilterBar(props: Props) {
           type="date"
           value={startDate}
           onChange={(e) => { setPreset("custom"); setStartDate(e.target.value); }}
-          className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white"
+          className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text"
         />
         <input
           type="date"
           value={endDate}
           onChange={(e) => { setPreset("custom"); setEndDate(e.target.value); }}
-          className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white"
+          className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text"
         />
 
         <SelectWithClear value={statusFilter} onChange={setStatusFilter} onClear={() => setStatusFilter("all")}>
@@ -149,7 +149,7 @@ export function FilterBar(props: Props) {
             <button
               key={chip.key}
               onClick={() => resetSingleFilter(chip.key)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/20 bg-white/5 text-xs text-white/80 hover:bg-white/10"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-brand-border dark:border-white/20 surface-subtle dark:bg-white/5 text-xs text-brand-text dark:text-white/80 hover:bg-brand-background dark:hover:bg-white/10"
             >
               {chip.label}
               <X className="w-3 h-3" />
@@ -157,7 +157,7 @@ export function FilterBar(props: Props) {
           ))}
           <button
             onClick={resetAllFilters}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-red-400/30 bg-red-500/10 text-xs text-red-200 hover:bg-red-500/15"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-red-400/30 bg-red-500/10 text-xs text-red-700 dark:text-red-200 hover:bg-red-500/15"
           >
             Rimuovi tutti
           </button>

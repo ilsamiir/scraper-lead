@@ -128,13 +128,9 @@ export function useAnalyticsData() {
       if (provinceFilter !== "all" && c.province !== provinceFilter) return false;
       if (cityFilter !== "all" && c.city !== cityFilter) return false;
       if (operatorFilter !== "all" && c.operator_id !== operatorFilter) return false;
-      if (c.created_at) {
-        const created = c.created_at.slice(0, 10);
-        if (created < startDate || created > endDate) return false;
-      }
       return true;
     });
-  }, [cityFilter, clients, endDate, keywordFilter, operatorFilter, provinceFilter, startDate, statusFilter]);
+  }, [cityFilter, clients, keywordFilter, operatorFilter, provinceFilter, statusFilter]);
 
   const filteredClientIds = useMemo(() => new Set(filteredClients.map((c) => c.id)), [filteredClients]);
 

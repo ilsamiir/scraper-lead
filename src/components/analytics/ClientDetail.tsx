@@ -52,18 +52,18 @@ export function ClientDetail({ client, onClose }: Props) {
         </div>
         <button
           onClick={onClose}
-          className="text-xs text-white/50 hover:text-white/80 px-2 py-1 rounded"
+          className="text-xs text-brand-muted hover:text-brand-text px-2 py-1 rounded hover:bg-brand-background"
         >
           Chiudi
         </button>
       </div>
-      <table className="w-full text-sm text-white/80">
+      <table className="w-full text-sm text-brand-text dark:text-white/80">
         <tbody>
           {rows.map((row) => (
             <tr key={row.label}>
-              <td className="py-1 pr-2 text-white/60">{row.label}</td>
+              <td className="py-1 pr-2 text-brand-muted dark:text-white/60">{row.label}</td>
               <td className="py-1">
-                {row.value || <span className="text-white/30">-</span>}
+                {row.value || <span className="text-brand-muted dark:text-white/30">-</span>}
               </td>
             </tr>
           ))}

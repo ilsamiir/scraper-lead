@@ -90,7 +90,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
             case 'email': return <Mail className="w-4 h-4 text-brand-accent" />;
             case 'messaggio': return <Send className="w-4 h-4 text-green-400" />;
             case 'nota': return <FileText className="w-4 h-4 text-purple-400" />;
-            default: return <CalendarIcon className="w-4 h-4 text-white/50" />;
+            default: return <CalendarIcon className="w-4 h-4 text-brand-muted" />;
         }
     };
 
@@ -110,15 +110,15 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center py-6 text-white/50">
+            <div className="flex items-center justify-center py-6 text-brand-muted">
                 <Loader2 className="w-5 h-5 animate-spin mr-2" /> Caricamento storico...
             </div>
         );
     }
 
     return (
-        <div className="bg-black/40 border-t border-white/5 p-6 space-y-6">
-            <h4 className="text-sm font-medium text-white/80">Storico Contatti & Note</h4>
+        <div className="surface-subtle dark:bg-black/40 border-t border-brand-border dark:border-white/5 rounded-xl p-6 space-y-6">
+            <h4 className="text-sm font-semibold text-brand-text dark:text-white/80">Storico Contatti & Note</h4>
 
             {/* Aggiungi Nota Rapida */}
             <form onSubmit={handleAddNote} className="flex gap-2">
@@ -127,7 +127,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                     value={newNote}
                     onChange={(e) => setNewNote(e.target.value)}
                     placeholder="Aggiungi una nota o un riepilogo..."
-                    className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-brand-accent transition-colors"
+                    className="flex-1 bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent transition-colors"
                 />
                 <button
                     type="submit"
@@ -141,7 +141,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
             {/* Timeline Storico */}
             <div className="space-y-4">
                 {history.length === 0 ? (
-                    <div className="text-sm text-white/40 text-center py-4 italic">
+                    <div className="text-sm text-brand-muted text-center py-4 italic">
                         Nessun evento registrato per questo cliente.
                     </div>
                 ) : (
@@ -149,17 +149,17 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                         {history.map((log) => (
                             <div key={log.id} className="relative pl-6">
                                 {/* Timeline Dot / Icon */}
-                                <div className="absolute -left-3.5 top-0.5 bg-black border border-white/20 rounded-full p-1.5 z-10">
+                                <div className="absolute -left-3.5 top-0.5 bg-brand-surface dark:bg-black border border-brand-border dark:border-white/20 rounded-full p-1.5 z-10 shadow-[0_6px_18px_rgba(15,23,42,0.08)] dark:shadow-none">
                                     {getIconForMethod(log.contact_method)}
                                 </div>
 
-                                <div className="group bg-white/[0.03] border border-white/5 rounded-lg p-4 transition-all hover:border-white/10">
+                                <div className="group bg-brand-surface dark:bg-white/[0.03] border border-brand-border dark:border-white/5 rounded-lg p-4 transition-all hover:border-brand-accent/30 dark:hover:border-white/10">
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm font-medium text-white/90 capitalize">
+                                            <span className="text-sm font-medium text-brand-text dark:text-white/90 capitalize">
                                                 {log.contact_method}
                                             </span>
-                                            <span className="text-xs text-white/40">
+                                            <span className="text-xs text-slate-600 dark:text-white/40">
                                                 {format(new Date(log.contact_date), "d MMM yyyy, HH:mm", { locale: it })}
                                             </span>
                                         </div>
@@ -169,7 +169,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                                                 handleDelete(log.id);
                                             }}
                                             disabled={deletingId === log.id}
-                                            className="p-1.5 rounded-md text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all disabled:opacity-50"
+                                            className="p-1.5 rounded-md text-slate-500 hover:text-red-500 hover:bg-red-500/10 transition-all disabled:opacity-50"
                                             title="Elimina attività"
                                         >
                                             {deletingId === log.id ? (
@@ -180,7 +180,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                                         </button>
                                     </div>
                                     {log.notes && (
-                                        <p className="text-sm text-white/70 whitespace-pre-wrap">
+                                        <p className="text-sm text-brand-text dark:text-white/70 whitespace-pre-wrap leading-relaxed">
                                             {log.notes}
                                         </p>
                                     )}

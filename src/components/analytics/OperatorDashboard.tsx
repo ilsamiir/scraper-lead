@@ -27,10 +27,10 @@ export function OperatorDashboard({ operatorStats }: Props) {
   if (operatorStats.length === 0) {
     return (
       <div className="glass-panel p-4">
-        <h3 className="text-sm text-white/70 mb-3 flex items-center gap-2">
+        <h3 className="text-sm text-brand-text dark:text-white/70 mb-3 flex items-center gap-2">
           <Users className="w-4 h-4 text-brand-accent" /> Dashboard operatori
         </h3>
-        <p className="text-xs text-white/40 text-center py-6">
+        <p className="text-xs text-slate-600 dark:text-white/40 text-center py-6">
           Nessun operatore configurato. Aggiungi operatori nella tabella &quot;operators&quot; per abilitare le statistiche individuali.
         </p>
       </div>
@@ -41,7 +41,7 @@ export function OperatorDashboard({ operatorStats }: Props) {
 
   return (
     <div className="glass-panel p-4">
-      <h3 className="text-sm text-white/70 mb-4 flex items-center gap-2">
+      <h3 className="text-sm text-brand-text dark:text-white/70 mb-4 flex items-center gap-2">
         <Users className="w-4 h-4 text-brand-accent" /> Dashboard operatori
       </h3>
 
@@ -49,22 +49,22 @@ export function OperatorDashboard({ operatorStats }: Props) {
         {operatorStats.map((stat) => (
           <div
             key={stat.operator.id}
-            className="border border-white/10 rounded-xl p-4 bg-white/[0.02]"
+            className="border border-brand-border dark:border-white/10 rounded-xl p-4 bg-brand-surface dark:bg-white/[0.02]"
           >
             {/* Header operatore */}
             <div className="flex items-center justify-between mb-3">
               <div>
-                <div className="font-medium text-white">{stat.operator.name}</div>
-                <div className="text-xs text-white/40">{stat.operator.role || "Operatore"}</div>
+                <div className="font-medium text-brand-text dark:text-white">{stat.operator.name}</div>
+                <div className="text-xs text-slate-600 dark:text-white/40">{stat.operator.role || "Operatore"}</div>
               </div>
               <div className="flex items-center gap-3 text-xs">
-                <span className="text-white/60">{stat.totalClients} clienti</span>
-                <span className="flex items-center gap-1 text-emerald-300">
+                <span className="text-slate-700 dark:text-white/60">{stat.totalClients} clienti</span>
+                <span className="flex items-center gap-1 text-emerald-700 dark:text-emerald-300">
                   <TrendingUp className="w-3 h-3" />
                   {stat.conversionRate}%
                 </span>
                 {stat.totalValue > 0 && (
-                  <span className="text-emerald-300/70">
+                  <span className="text-emerald-700/80 dark:text-emerald-300/70">
                     €{stat.totalValue.toLocaleString("it-IT")}
                   </span>
                 )}
@@ -73,13 +73,13 @@ export function OperatorDashboard({ operatorStats }: Props) {
 
             {/* Barra attività */}
             <div className="flex items-center gap-2 mb-2">
-              <div className="h-2 rounded-full bg-white/10 flex-1 overflow-hidden">
+              <div className="h-2 rounded-full bg-brand-background dark:bg-white/10 flex-1 overflow-hidden">
                 <div
                   className="h-2 rounded-full bg-brand-accent transition-all"
                   style={{ width: `${(stat.totalActivities / maxActivities) * 100}%` }}
                 />
               </div>
-              <span className="text-xs text-white/60 w-10 text-right">
+              <span className="text-xs text-brand-text dark:text-white/60 w-10 text-right">
                 {stat.totalActivities}
               </span>
             </div>
@@ -93,7 +93,7 @@ export function OperatorDashboard({ operatorStats }: Props) {
                   return (
                     <span
                       key={method}
-                      className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-white/10 bg-white/5 text-white/60"
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-slate-300 dark:border-white/10 surface-subtle dark:bg-white/5 text-slate-800 dark:text-white/60 font-medium"
                     >
                       {Icon && <Icon className="w-3 h-3" />}
                       {method}: {count}
@@ -101,7 +101,7 @@ export function OperatorDashboard({ operatorStats }: Props) {
                   );
                 })}
               {stat.convertiti > 0 && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-emerald-400/20 bg-emerald-400/10 text-emerald-700 dark:text-emerald-300">
                   Convertiti: {stat.convertiti}
                 </span>
               )}

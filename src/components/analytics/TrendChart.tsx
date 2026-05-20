@@ -66,8 +66,8 @@ export function TrendChart({ points, totals }: Props) {
     <div className="glass-panel p-4 md:p-5">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
         <div>
-          <h3 className="text-sm text-white/70">Trend operativo</h3>
-          <p className="text-xs text-white/45 mt-1">
+          <h3 className="text-sm text-brand-text dark:text-white/70">Trend operativo</h3>
+          <p className="text-xs text-slate-600 dark:text-white/45 mt-1">
             Andamento giornaliero di inserimenti e attività contatto.
           </p>
         </div>
@@ -96,27 +96,28 @@ export function TrendChart({ points, totals }: Props) {
       <div className="w-full h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="4 4" stroke="rgba(255,255,255,0.08)" />
+            <CartesianGrid strokeDasharray="4 4" stroke="var(--brand-border)" />
             <XAxis
               dataKey="displayLabel"
-              tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }}
-              axisLine={{ stroke: "rgba(255,255,255,0.2)" }}
+              tick={{ fill: "var(--brand-muted)", fontSize: 11 }}
+              axisLine={{ stroke: "var(--brand-border)" }}
               tickLine={false}
               interval={0}
             />
             <YAxis
-              tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }}
-              axisLine={{ stroke: "rgba(255,255,255,0.2)" }}
+              tick={{ fill: "var(--brand-muted)", fontSize: 11 }}
+              axisLine={{ stroke: "var(--brand-border)" }}
               tickLine={false}
               allowDecimals={false}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1a1a2e",
-                border: "1px solid rgba(255,255,255,0.15)",
+                backgroundColor: "var(--brand-surface)",
+                border: "1px solid var(--brand-border)",
                 borderRadius: "8px",
-                color: "#fff",
+                color: "var(--brand-text)",
                 fontSize: "12px",
+                boxShadow: "0 12px 28px rgba(15,23,42,0.12)",
               }}
               labelFormatter={(_, payload) => {
                 const p = payload?.[0]?.payload;
@@ -130,7 +131,7 @@ export function TrendChart({ points, totals }: Props) {
               }}
             />
             <Legend
-              wrapperStyle={{ fontSize: "11px", color: "rgba(255,255,255,0.6)" }}
+              wrapperStyle={{ fontSize: "11px", color: "var(--brand-muted)" }}
             />
             {SERIES.map((s) =>
               activeSeries[s.key] ? (

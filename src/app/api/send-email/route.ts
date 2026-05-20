@@ -15,9 +15,10 @@ export async function POST(request: Request) {
 
     try {
         const resendApiKey = process.env.RESEND_API_KEY;
-        payload = await request.json();
-        const { clientId, to, subject, body } = payload;
-        const source = payload.source === 'cron' ? 'cron' : 'manual';
+        const requestBody = await request.json() as SendEmailRequestBody;
+        payload = requestBody;
+        const { clientId, to, subject, body } = requestBody;
+        const source = requestBody.source === 'cron' ? 'cron' : 'manual';
 
         if (!clientId || !to || !subject || !body) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });

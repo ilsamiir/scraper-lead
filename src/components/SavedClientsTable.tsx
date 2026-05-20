@@ -531,13 +531,8 @@ export function SavedClientsTable() {
         if (selectedClientId === id) setSelectedClientId(null);
     };
 
-<<<<<<< HEAD
-    if (loading) {
-        return <div className="text-center p-8 text-brand-muted">Caricamento clienti...</div>;
-=======
     if (!authChecked || loading) {
         return <div className="text-center p-8 text-white/50">Caricamento clienti...</div>;
->>>>>>> 17e0623 (feat: add auth middleware and analytics updates)
     }
 
     if (!authReady) {

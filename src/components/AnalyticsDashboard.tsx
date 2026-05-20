@@ -41,12 +41,12 @@ export function AnalyticsDashboard() {
 
   if (data.requiresAuth) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-white/50">
-        <p className="text-base text-white">Sessione non valida o scaduta.</p>
+      <div className="rounded-2xl border border-brand-border bg-brand-surface px-6 py-10 text-center text-brand-muted dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
+        <p className="text-base text-brand-text">Sessione non valida o scaduta.</p>
         <p className="mt-2 text-sm">Effettua di nuovo l&apos;accesso per aprire la dashboard analytics.</p>
         <Link
           href="/login"
-          className="mt-5 inline-flex items-center justify-center rounded-full border border-brand-accent/30 bg-brand-accent/12 px-5 py-2 text-sm font-semibold text-white"
+          className="mt-5 inline-flex items-center justify-center rounded-full border border-brand-accent/35 bg-brand-accent/16 px-5 py-2 text-sm font-semibold text-brand-accent dark:text-[#F3EEFF]"
         >
           Vai al login
         </Link>

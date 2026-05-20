@@ -66,8 +66,8 @@ export function TrendChart({ points, totals }: Props) {
     <div className="glass-panel p-4 md:p-5">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
         <div>
-          <h3 className="text-sm text-brand-text dark:text-white/70">Trend operativo</h3>
-          <p className="text-xs text-slate-600 dark:text-white/45 mt-1">
+          <h3 className="text-sm text-brand-text">Trend operativo</h3>
+          <p className="mt-1 text-xs text-brand-muted">
             Andamento giornaliero di inserimenti e attività contatto.
           </p>
         </div>
@@ -80,7 +80,7 @@ export function TrendChart({ points, totals }: Props) {
               }`}
               style={{
                 borderColor: `${s.color}66`,
-                backgroundColor: `${s.color}1a`,
+                backgroundColor: `${s.color}22`,
                 color: s.color,
               }}
               onClick={() => toggle(s.key)}
@@ -117,7 +117,7 @@ export function TrendChart({ points, totals }: Props) {
                 borderRadius: "8px",
                 color: "var(--brand-text)",
                 fontSize: "12px",
-                boxShadow: "0 12px 28px rgba(15,23,42,0.12)",
+                boxShadow: "0 18px 36px rgba(2,6,23,0.45)",
               }}
               labelFormatter={(_, payload) => {
                 const p = payload?.[0]?.payload;

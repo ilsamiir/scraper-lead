@@ -204,16 +204,16 @@ export function PromemoriaTable() {
         }
     };
 
-    if (loading) return <div className="text-center p-8 text-white/50">Caricamento promemoria...</div>;
+    if (loading) return <div className="p-8 text-center text-brand-muted">Caricamento promemoria...</div>;
 
     if (clients.length === 0) {
         return (
             <div className="w-full glass-panel p-8 min-h-[400px] flex flex-col items-center justify-center text-center border-dashed">
-                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-4">
-                    <CalendarIcon className="w-8 h-8 text-white/20" />
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-surface dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
+                    <CalendarIcon className="w-8 h-8 text-brand-muted" />
                 </div>
-                <h3 className="text-xl font-medium text-white/80">Nessun promemoria in sospeso</h3>
-                <p className="text-white/40 mt-2 max-w-sm">
+                <h3 className="text-xl font-medium text-brand-text">Nessun promemoria in sospeso</h3>
+                <p className="mt-2 max-w-sm text-brand-muted">
                     Ottimo lavoro! Non hai follow-up in ritardo o programmati per oggi.
                 </p>
             </div>
@@ -224,7 +224,7 @@ export function PromemoriaTable() {
         <div className="w-full glass-panel overflow-hidden">
             {selectedClients.length > 0 && (
                 <div className="bg-brand-gradient-1/10 border-b border-brand-gradient-1/20 px-6 py-3 flex items-center justify-between">
-                    <span className="text-sm font-medium text-white/90">
+                    <span className="text-sm font-medium text-brand-text">
                         {selectedClients.length} selezionat{selectedClients.length === 1 ? 'o' : 'i'}
                     </span>
                     <button
@@ -238,7 +238,7 @@ export function PromemoriaTable() {
             )}
             <div className="overflow-x-auto min-h-[500px]">
                 <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="bg-white/5 border-b border-white/10 text-white/60">
+                    <thead className="surface-subtle border-b border-brand-border text-brand-muted">
                         <tr>
                             <th className="px-6 py-4 font-medium w-12">
                                 <input
@@ -256,24 +256,24 @@ export function PromemoriaTable() {
                             <th className="px-6 py-4 font-medium">Azioni Rapide</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/10">
+                    <tbody className="divide-y divide-brand-border">
                         {clients.map((client) => (
                             <Fragment key={client.id}>
-                                <tr className={`bg-white/[0.02] hover:bg-white/[0.04] transition-colors border-l-2 border-brand-accent ${selectedClients.includes(client.id) ? 'bg-brand-gradient-1/5' : ''}`}>
+                                <tr className={`border-l-2 border-brand-accent transition-colors hover:bg-brand-background/70 ${selectedClients.includes(client.id) ? 'bg-brand-gradient-1/5' : 'bg-transparent'}`}>
                                     <td className="px-6 py-4">
                                         <input
                                             type="checkbox"
                                             checked={selectedClients.includes(client.id)}
                                             onChange={() => toggleSelect(client.id)}
-                                            className="rounded border-white/20 bg-black/50 text-brand-accent focus:ring-brand-accent focus:ring-offset-black"
+                                            className="rounded border-brand-border bg-brand-surface text-brand-accent focus:ring-brand-accent focus:ring-offset-brand-background dark:bg-[#0F1220]"
                                         />
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className="font-medium text-white">{client.business_name}</div>
-                                        <div className="text-xs text-white/50">{client.city} {client.province ? `(${client.province})` : ''}</div>
+                                        <div className="font-medium text-brand-text">{client.business_name}</div>
+                                        <div className="text-xs text-brand-muted">{client.city} {client.province ? `(${client.province})` : ''}</div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className="text-white/80">{client.phone || '-'}</div>
+                                        <div className="text-brand-text">{client.phone || '-'}</div>
                                         <div className="flex gap-2 text-xs mt-1">
                                             {client.website && <a href={client.website} target="_blank" className="text-brand-gradient-1 hover:underline flex items-center gap-1">Web <ExternalLink className="w-3 h-3" /></a>}
                                             {client.google_maps_url && <a href={client.google_maps_url} target="_blank" className="text-brand-accent hover:underline flex items-center gap-1">Maps <ExternalLink className="w-3 h-3" /></a>}
@@ -287,7 +287,7 @@ export function PromemoriaTable() {
                                                     type="email"
                                                     value={emailValue}
                                                     onChange={(e) => setEmailValue(e.target.value)}
-                                                    className="bg-black/50 border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-brand-accent w-48"
+                                                    className="w-48 rounded border border-brand-border bg-brand-surface px-2 py-1 text-sm text-brand-text focus:border-brand-accent focus:outline-none dark:bg-[#0F1220]"
                                                     onKeyDown={(e) => e.key === 'Enter' && saveEmail(client.id)}
                                                 />
                                                 <button onClick={() => saveEmail(client.id)} className="text-green-400 hover:text-green-300"><Save className="w-4 h-4" /></button>
@@ -295,10 +295,10 @@ export function PromemoriaTable() {
                                         ) : (
                                             <div
                                                 onClick={() => handleEmailEdit(client)}
-                                                className="group flex items-center gap-2 cursor-pointer border-b border-transparent hover:border-white/30 transition-colors py-1"
+                                                className="group flex cursor-pointer items-center gap-2 border-b border-transparent py-1 transition-colors hover:border-brand-border"
                                                 title="Clicca per modificare"
                                             >
-                                                <span className={client.email ? "text-white/90" : "text-white/30 italic"}>
+                                                <span className={client.email ? "text-brand-text" : "italic text-brand-muted"}>
                                                     {client.email || 'Inserisci email...'}
                                                 </span>
                                             </div>
@@ -311,13 +311,13 @@ export function PromemoriaTable() {
                                                     type="datetime-local"
                                                     value={lastContactDateValue}
                                                     onChange={(e) => setLastContactDateValue(e.target.value)}
-                                                    className="bg-black/50 border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-brand-accent w-full"
+                                                    className="w-full rounded border border-brand-border bg-brand-surface px-2 py-1 text-sm text-brand-text focus:border-brand-accent focus:outline-none dark:bg-[#0F1220]"
                                                 />
                                                 <div className="flex items-center gap-2">
                                                     <select
                                                         value={lastContactMethodValue}
                                                         onChange={(e) => setLastContactMethodValue(e.target.value)}
-                                                        className="bg-black/50 border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-brand-accent w-full"
+                                                        className="w-full rounded border border-brand-border bg-brand-surface px-2 py-1 text-sm text-brand-text focus:border-brand-accent focus:outline-none dark:bg-[#0F1220]"
                                                     >
                                                         <option value="chiamata">Chiamata</option>
                                                         <option value="email">Email</option>
@@ -330,18 +330,18 @@ export function PromemoriaTable() {
                                         ) : (
                                             <div
                                                 onClick={() => handleLastContactEdit(client)}
-                                                className="group flex items-center gap-2 cursor-pointer border-b border-transparent hover:border-white/30 transition-colors py-1"
+                                                className="group flex cursor-pointer items-center gap-2 border-b border-transparent py-1 transition-colors hover:border-brand-border"
                                                 title="Clicca per modificare data e tipo contatto"
                                             >
                                                 {client.last_contact_date ? (
-                                                    <div className="flex items-center gap-2 text-white/80">
+                                                    <div className="flex items-center gap-2 text-brand-text">
                                                         {client.last_contact_method === 'chiamata' ? <Phone className="w-3 h-3 text-blue-400" /> :
                                                             client.last_contact_method === 'email' ? <Mail className="w-3 h-3 text-brand-accent" /> :
-                                                                <FileText className="w-3 h-3 text-white/50" />}
+                                                                <FileText className="w-3 h-3 text-brand-muted" />}
                                                         {new Date(client.last_contact_date).toLocaleDateString('it-IT')}
                                                     </div>
                                                 ) : (
-                                                    <span className="text-white/30 italic">Aggiungi contatto...</span>
+                                                    <span className="italic text-brand-muted">Aggiungi contatto...</span>
                                                 )}
                                             </div>
                                         )}
@@ -364,7 +364,7 @@ export function PromemoriaTable() {
                                             <button onClick={() => handleFollowUp(client)} className="p-1.5 rounded-md bg-green-500/10 hover:bg-green-500/20 text-green-400 transition-colors" title="Riposponi Follow-up">
                                                 <CalendarIcon className="w-4 h-4" />
                                             </button>
-                                            <button onClick={() => handleNotes(client)} className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/70 transition-colors relative" title="Aggiungi Note">
+                                            <button onClick={() => handleNotes(client)} className="relative rounded-md bg-brand-surface p-1.5 text-brand-muted transition-colors hover:bg-brand-background dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)] dark:hover:bg-brand-surface" title="Aggiungi Note">
                                                 <FileText className="w-4 h-4" />
                                                 {client.notes && <span className="absolute -top-1 -right-1 w-2 h-2 bg-brand-accent rounded-full"></span>}
                                             </button>
@@ -383,8 +383,8 @@ export function PromemoriaTable() {
                                     </td>
                                 </tr>
                                 {expandedClientId === client.id && (
-                                    <tr key={`history-${client.id}`} className="bg-white/[0.01]">
-                                        <td colSpan={7} className="p-0 border-b border-white/5">
+                                    <tr key={`history-${client.id}`} className="bg-brand-background/50">
+                                        <td colSpan={7} className="border-b border-brand-border p-0">
                                             <FollowUpHistory clientId={client.id} />
                                         </td>
                                     </tr>

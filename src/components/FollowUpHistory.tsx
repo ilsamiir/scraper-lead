@@ -117,8 +117,8 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
     }
 
     return (
-        <div className="surface-subtle dark:bg-black/40 border-t border-brand-border dark:border-white/5 rounded-xl p-6 space-y-6">
-            <h4 className="text-sm font-semibold text-brand-text dark:text-white/80">Storico Contatti & Note</h4>
+        <div className="surface-subtle space-y-6 rounded-xl border-t border-brand-border p-6 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,black_10%)]">
+            <h4 className="text-sm font-semibold text-brand-text">Storico Contatti & Note</h4>
 
             {/* Aggiungi Nota Rapida */}
             <form onSubmit={handleAddNote} className="flex gap-2">
@@ -127,7 +127,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                     value={newNote}
                     onChange={(e) => setNewNote(e.target.value)}
                     placeholder="Aggiungi una nota o un riepilogo..."
-                    className="flex-1 bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent transition-colors"
+                    className="flex-1 rounded-lg border border-brand-border bg-brand-surface px-4 py-2 text-sm text-brand-text transition-colors focus:border-brand-accent focus:outline-none dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                 />
                 <button
                     type="submit"
@@ -149,17 +149,17 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                         {history.map((log) => (
                             <div key={log.id} className="relative pl-6">
                                 {/* Timeline Dot / Icon */}
-                                <div className="absolute -left-3.5 top-0.5 bg-brand-surface dark:bg-black border border-brand-border dark:border-white/20 rounded-full p-1.5 z-10 shadow-[0_6px_18px_rgba(15,23,42,0.08)] dark:shadow-none">
+                                <div className="absolute -left-3.5 top-0.5 z-10 rounded-full border border-brand-border bg-brand-surface p-1.5 shadow-[0_6px_18px_rgba(15,23,42,0.08)] dark:bg-[#0F1220] dark:shadow-none">
                                     {getIconForMethod(log.contact_method)}
                                 </div>
 
-                                <div className="group bg-brand-surface dark:bg-white/[0.03] border border-brand-border dark:border-white/5 rounded-lg p-4 transition-all hover:border-brand-accent/30 dark:hover:border-white/10">
+                                <div className="group rounded-lg border border-brand-border bg-brand-surface p-4 transition-all hover:border-brand-accent/30 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm font-medium text-brand-text dark:text-white/90 capitalize">
+                                            <span className="text-sm font-medium capitalize text-brand-text">
                                                 {log.contact_method}
                                             </span>
-                                            <span className="text-xs text-slate-600 dark:text-white/40">
+                                            <span className="text-xs text-brand-muted">
                                                 {format(new Date(log.contact_date), "d MMM yyyy, HH:mm", { locale: it })}
                                             </span>
                                         </div>
@@ -180,7 +180,7 @@ export function FollowUpHistory({ clientId }: { clientId: string }) {
                                         </button>
                                     </div>
                                     {log.notes && (
-                                        <p className="text-sm text-brand-text dark:text-white/70 whitespace-pre-wrap leading-relaxed">
+                                        <p className="text-sm leading-relaxed whitespace-pre-wrap text-brand-text">
                                             {log.notes}
                                         </p>
                                     )}

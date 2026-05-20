@@ -27,10 +27,10 @@ export function OperatorDashboard({ operatorStats }: Props) {
   if (operatorStats.length === 0) {
     return (
       <div className="glass-panel p-4">
-        <h3 className="text-sm text-brand-text dark:text-white/70 mb-3 flex items-center gap-2">
+        <h3 className="mb-3 flex items-center gap-2 text-sm text-brand-text">
           <Users className="w-4 h-4 text-brand-accent" /> Dashboard operatori
         </h3>
-        <p className="text-xs text-slate-600 dark:text-white/40 text-center py-6">
+        <p className="py-6 text-center text-xs text-brand-muted">
           Nessun operatore configurato. Aggiungi operatori nella tabella &quot;operators&quot; per abilitare le statistiche individuali.
         </p>
       </div>
@@ -41,7 +41,7 @@ export function OperatorDashboard({ operatorStats }: Props) {
 
   return (
     <div className="glass-panel p-4">
-      <h3 className="text-sm text-brand-text dark:text-white/70 mb-4 flex items-center gap-2">
+      <h3 className="mb-4 flex items-center gap-2 text-sm text-brand-text">
         <Users className="w-4 h-4 text-brand-accent" /> Dashboard operatori
       </h3>
 
@@ -49,16 +49,16 @@ export function OperatorDashboard({ operatorStats }: Props) {
         {operatorStats.map((stat) => (
           <div
             key={stat.operator.id}
-            className="border border-brand-border dark:border-white/10 rounded-xl p-4 bg-brand-surface dark:bg-white/[0.02]"
+            className="rounded-xl border border-brand-border bg-brand-surface p-4 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
           >
             {/* Header operatore */}
             <div className="flex items-center justify-between mb-3">
               <div>
-                <div className="font-medium text-brand-text dark:text-white">{stat.operator.name}</div>
-                <div className="text-xs text-slate-600 dark:text-white/40">{stat.operator.role || "Operatore"}</div>
+                <div className="font-medium text-brand-text">{stat.operator.name}</div>
+                <div className="text-xs text-brand-muted">{stat.operator.role || "Operatore"}</div>
               </div>
               <div className="flex items-center gap-3 text-xs">
-                <span className="text-slate-700 dark:text-white/60">{stat.totalClients} clienti</span>
+                <span className="text-brand-muted">{stat.totalClients} clienti</span>
                 <span className="flex items-center gap-1 text-emerald-700 dark:text-emerald-300">
                   <TrendingUp className="w-3 h-3" />
                   {stat.conversionRate}%
@@ -73,13 +73,13 @@ export function OperatorDashboard({ operatorStats }: Props) {
 
             {/* Barra attività */}
             <div className="flex items-center gap-2 mb-2">
-              <div className="h-2 rounded-full bg-brand-background dark:bg-white/10 flex-1 overflow-hidden">
+              <div className="h-2 flex-1 overflow-hidden rounded-full bg-brand-background dark:bg-[#0F1220]">
                 <div
                   className="h-2 rounded-full bg-brand-accent transition-all"
                   style={{ width: `${(stat.totalActivities / maxActivities) * 100}%` }}
                 />
               </div>
-              <span className="text-xs text-brand-text dark:text-white/60 w-10 text-right">
+              <span className="w-10 text-right text-xs text-brand-text">
                 {stat.totalActivities}
               </span>
             </div>
@@ -93,7 +93,7 @@ export function OperatorDashboard({ operatorStats }: Props) {
                   return (
                     <span
                       key={method}
-                      className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-slate-300 dark:border-white/10 surface-subtle dark:bg-white/5 text-slate-800 dark:text-white/60 font-medium"
+                      className="inline-flex items-center gap-1 rounded-full border border-brand-border bg-brand-surface px-2 py-1 font-medium text-brand-text"
                     >
                       {Icon && <Icon className="w-3 h-3" />}
                       {method}: {count}

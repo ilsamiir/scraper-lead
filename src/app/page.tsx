@@ -63,14 +63,14 @@ export default function Home() {
 
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="sticky top-0 z-50 w-full border-b border-brand-border bg-brand-surface/80 shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:bg-brand-background/80 dark:shadow-none">
+        <header className="sticky top-0 z-50 w-full border-b border-brand-border bg-brand-surface/85 shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:bg-[color:color-mix(in_srgb,var(--brand-background)_76%,var(--brand-surface)_24%)] dark:shadow-none">
           <div className="container flex items-center justify-between h-16 px-4 mx-auto sm:px-8 max-w-[1440px]">
             <div className="flex items-center gap-3">
               <span className="text-xl font-bold font-heading tracking-tight">WebNovation</span>
               <span className="px-2.5 py-1 text-[10px] font-semibold tracking-wider text-brand-accent border border-brand-accent/30 rounded-full uppercase bg-brand-accent/10">Intelligence</span>
             </div>
             <nav className="flex items-center gap-6">
-              <Link href="/" className="inline-flex items-center gap-2 rounded-full bg-brand-accent/12 px-3 py-2 text-sm font-semibold text-brand-primary border border-brand-accent/20 dark:bg-transparent dark:border-transparent dark:text-brand-accent">
+              <Link href="/" className="inline-flex items-center gap-2 rounded-full border border-brand-accent/35 bg-brand-accent/18 px-3 py-2 text-sm font-semibold text-brand-accent shadow-[0_0_0_1px_rgba(196,181,253,0.08)] dark:bg-brand-accent/20 dark:text-[#F3EEFF] dark:shadow-[0_0_0_1px_rgba(196,181,253,0.16)]">
                 <HomeIcon className="w-4 h-4" /> <span className="hidden sm:inline">Ricerca</span>
               </Link>
               <Link href="/clienti" className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2">
@@ -81,7 +81,7 @@ export default function Home() {
               </Link>
               <div className="flex items-center gap-2 ml-4 border-l border-brand-border pl-4">
                 <ThemeToggle />
-                <button onClick={handleLogout} className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2 rounded-full px-3 py-2 hover:bg-brand-background dark:hover:bg-white/5">
+                <button onClick={handleLogout} className="text-sm font-medium text-brand-muted hover:text-brand-text transition-colors flex items-center gap-2 rounded-full px-3 py-2 hover:bg-brand-background dark:hover:bg-brand-surface">
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">Esci</span>
                 </button>

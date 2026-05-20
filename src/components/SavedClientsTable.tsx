@@ -227,7 +227,7 @@ export function SavedClientsTable() {
                 const appended: BoardColumn[] = missingStatuses.map((status) => ({
                     id: status,
                     title: status,
-                    colorClass: "bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-white border-slate-300 dark:border-white/20",
+                    colorClass: "bg-slate-100 dark:bg-brand-surface text-slate-800 dark:text-brand-text border-slate-300 dark:border-brand-border",
                 }));
 
                 const next = [...previous, ...appended];
@@ -310,7 +310,7 @@ export function SavedClientsTable() {
             {
                 id: label,
                 title: label,
-                colorClass: "bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white border-gray-200 dark:border-white/20",
+                colorClass: "bg-gray-100 dark:bg-brand-surface text-gray-700 dark:text-brand-text border-gray-200 dark:border-brand-border",
             },
         ];
 
@@ -532,17 +532,17 @@ export function SavedClientsTable() {
     };
 
     if (!authChecked || loading) {
-        return <div className="text-center p-8 text-white/50">Caricamento clienti...</div>;
+        return <div className="p-8 text-center text-brand-muted">Caricamento clienti...</div>;
     }
 
     if (!authReady) {
         return (
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-white/50">
-                <p className="text-base text-white">Sessione non valida o scaduta.</p>
+            <div className="rounded-2xl border border-brand-border bg-brand-surface px-6 py-10 text-center text-brand-muted dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
+                <p className="text-base text-brand-text">Sessione non valida o scaduta.</p>
                 <p className="mt-2 text-sm">Effettua di nuovo l&apos;accesso per caricare i clienti selezionati.</p>
                 <Link
                     href="/login"
-                    className="mt-5 inline-flex items-center justify-center rounded-full border border-brand-accent/30 bg-brand-accent/12 px-5 py-2 text-sm font-semibold text-white"
+                    className="mt-5 inline-flex items-center justify-center rounded-full border border-brand-accent/35 bg-brand-accent/16 px-5 py-2 text-sm font-semibold text-brand-accent dark:text-[#F3EEFF]"
                 >
                     Vai al login
                 </Link>
@@ -560,7 +560,7 @@ export function SavedClientsTable() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Cerca nominativi, città, telefono, email..."
-                        className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg pl-9 pr-10 py-2.5 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60"
+                        className="w-full rounded-lg border border-brand-border bg-brand-surface py-2.5 pl-9 pr-10 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                     />
                     {searchQuery && (
                         <button
@@ -579,7 +579,7 @@ export function SavedClientsTable() {
                         value={newColumnName}
                         onChange={(e) => setNewColumnName(e.target.value)}
                         placeholder="Nuova colonna"
-                        className="flex-1 md:w-52 bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60"
+                        className="flex-1 rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text placeholder-brand-muted focus:outline-none focus:border-brand-accent/60 md:w-52 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 e.preventDefault();
@@ -611,7 +611,7 @@ export function SavedClientsTable() {
                             {groupedClients.map((column) => (
                                 <div
                                     key={column.id}
-                                    className={`w-[300px] shrink-0 rounded-xl border border-brand-border dark:border-white/10 surface-strong dark:bg-black/35 shadow-[0_14px_30px_rgba(15,23,42,0.05)] dark:shadow-none flex flex-col transition-shadow ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
+                                    className={`flex w-[300px] shrink-0 flex-col rounded-xl border border-brand-border surface-strong shadow-[0_14px_30px_rgba(15,23,42,0.05)] transition-shadow dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_96%,white_4%)] dark:shadow-none ${draggedColumnId === column.id ? "ring-2 ring-brand-accent/60" : ""}`}
                                     draggable={!draggedClientId}
                                     onDragStart={(e) => {
                                         if (draggedClientId) { e.preventDefault(); return; }
@@ -630,7 +630,7 @@ export function SavedClientsTable() {
                                         }
                                     }}
                                 >
-                                    <div className="px-3 py-3 border-b border-brand-border dark:border-white/10 flex items-start justify-between gap-2 cursor-move">
+                                    <div className="flex cursor-move items-start justify-between gap-2 border-b border-brand-border px-3 py-3">
                                         <div>
                                             <div className="flex items-center gap-2">
                                                 <h3 className="font-medium text-brand-text text-sm">{column.title}</h3>
@@ -642,7 +642,7 @@ export function SavedClientsTable() {
                                         <div className="flex items-center gap-1">
                                             <button
                                                 onClick={() => handleRenameColumn(column.id)}
-                                                className="text-xs px-2 py-1 rounded surface-subtle dark:bg-white/5 hover:bg-brand-background dark:hover:bg-white/10 text-brand-muted dark:text-white/70"
+                                                className="rounded px-2 py-1 text-xs text-brand-muted surface-subtle hover:bg-brand-background dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_84%,white_16%)]"
                                                 title="Modifica nome colonna"
                                             >
                                                 Modifica
@@ -659,7 +659,7 @@ export function SavedClientsTable() {
 
                                     <div className="p-3 space-y-3 overflow-y-auto min-h-[420px] max-h-[620px]">
                                         {column.clients.length === 0 ? (
-                                            <div className="rounded-lg border border-dashed border-brand-border dark:border-white/15 text-center text-xs text-brand-muted p-4">
+                                            <div className="rounded-lg border border-dashed border-brand-border p-4 text-center text-xs text-brand-muted">
                                                 Trascina qui i nominativi
                                             </div>
                                         ) : (
@@ -677,7 +677,7 @@ export function SavedClientsTable() {
                                                         className={`w-full text-left rounded-lg border p-3 transition-all ${
                                                             isActive
                                                                 ? "border-brand-accent/60 bg-brand-accent/10 shadow-[0_10px_24px_rgba(109,40,217,0.12)]"
-                                                                : "border-brand-border dark:border-white/10 bg-brand-surface dark:bg-white/[0.02] hover:bg-brand-background/70 dark:hover:bg-white/[0.05]"
+                                                                : "border-brand-border bg-brand-surface hover:bg-brand-background/70 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_88%,white_12%)]"
                                                         }`}
                                                     >
                                                         <div className="flex items-start justify-between gap-2">
@@ -721,7 +721,7 @@ export function SavedClientsTable() {
                     </div>
 
                     {selectedClient && (
-                        <aside className="glass-panel p-4 min-h-[560px] bg-brand-surface dark:bg-white/[0.02] border border-brand-border dark:border-white/10 shadow-[0_14px_30px_rgba(15,23,42,0.05)] dark:shadow-none">
+                        <aside className="glass-panel min-h-[560px] border border-brand-border bg-brand-surface p-4 shadow-[0_14px_30px_rgba(15,23,42,0.05)] dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)] dark:shadow-none">
                             <div className="space-y-4">
                                 <div className="flex items-start justify-between gap-2">
                                     <div>
@@ -736,7 +736,7 @@ export function SavedClientsTable() {
                                     <div className="flex gap-2 items-center">
                                         <button
                                             onClick={() => setSelectedClientId(null)}
-                                            className="p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-brand-muted dark:text-white/60"
+                                            className="rounded-md bg-gray-100 p-2 text-brand-muted hover:bg-gray-200 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_84%,white_16%)]"
                                             title="Chiudi pannello"
                                             style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         >
@@ -759,7 +759,7 @@ export function SavedClientsTable() {
                                         type="email"
                                         value={detailDraft.email}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, email: e.target.value }))}
-                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                     />
                                 </div>
 
@@ -769,7 +769,7 @@ export function SavedClientsTable() {
                                         type="text"
                                         value={detailDraft.phone}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, phone: e.target.value }))}
-                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                     />
                                 </div>
 
@@ -779,7 +779,7 @@ export function SavedClientsTable() {
                                         type="text"
                                         value={detailDraft.website}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, website: e.target.value }))}
-                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                     />
                                     <div className="flex items-center gap-2 text-xs">
                                         {selectedClient.website && (
@@ -811,7 +811,7 @@ export function SavedClientsTable() {
                                         type="date"
                                         value={detailDraft.follow_up_date}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, follow_up_date: e.target.value }))}
-                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
+                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                     />
                                 </div>
 
@@ -821,7 +821,7 @@ export function SavedClientsTable() {
                                         value={detailDraft.notes}
                                         onChange={(e) => setDetailDraft((prev) => ({ ...prev, notes: e.target.value }))}
                                         rows={4}
-                                        className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 resize-y"
+                                        className="w-full resize-y rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                     />
                                 </div>
 
@@ -848,7 +848,7 @@ export function SavedClientsTable() {
                                     <Save className="w-4 h-4" /> {savingDetails ? "Salvataggio..." : "Salva dettagli"}
                                 </button>
 
-                                <div className="pt-2 border-t border-brand-border dark:border-white/10">
+                                <div className="border-t border-brand-border pt-2">
                                     <div className="flex items-center justify-between text-xs text-brand-muted mb-2">
                                         <span>Ultimo contatto</span>
                                         <span className="inline-flex items-center gap-1">
@@ -869,15 +869,15 @@ export function SavedClientsTable() {
             {/* Email Modal */}
             {isEmailModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                    <div className="bg-brand-surface dark:bg-[#111] border border-brand-border dark:border-white/10 rounded-xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="flex items-center justify-between p-4 border-b border-brand-border dark:border-white/10">
+                    <div className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-xl border border-brand-border bg-brand-surface shadow-2xl dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_96%,white_4%)]">
+                        <div className="flex items-center justify-between border-b border-brand-border p-4">
                             <h3 className="text-lg font-medium text-brand-text flex items-center gap-2">
                                 <Mail className="w-5 h-5 text-brand-accent" />
                                 Bozza Email per {selectedClient?.business_name}
                             </h3>
                             <button
                                 onClick={() => setIsEmailModalOpen(false)}
-                                    className="p-2 rounded-md hover:bg-brand-background dark:hover:bg-white/10 text-brand-muted dark:text-white/60"
+                                    className="rounded-md p-2 text-brand-muted hover:bg-brand-background dark:hover:bg-brand-surface"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -885,38 +885,38 @@ export function SavedClientsTable() {
                         
                         <div className="p-4 overflow-y-auto flex-1 space-y-4">
                             {isGeneratingEmail ? (
-                                <div className="flex flex-col items-center justify-center py-12 text-brand-muted dark:text-white/50 space-y-4">
+                                <div className="flex flex-col items-center justify-center space-y-4 py-12 text-brand-muted">
                                     <div className="w-8 h-8 border-2 border-brand-accent border-t-transparent rounded-full animate-spin"></div>
                                     <p>Generazione email in corso con AI...</p>
                                 </div>
                             ) : (
                                 <>
                                     <div className="space-y-2">
-                                        <label className="text-sm text-brand-text dark:text-white/70">Oggetto</label>
+                                        <label className="text-sm text-brand-text">Oggetto</label>
                                         <input
                                             type="text"
                                             value={emailDraft.subject}
                                             onChange={(e) => setEmailDraft(prev => ({ ...prev, subject: e.target.value }))}
-                                            className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60"
+                                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm text-brand-text dark:text-white/70">Messaggio</label>
+                                        <label className="text-sm text-brand-text">Messaggio</label>
                                         <textarea
                                             value={emailDraft.body}
                                             onChange={(e) => setEmailDraft(prev => ({ ...prev, body: e.target.value }))}
                                             rows={12}
-                                            className="w-full bg-white dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 resize-y"
+                                            className="w-full resize-y rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                         />
                                     </div>
                                 </>
                             )}
                         </div>
 
-                        <div className="p-4 border-t border-brand-border dark:border-white/10 flex justify-end gap-3">
+                        <div className="flex justify-end gap-3 border-t border-brand-border p-4">
                             <button
                                 onClick={() => setIsEmailModalOpen(false)}
-                                className="px-4 py-2 rounded-lg surface-subtle dark:bg-white/5 hover:bg-brand-background dark:hover:bg-white/10 text-brand-text dark:text-white text-sm font-medium"
+                                className="surface-subtle rounded-lg px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-background dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_84%,white_16%)]"
                             >
                                 Annulla
                             </button>

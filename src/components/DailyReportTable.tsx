@@ -55,7 +55,7 @@ const getMethodIcon = (method: string) => {
         case "nota":
             return <FileText className="w-4 h-4 text-purple-400" />;
         default:
-            return <CalendarIcon className="w-4 h-4 text-white/50" />;
+            return <CalendarIcon className="w-4 h-4 text-brand-muted" />;
     }
 };
 
@@ -119,14 +119,14 @@ export function DailyReportTable() {
     }, [rows]);
 
     return (
-        <div className="w-full glass-panel overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/10 flex flex-col lg:flex-row items-start lg:items-center gap-4">
-                <div className="flex items-center gap-2 text-white/70 text-sm">
+        <div className="glass-panel w-full overflow-hidden">
+            <div className="flex flex-col items-start gap-4 border-b border-brand-border px-6 py-4 lg:flex-row lg:items-center">
+                <div className="flex items-center gap-2 text-sm text-brand-muted">
                     <CalendarIcon className="w-4 h-4" />
                     <span>Resoconto giornaliero</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 ml-auto">
-                    <div className="flex items-center gap-2 text-xs text-white/40">
+                    <div className="flex items-center gap-2 text-xs text-brand-muted">
                         <Filter className="w-4 h-4" />
                         <span>Filtri</span>
                     </div>
@@ -134,12 +134,12 @@ export function DailyReportTable() {
                         type="date"
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent transition-colors"
+                        className="rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text transition-colors focus:border-brand-accent focus:outline-none dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                     />
                     <select
                         value={methodFilter}
                         onChange={(e) => setMethodFilter(e.target.value)}
-                        className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-accent transition-colors"
+                        className="rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text transition-colors focus:border-brand-accent focus:outline-none dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                     >
                         {METHOD_OPTIONS.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -150,31 +150,31 @@ export function DailyReportTable() {
                 </div>
             </div>
 
-            <div className="px-6 py-4 border-b border-white/10 flex flex-wrap items-center gap-3 text-sm text-white/70">
-                <span className="text-white/40">Totale:</span>
-                <span className="font-medium text-white">{summary.total}</span>
-                <span className="text-white/40">·</span>
+            <div className="flex flex-wrap items-center gap-3 border-b border-brand-border px-6 py-4 text-sm text-brand-muted">
+                <span className="text-brand-muted">Totale:</span>
+                <span className="font-medium text-brand-text">{summary.total}</span>
+                <span className="text-brand-muted">·</span>
                 <span>Email: {summary.byMethod.email || 0}</span>
-                <span className="text-white/40">·</span>
+                <span className="text-brand-muted">·</span>
                 <span>Telefono: {summary.byMethod.chiamata || 0}</span>
-                <span className="text-white/40">·</span>
+                <span className="text-brand-muted">·</span>
                 <span>App/Messaggi: {summary.byMethod.messaggio || 0}</span>
-                <span className="text-white/40">·</span>
+                <span className="text-brand-muted">·</span>
                 <span>Note: {summary.byMethod.nota || 0}</span>
             </div>
 
             {loading ? (
-                <div className="flex items-center justify-center py-10 text-white/50">
+                <div className="flex items-center justify-center py-10 text-brand-muted">
                     <Loader2 className="w-5 h-5 animate-spin mr-2" /> Caricamento resoconto...
                 </div>
             ) : rows.length === 0 ? (
-                <div className="py-12 text-center text-white/40 text-sm">
+                <div className="py-12 text-center text-sm text-brand-muted">
                     Nessuna attività registrata per la data selezionata.
                 </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-white/5 border-b border-white/10 text-white/60">
+                        <thead className="surface-subtle border-b border-brand-border text-brand-muted">
                             <tr>
                                 <th className="px-6 py-4 font-medium">Cliente</th>
                                 <th className="px-6 py-4 font-medium">Tipo di contatto</th>
@@ -185,34 +185,34 @@ export function DailyReportTable() {
                                 <th className="px-6 py-4 font-medium">Note</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/10">
+                        <tbody className="divide-y divide-brand-border">
                             {rows.map((row) => (
                                 <>
                                     <tr 
                                         key={row.id} 
-                                        className={`hover:bg-white/[0.04] transition-colors cursor-pointer ${expandedRowId === row.id ? 'bg-white/[0.04]' : ''}`}
+                                        className={`cursor-pointer transition-colors hover:bg-brand-background/70 ${expandedRowId === row.id ? 'bg-brand-background/70' : ''}`}
                                         onClick={() => setExpandedRowId(expandedRowId === row.id ? null : row.id)}
                                     >
                                         <td className="px-6 py-4">
-                                            <div className="font-medium text-white">
+                                            <div className="font-medium text-brand-text">
                                                 {row.saved_clients?.business_name || "Cliente"}
                                             </div>
                                             {(row.saved_clients?.city || row.saved_clients?.province) && (
-                                                <div className="text-xs text-white/50">
+                                                <div className="text-xs text-brand-muted">
                                                     {row.saved_clients?.city} {row.saved_clients?.province ? `(${row.saved_clients?.province})` : ""}
                                                 </div>
                                             )}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2 text-white/80">
+                                            <div className="flex items-center gap-2 text-brand-text">
                                                 {getMethodIcon(row.contact_method)}
                                                 <span>{getMethodLabel(row.contact_method)}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-white/70">
+                                        <td className="px-6 py-4 text-brand-muted">
                                             {format(new Date(row.contact_date), "d MMM yyyy, HH:mm", { locale: it })}
                                         </td>
-                                        <td className="px-6 py-4 text-white/70">
+                                        <td className="px-6 py-4 text-brand-muted">
                                             {row.saved_clients?.email ? (
                                                 <a
                                                     href={`mailto:${row.saved_clients.email}`}
@@ -225,7 +225,7 @@ export function DailyReportTable() {
                                                 "-"
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 text-white/70">
+                                        <td className="px-6 py-4 text-brand-muted">
                                             {row.saved_clients?.phone ? (
                                                 <a 
                                                     href={`tel:${row.saved_clients.phone}`} 
@@ -238,7 +238,7 @@ export function DailyReportTable() {
                                                 "-"
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 text-white/70">
+                                        <td className="px-6 py-4 text-brand-muted">
                                             {row.saved_clients?.website ? (
                                                 <a
                                                     href={row.saved_clients.website}
@@ -253,7 +253,7 @@ export function DailyReportTable() {
                                                 "-"
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 text-white/60">
+                                        <td className="px-6 py-4 text-brand-muted">
                                             {row.notes ? (
                                                 <div className="flex items-center gap-2 text-brand-accent font-medium">
                                                     <FileText className="w-3 h-3" />
@@ -265,11 +265,11 @@ export function DailyReportTable() {
                                         </td>
                                     </tr>
                                     {expandedRowId === row.id && row.notes && (
-                                        <tr className="bg-white/[0.02]">
+                                        <tr className="bg-brand-background/60">
                                             <td colSpan={7} className="px-6 py-4">
-                                                <div className="bg-black/20 rounded-lg p-4 border border-white/5">
-                                                    <div className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">Note dell'attività</div>
-                                                    <div className="text-white/80 whitespace-pre-wrap leading-relaxed">
+                                                <div className="rounded-lg border border-brand-border bg-brand-surface p-4 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
+                                                    <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-brand-muted">Note dell'attività</div>
+                                                    <div className="leading-relaxed whitespace-pre-wrap text-brand-text">
                                                         {row.notes}
                                                     </div>
                                                 </div>

@@ -24,7 +24,7 @@ function Card({
 }) {
   return (
     <div className="glass-panel p-4 shadow-[0_12px_28px_rgba(15,23,42,0.05)] dark:shadow-none">
-      <div className="text-slate-600 dark:text-white/50 text-xs font-medium">{label}</div>
+      <div className="text-xs font-medium text-brand-muted">{label}</div>
       <div className="text-2xl font-semibold mt-1">{value}</div>
       <Icon className={`w-4 h-4 mt-2 ${iconColor}`} />
     </div>

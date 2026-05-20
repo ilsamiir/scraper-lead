@@ -36,42 +36,42 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-brand-accent selection:text-white flex items-center justify-center p-4">
+        <div className="flex min-h-screen items-center justify-center bg-brand-background p-4 text-brand-text selection:bg-brand-accent selection:text-brand-text">
             {/* Dynamic Background Element */}
             <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[20%] w-[60%] h-[60%] bg-brand-accent/20 blur-[120px] rounded-full mix-blend-screen" />
+                <div className="absolute top-[-20%] left-[20%] h-[60%] w-[60%] rounded-full bg-brand-accent/20 blur-[120px] mix-blend-screen" />
             </div>
 
             <div className="w-full max-w-md relative z-10">
-                <div className="glass-panel p-8 sm:p-12 text-center rounded-3xl border border-white/10 shadow-2xl">
+                <div className="glass-panel rounded-3xl border border-brand-border p-8 text-center shadow-2xl sm:p-12 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
                     <div className="flex items-center justify-center gap-2 mb-8">
-                        <span className="text-3xl font-bold tracking-tight text-white">saks.</span>
+                        <span className="text-3xl font-bold tracking-tight text-brand-text">saks.</span>
                     </div>
 
                     <h2 className="text-2xl font-bold mb-2">Accesso Riservato</h2>
-                    <p className="text-white/50 mb-8 text-sm">Inserisci le credenziali per generare i preventivi.</p>
+                    <p className="mb-8 text-sm text-brand-muted">Inserisci le credenziali per generare i preventivi.</p>
 
                     <form onSubmit={handleLogin} className="flex flex-col gap-5 text-left">
                         <div>
-                            <label className="block text-sm font-medium text-white/70 mb-1.5 ml-1">Username</label>
+                            <label className="mb-1.5 ml-1 block text-sm font-medium text-brand-muted">Username</label>
                             <input
                                 type="text"
                                 required
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/50 rounded-xl px-4 py-3 text-white placeholder-white/30 outline-none transition-all"
+                                className="w-full rounded-xl border border-brand-border bg-brand-surface px-4 py-3 text-brand-text outline-none transition-all placeholder:text-brand-muted focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                 placeholder="Inserisci username"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-white/70 mb-1.5 ml-1">Password</label>
+                            <label className="mb-1.5 ml-1 block text-sm font-medium text-brand-muted">Password</label>
                             <input
                                 type="password"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/50 rounded-xl px-4 py-3 text-white placeholder-white/30 outline-none transition-all"
+                                className="w-full rounded-xl border border-brand-border bg-brand-surface px-4 py-3 text-brand-text outline-none transition-all placeholder:text-brand-muted focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                 placeholder="Inserisci password"
                             />
                         </div>
@@ -85,10 +85,10 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="mt-2 w-full bg-white text-black font-medium py-3.5 rounded-xl hover:bg-white/90 transition-all active:scale-95 flex items-center justify-center"
+                            className="mt-2 flex w-full items-center justify-center rounded-xl bg-brand-accent py-3.5 font-medium text-white transition-all active:scale-95 hover:opacity-90"
                         >
                             {loading ? (
-                                <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                             ) : (
                                 "Accedi"
                             )}

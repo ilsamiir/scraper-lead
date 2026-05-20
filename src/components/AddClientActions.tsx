@@ -101,7 +101,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                 </button>
                 <button
                     onClick={() => setDialogType("gmb")}
-                    className="flex items-center gap-2 px-4 py-2 bg-brand-primary/10 hover:bg-brand-primary/15 text-brand-primary dark:text-white border border-brand-primary/20 dark:border-white/10 rounded-lg transition-all text-sm font-medium"
+                    className="flex items-center gap-2 rounded-lg border border-brand-primary/20 bg-brand-primary/10 px-4 py-2 text-sm font-medium text-brand-primary transition-all hover:bg-brand-primary/15 dark:border-brand-border dark:text-brand-text"
                 >
                     <Link className="w-4 h-4" />
                     <span className="hidden sm:inline">Importa da GMB</span>
@@ -111,16 +111,16 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
             {/* Dialog Overlay */}
             {dialogType && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                    <div className="w-full max-w-lg glass-panel p-6 shadow-2xl border border-brand-border dark:border-white/10 animate-in fade-in zoom-in duration-200">
+                    <div className="glass-panel w-full max-w-lg animate-in fade-in zoom-in border border-brand-border p-6 shadow-2xl duration-200 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]">
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-xl font-semibold text-brand-text dark:text-white flex items-center gap-2">
+                            <h3 className="flex items-center gap-2 text-xl font-semibold text-brand-text">
                                 {dialogType === "manual" ? (
                                     <><UserPlus className="w-5 h-5 text-brand-accent" /> Nuovo Cliente</>
                                 ) : (
                                     <><Link className="w-5 h-5 text-brand-accent" /> Importa da Google Maps</>
                                 )}
                             </h3>
-                            <button onClick={resetForm} className="p-1 hover:bg-brand-background dark:hover:bg-white/10 rounded-full transition-colors">
+                            <button onClick={resetForm} className="rounded-full p-1 transition-colors hover:bg-brand-background dark:hover:bg-brand-surface">
                                 <X className="w-5 h-5 text-brand-muted" />
                             </button>
                         </div>
@@ -133,7 +133,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                                         required
                                         value={manualClient.business_name}
                                         onChange={e => setManualClient({ ...manualClient, business_name: e.target.value })}
-                                        className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50"
+                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                         placeholder="Esempio: Ristorante Da Mario"
                                     />
                                 </div>
@@ -143,7 +143,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                                         <input
                                             value={manualClient.city}
                                             onChange={e => setManualClient({ ...manualClient, city: e.target.value })}
-                                            className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50"
+                                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                             placeholder="Milano"
                                         />
                                     </div>
@@ -152,7 +152,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                                         <input
                                             value={manualClient.province}
                                             onChange={e => setManualClient({ ...manualClient, province: e.target.value })}
-                                            className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50"
+                                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                             placeholder="MI"
                                             maxLength={2}
                                         />
@@ -164,7 +164,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                                         <input
                                             value={manualClient.phone}
                                             onChange={e => setManualClient({ ...manualClient, phone: e.target.value })}
-                                            className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50"
+                                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                             placeholder="+39 02..."
                                         />
                                     </div>
@@ -174,7 +174,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                                             type="email"
                                             value={manualClient.email}
                                             onChange={e => setManualClient({ ...manualClient, email: e.target.value })}
-                                            className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50"
+                                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                             placeholder="info@esempio.it"
                                         />
                                     </div>
@@ -190,7 +190,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                             </form>
                         ) : (
                             <form onSubmit={handleGMBImport} className="space-y-4">
-                                <p className="text-sm text-brand-muted dark:text-white/60 mb-2">
+                                <p className="mb-2 text-sm text-brand-muted">
                                     Incolla il link della scheda Google My Business (es. maps.google.com/...) per estrarre automaticamente i dettagli.
                                 </p>
                                 <div>
@@ -199,7 +199,7 @@ export function AddClientActions({ onClientAdded }: { onClientAdded: () => void 
                                         required
                                         value={gmbUrl}
                                         onChange={e => setGmbUrl(e.target.value)}
-                                        className="w-full bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50"
+                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-4 py-2 text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-accent/50 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
                                         placeholder="https://www.google.com/maps/place/..."
                                     />
                                 </div>

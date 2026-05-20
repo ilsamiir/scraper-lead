@@ -119,7 +119,7 @@ export function BatchContactTool({
 
   return (
     <div className="glass-panel p-4">
-      <h3 className="text-sm text-brand-text dark:text-white/70 mb-3">Strumento contatto batch</h3>
+      <h3 className="mb-3 text-sm text-brand-text">Strumento contatto batch</h3>
 
       {/* Toast */}
       {toast && (
@@ -132,7 +132,7 @@ export function BatchContactTool({
         <select
           value={batchMethod}
           onChange={(e) => setBatchMethod(e.target.value)}
-          className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text"
+          className="rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
         >
           {CONTACT_METHODS.filter((m) => m !== "nota").map((m) => (
             <option key={m} value={m}>{m}</option>
@@ -142,7 +142,7 @@ export function BatchContactTool({
         <select
           value={batchStatus}
           onChange={(e) => setBatchStatus(e.target.value)}
-          className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text"
+          className="rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
         >
           <option value="unchanged">Status invariato</option>
           {statuses.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -152,14 +152,14 @@ export function BatchContactTool({
           type="date"
           value={batchFollowUp}
           onChange={(e) => setBatchFollowUp(e.target.value)}
-          className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text"
+          className="rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
         />
 
         {operators.length > 0 && (
           <select
             value={batchOperator}
             onChange={(e) => setBatchOperator(e.target.value)}
-            className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text"
+            className="rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
           >
             <option value="">Operatore</option>
             {operators.map((op) => <option key={op.id} value={op.id}>{op.name}</option>)}
@@ -169,18 +169,18 @@ export function BatchContactTool({
         <input
           value={batchNotes}
           onChange={(e) => setBatchNotes(e.target.value)}
-          className="bg-brand-surface dark:bg-white/5 border border-brand-border dark:border-white/10 rounded-lg px-3 py-2 text-sm text-brand-text lg:col-span-2"
+          className="rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text lg:col-span-2 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
           placeholder="Note contatto"
         />
       </div>
 
       <div className="flex items-center justify-between mb-3 text-sm">
-        <label className="flex items-center gap-2 text-brand-muted dark:text-white/70">
+        <label className="flex items-center gap-2 text-brand-muted">
           <input
             type="checkbox"
             checked={selectedIds.length > 0 && selectedIds.length === filteredClients.length}
             onChange={toggleSelectAll}
-            className="rounded border-brand-border dark:border-white/20 bg-brand-surface dark:bg-black/50"
+            className="rounded border-brand-border bg-brand-surface dark:bg-[#0F1220]"
           />
           Seleziona tutti ({filteredClients.length})
         </label>
@@ -194,9 +194,9 @@ export function BatchContactTool({
         </button>
       </div>
 
-      <div className="max-h-72 overflow-auto border border-brand-border dark:border-white/10 rounded-xl">
+      <div className="max-h-72 overflow-auto rounded-xl border border-brand-border">
         <table className="w-full text-sm">
-          <thead className="surface-subtle dark:bg-white/5 text-brand-muted dark:text-white/60 sticky top-0">
+          <thead className="surface-subtle sticky top-0 text-brand-muted">
             <tr>
               <th className="px-3 py-2 w-10"></th>
               <th className="px-3 py-2 text-left">Cliente</th>
@@ -205,15 +205,15 @@ export function BatchContactTool({
               <th className="px-3 py-2 text-left">Ultimo</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-brand-border dark:divide-white/10">
+          <tbody className="divide-y divide-brand-border">
             {filteredClients.map((c) => (
               <tr
                 key={c.id}
                 className={
                   "cursor-pointer transition " +
                   (selectedClientId === c.id
-                    ? "bg-brand-accent/10 border-l-4 border-brand-accent"
-                    : "hover:bg-brand-background/70 dark:hover:bg-white/[0.06]")
+                    ? "border-l-4 border-brand-accent bg-brand-accent/10"
+                    : "hover:bg-brand-background/70 dark:hover:bg-brand-surface")
                 }
                 onClick={() => onSelectClient(c)}
               >
@@ -222,17 +222,17 @@ export function BatchContactTool({
                     type="checkbox"
                     checked={selectedIds.includes(c.id)}
                     onChange={(e) => { e.stopPropagation(); toggleSelectOne(c.id); }}
-                    className="rounded border-brand-border dark:border-white/20 bg-brand-surface dark:bg-black/50"
+                    className="rounded border-brand-border bg-brand-surface dark:bg-[#0F1220]"
                   />
                 </td>
                 <td className="px-3 py-2">
-                  <div className="font-medium text-brand-text dark:text-white">{c.business_name || "Cliente"}</div>
-                  <div className="text-xs text-brand-muted dark:text-white/40">
+                  <div className="font-medium text-brand-text">{c.business_name || "Cliente"}</div>
+                  <div className="text-xs text-brand-muted">
                     {c.city || "-"} {c.province ? `(${c.province})` : ""}
                   </div>
                 </td>
-                <td className="px-3 py-2 text-brand-muted dark:text-white/70">{c.status || "Da contattare"}</td>
-                <td className="px-3 py-2 text-brand-muted dark:text-white/70">
+                <td className="px-3 py-2 text-brand-muted">{c.status || "Da contattare"}</td>
+                <td className="px-3 py-2 text-brand-muted">
                   <div className="flex gap-2">
                     {c.phone && (
                       <span className="inline-flex items-center gap-1">
@@ -246,7 +246,7 @@ export function BatchContactTool({
                     )}
                   </div>
                 </td>
-                <td className="px-3 py-2 text-brand-muted dark:text-white/60">
+                <td className="px-3 py-2 text-brand-muted">
                   {c.last_contact_date
                     ? new Date(c.last_contact_date).toLocaleDateString("it-IT")
                     : "Mai"}

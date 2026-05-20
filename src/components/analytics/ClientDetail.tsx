@@ -57,13 +57,13 @@ export function ClientDetail({ client, onClose }: Props) {
           Chiudi
         </button>
       </div>
-      <table className="w-full text-sm text-brand-text dark:text-white/80">
+      <table className="w-full text-sm text-brand-text">
         <tbody>
           {rows.map((row) => (
             <tr key={row.label}>
-              <td className="py-1 pr-2 text-brand-muted dark:text-white/60">{row.label}</td>
+              <td className="py-1 pr-2 text-brand-muted">{row.label}</td>
               <td className="py-1">
-                {row.value || <span className="text-brand-muted dark:text-white/30">-</span>}
+                {row.value || <span className="text-brand-muted">-</span>}
               </td>
             </tr>
           ))}

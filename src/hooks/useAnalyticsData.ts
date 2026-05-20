@@ -17,6 +17,7 @@ export function useAnalyticsData() {
   const supabaseRef = useRef(createClient());
   const supabase = supabaseRef.current;
 
+  const [authReady, setAuthReady] = useState(false);
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<SavedClient[]>([]);
   const [history, setHistory] = useState<ContactHistoryRow[]>([]);
@@ -60,9 +61,21 @@ export function useAnalyticsData() {
     setLoading(false);
   }, [supabase]);
 
+  // Wait for auth session to be ready before fetching data
   useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) setAuthReady(true);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setAuthReady(true);
+    });
+    return () => subscription.unsubscribe();
+  }, [supabase]);
+
+  useEffect(() => {
+    if (!authReady) return;
     fetchData();
-  }, [fetchData]);
+  }, [authReady, fetchData]);
 
   // --- Date preset ---
   const minAvailableDate = useMemo(() => {

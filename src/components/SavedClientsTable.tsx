@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
 import {
     Calendar as CalendarIcon,
@@ -54,9 +55,9 @@ const STORAGE_KEY = "lead-intelligence:clienti-columns:v1";
 const sanitizeColumnName = (value: string) => value.trim().replace(/\s+/g, " ");
 
 export function SavedClientsTable() {
-    const supabaseRef = useRef(createClient());
-    const supabase = supabaseRef.current;
+    const [supabase] = useState(() => createClient());
     const [authReady, setAuthReady] = useState(false);
+    const [authChecked, setAuthChecked] = useState(false);
 
     const [clients, setClients] = useState<SavedClient[]>([]);
     const [loading, setLoading] = useState(true);
@@ -148,7 +149,9 @@ export function SavedClientsTable() {
         try {
             const parsed = JSON.parse(raw) as BoardColumn[];
             if (Array.isArray(parsed) && parsed.length > 0) {
-                setColumns(parsed);
+                queueMicrotask(() => {
+                    setColumns(parsed);
+                });
             }
         } catch {
             // ignore malformed local value
@@ -157,60 +160,80 @@ export function SavedClientsTable() {
 
     // Wait for auth session to be ready before fetching data
     useEffect(() => {
+        let active = true;
+
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            if (session) {
-                setAuthReady(true);
-            }
+            if (!active) return;
+            setAuthReady(Boolean(session));
+            setAuthChecked(true);
         });
         // Also check current session immediately (for cases where session is already set)
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) setAuthReady(true);
-        });
-        return () => subscription.unsubscribe();
+        supabase.auth.getSession()
+            .then(({ data: { session } }) => {
+                if (!active) return;
+                setAuthReady(Boolean(session));
+            })
+            .catch((error) => {
+                console.error(error);
+                if (!active) return;
+                setAuthReady(false);
+            })
+            .finally(() => {
+                if (active) setAuthChecked(true);
+            });
+        return () => {
+            active = false;
+            subscription.unsubscribe();
+        };
     }, [supabase]);
 
     useEffect(() => {
         if (!authReady) return;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        fetchClients();
+        queueMicrotask(() => {
+            void fetchClients();
+        });
     }, [authReady, fetchClients]);
 
     useEffect(() => {
         if (!selectedClient) return;
 
-        setDetailDraft({
-            email: selectedClient.email ?? "",
-            phone: selectedClient.phone ?? "",
-            website: selectedClient.website ?? "",
-            follow_up_date: selectedClient.follow_up_date ?? "",
-            notes: selectedClient.notes ?? "",
+        queueMicrotask(() => {
+            setDetailDraft({
+                email: selectedClient.email ?? "",
+                phone: selectedClient.phone ?? "",
+                website: selectedClient.website ?? "",
+                follow_up_date: selectedClient.follow_up_date ?? "",
+                notes: selectedClient.notes ?? "",
+            });
         });
     }, [selectedClient]);
 
     useEffect(() => {
         if (clients.length === 0) return;
 
-        setColumns((previous) => {
-            const knownIds = new Set(previous.map((col) => col.id));
-            const missingStatuses = Array.from(
-                new Set(
-                    clients
-                        .map((client) => sanitizeColumnName(client.status || ""))
-                        .filter((status) => status.length > 0 && !knownIds.has(status))
-                )
-            );
+        queueMicrotask(() => {
+            setColumns((previous) => {
+                const knownIds = new Set(previous.map((col) => col.id));
+                const missingStatuses = Array.from(
+                    new Set(
+                        clients
+                            .map((client) => sanitizeColumnName(client.status || ""))
+                            .filter((status) => status.length > 0 && !knownIds.has(status))
+                    )
+                );
 
-            if (missingStatuses.length === 0) return previous;
+                if (missingStatuses.length === 0) return previous;
 
-            const appended: BoardColumn[] = missingStatuses.map((status) => ({
-                id: status,
-                title: status,
-                colorClass: "bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-white border-slate-300 dark:border-white/20",
-            }));
+                const appended: BoardColumn[] = missingStatuses.map((status) => ({
+                    id: status,
+                    title: status,
+                    colorClass: "bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-white border-slate-300 dark:border-white/20",
+                }));
 
-            const next = [...previous, ...appended];
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-            return next;
+                const next = [...previous, ...appended];
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+                return next;
+            });
         });
     }, [clients]);
 
@@ -508,8 +531,28 @@ export function SavedClientsTable() {
         if (selectedClientId === id) setSelectedClientId(null);
     };
 
+<<<<<<< HEAD
     if (loading) {
         return <div className="text-center p-8 text-brand-muted">Caricamento clienti...</div>;
+=======
+    if (!authChecked || loading) {
+        return <div className="text-center p-8 text-white/50">Caricamento clienti...</div>;
+>>>>>>> 17e0623 (feat: add auth middleware and analytics updates)
+    }
+
+    if (!authReady) {
+        return (
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-white/50">
+                <p className="text-base text-white">Sessione non valida o scaduta.</p>
+                <p className="mt-2 text-sm">Effettua di nuovo l&apos;accesso per caricare i clienti selezionati.</p>
+                <Link
+                    href="/login"
+                    className="mt-5 inline-flex items-center justify-center rounded-full border border-brand-accent/30 bg-brand-accent/12 px-5 py-2 text-sm font-semibold text-white"
+                >
+                    Vai al login
+                </Link>
+            </div>
+        );
     }
 
     return (
@@ -583,7 +626,7 @@ export function SavedClientsTable() {
                                     onDragOver={(e) => {
                                         if (draggedColumnId || draggedClientId) e.preventDefault();
                                     }}
-                                    onDrop={(e) => {
+                                    onDrop={() => {
                                         if (draggedColumnId) {
                                             moveColumn(draggedColumnId, column.id);
                                             setDraggedColumnId(null);

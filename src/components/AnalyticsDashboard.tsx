@@ -39,6 +39,21 @@ export function AnalyticsDashboard() {
     );
   }
 
+  if (data.requiresAuth) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-white/50">
+        <p className="text-base text-white">Sessione non valida o scaduta.</p>
+        <p className="mt-2 text-sm">Effettua di nuovo l&apos;accesso per aprire la dashboard analytics.</p>
+        <Link
+          href="/login"
+          className="mt-5 inline-flex items-center justify-center rounded-full border border-brand-accent/30 bg-brand-accent/12 px-5 py-2 text-sm font-semibold text-white"
+        >
+          Vai al login
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Trend chart */}

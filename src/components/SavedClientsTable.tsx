@@ -478,6 +478,8 @@ export function SavedClientsTable() {
                     clientName: selectedClient.business_name,
                     website: detailDraft.website || selectedClient.website,
                     notes: detailDraft.notes || selectedClient.notes,
+                    keyword: selectedClient.keyword,
+                    city: selectedClient.city,
                 }),
             });
 
@@ -544,12 +546,15 @@ export function SavedClientsTable() {
                     ? responseData.sentAt
                     : new Date().toISOString();
 
+                const currentDateStr = sentAt.split('T')[0];
+
                 setClients((prev) => prev.map((client) => (
                     client.id === selectedClient.id
                         ? {
                             ...client,
                             last_contact_method: "email",
                             last_contact_date: sentAt,
+                            follow_up_date: currentDateStr,
                         }
                         : client
                 )));

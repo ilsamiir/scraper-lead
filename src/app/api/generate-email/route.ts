@@ -90,7 +90,7 @@ const parseEmailGenerationPayload = (content: unknown): EmailGenerationPayload =
 
 export async function POST(request: Request) {
     try {
-        const { clientName, website, notes } = await request.json();
+        const { clientName, website, notes, keyword, city } = await request.json();
 
         if (!process.env.OPENROUTER_API_KEY) {
             throw new EmailGenerationError(
@@ -110,25 +110,36 @@ export async function POST(request: Request) {
             console.warn('Could not read brand_identity.md', e);
         }
 
+        let isSocial = false;
+        if (website && (website.includes('facebook') || website.includes('instagram'))) {
+            isSocial = true;
+        }
+
         const prompt = `
 Sei un esperto copywriter B2B per l'agenzia "Webnovation".
 Ecco le informazioni sull'agenzia:
 ${brandIdentity}
 
-Devi scrivere un'email a freddo (cold email) per un potenziale cliente.
+Devi scrivere un'email a freddo (cold email) per un potenziale cliente locale.
 Dettagli del cliente:
 - Nome: ${clientName || 'Non specificato'}
-- Sito web: ${website || 'Non specificato'}
+- Settore/Categoria: ${keyword || 'Non specificato'}
+- Città: ${city || 'Non specificata'}
+- Sito web/Social: ${website || 'Non specificato'}
 - Note aggiuntive: ${notes || 'Nessuna'}
 
+${isSocial ? "NOTA PER IL COPY: Questo cliente sta usando una pagina Facebook/Instagram invece di un vero sito web proprietario. Sfrutta questa informazione a nostro vantaggio! Fai leva sul fatto che un'attività nel settore " + (keyword || 'di sua competenza') + " a " + (city || 'livello locale') + " ha bisogno di un ecosistema digitale (sito e automazioni) per scalare e battere la concorrenza, e non può basarsi solo sui social network." : ""}
+
 L'email deve essere:
-- Breve, diretta e professionale ma non troppo formale.
-- Focalizzata sul valore che Webnovation può portare al cliente.
+- ESTREMAMENTE BREVE E CONCISA (massimo 3-4 frasi in totale). Le email lunghe non vengono lette.
+- Con un tono molto informale, amichevole e colloquiale. Evita il linguaggio corporativo o troppo rigido.
+- Altamente personalizzata sui problemi (pain points) tipici del settore ${keyword || 'del cliente'} nella città di ${city || 'riferimento'}, ma andando dritta al punto.
+- Focalizzata sul valore essenziale che Webnovation può portare, senza dilungarsi in spiegazioni complesse.
 - Scritta in italiano.
 
 Regole fondamentali da rispettare:
 1. L'email è scritta e inviata da Angelo Giacchetti. Non inventare altri mittenti.
-2. L'obiettivo e la Call to Action devono essere chiaramente quelli di chiedere un contatto telefonico o un appuntamento conoscitivo.
+2. L'obiettivo e la Call to Action devono essere chiaramente quelli di chiedere un rapido contatto telefonico o un appuntamento conoscitivo.
 3. L'email DEVE concludersi con questa ESATTA firma (rispettando gli a capo):
 
 Angelo Giacchetti

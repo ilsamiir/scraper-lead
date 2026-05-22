@@ -1,14 +1,125 @@
 "use client";
 
-import { Phone, Mail } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, Wand2, Send, Check } from "lucide-react";
 import type { SavedClient } from "@/lib/types";
+import { createClient } from "@/utils/supabase/client";
 
 type Props = {
   client: SavedClient;
   onClose: () => void;
+  onRefresh?: () => void;
 };
 
-export function ClientDetail({ client, onClose }: Props) {
+export function ClientDetail({ client, onClose, onRefresh }: Props) {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailBody, setEmailBody] = useState("");
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [isLoggingCall, setIsLoggingCall] = useState(false);
+  const supabase = createClient();
+
+  const handleGenerateEmail = async () => {
+    if (!client.email) {
+      alert("Nessuna email per questo cliente.");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setShowEmailForm(true);
+    setEmailSubject("");
+    setEmailBody("");
+    
+    try {
+      const res = await fetch("/api/generate-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientName: client.business_name,
+          website: client.website,
+          notes: client.notes,
+          keyword: client.keyword,
+          city: client.city,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Errore generazione");
+      
+      setEmailSubject(data.subject);
+      setEmailBody(data.body);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Errore durante la generazione dell'email");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!client.email) return;
+    setIsSending(true);
+    
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientId: client.id,
+          to: client.email,
+          subject: emailSubject,
+          body: emailBody,
+          source: "manual",
+        }),
+      });
+      
+      const responseData = await res.json();
+      if (!res.ok) throw new Error(responseData.error?.message || responseData.error || "Errore invio");
+      
+      alert("Email inviata con successo!");
+      if (onRefresh) onRefresh();
+      onClose();
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Errore durante l'invio dell'email");
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleLogCall = async () => {
+    setIsLoggingCall(true);
+    try {
+      const now = new Date().toISOString();
+      const { error: updateError } = await supabase
+        .from("saved_clients")
+        .update({
+          last_contact_method: "chiamata",
+          last_contact_date: now,
+          follow_up_date: now.split("T")[0]
+        })
+        .eq("id", client.id);
+
+      if (updateError) throw updateError;
+      
+      await supabase.from("contact_history").insert([{
+        client_id: client.id,
+        contact_method: "chiamata",
+        contact_date: now,
+        notes: "Chiamata registrata dalla dashboard."
+      }]);
+      
+      alert("Chiamata registrata!");
+      if (onRefresh) onRefresh();
+      onClose();
+    } catch (err: any) {
+      console.error(err);
+      alert("Errore durante la registrazione della chiamata.");
+    } finally {
+      setIsLoggingCall(false);
+    }
+  };
   const rows: Array<{ label: string; value: React.ReactNode }> = [
     {
       label: "Telefono",
@@ -69,6 +180,60 @@ export function ClientDetail({ client, onClose }: Props) {
           ))}
         </tbody>
       </table>
+      
+      {!showEmailForm ? (
+        <div className="mt-6 flex justify-end gap-3 border-t border-brand-border pt-4">
+          {client.phone && (
+            <button
+              onClick={handleLogCall}
+              disabled={isLoggingCall}
+              className="flex items-center gap-2 rounded-lg bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-600 transition hover:bg-emerald-500/20 disabled:opacity-50 dark:text-emerald-400"
+            >
+              {isLoggingCall ? "Registrazione..." : <><Check className="w-4 h-4" /> Registra Chiamata</>}
+            </button>
+          )}
+          {client.email && (
+            <button
+              onClick={handleGenerateEmail}
+              disabled={isGenerating}
+              className="flex items-center gap-2 rounded-lg bg-brand-accent/10 px-4 py-2 text-sm font-medium text-brand-accent transition hover:bg-brand-accent/20 disabled:opacity-50"
+            >
+              {isGenerating ? "Generazione AI..." : <><Wand2 className="w-4 h-4" /> Genera Email AI</>}
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 border-t border-brand-border pt-4 space-y-3">
+          <input
+            type="text"
+            className="w-full rounded-md border border-brand-border bg-brand-surface p-2 text-sm text-brand-text mb-2 outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent"
+            placeholder="Oggetto dell'email"
+            value={emailSubject}
+            onChange={(e) => setEmailSubject(e.target.value)}
+          />
+          <textarea
+            className="w-full rounded-md border border-brand-border bg-brand-surface p-2 text-sm text-brand-text mb-2 min-h-[150px] outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent overflow-auto resize-y"
+            placeholder="Corpo dell'email generata con AI..."
+            value={emailBody}
+            onChange={(e) => setEmailBody(e.target.value)}
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => setShowEmailForm(false)}
+              className="px-4 py-2 text-sm text-brand-muted hover:text-brand-text"
+            >
+              Annulla
+            </button>
+            <button
+              onClick={handleSendEmail}
+              disabled={isSending}
+              className="flex items-center gap-2 rounded-lg bg-brand-accent px-4 py-2 text-sm font-medium text-white transition hover:brightness-110 disabled:opacity-50"
+            >
+              {isSending ? "Invio..." : <><Send className="w-4 h-4" /> Invia Email</>}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

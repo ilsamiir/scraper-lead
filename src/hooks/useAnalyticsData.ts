@@ -350,7 +350,13 @@ export function useAnalyticsData() {
   // --- Top Priority (scoring) ---
   const topPriority = useMemo(() => {
     const now = new Date();
+    // Non mostrare in priorità i lead contattati nelle ultime 24 ore
     return filteredClients
+      .filter(c => {
+        if (!c.last_contact_date) return true;
+        const h = (now.getTime() - new Date(c.last_contact_date).getTime()) / (1000 * 60 * 60);
+        return h > 24;
+      })
       .map((c) => ({
         client: c,
         score: scoreClientTotal(c, historyByClient[c.id] || 0, now),

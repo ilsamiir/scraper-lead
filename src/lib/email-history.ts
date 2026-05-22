@@ -60,11 +60,14 @@ export async function logEmailHistory({
         return { sentAt: occurredAt };
     }
 
+    const currentDateStr = occurredAt.split('T')[0];
+
     const { error: clientUpdateError } = await supabaseAdmin
         .from("saved_clients")
         .update({
             last_contact_method: "email",
             last_contact_date: occurredAt,
+            follow_up_date: currentDateStr,
         })
         .eq("id", clientId);
 

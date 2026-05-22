@@ -141,6 +141,7 @@ export function AnalyticsDashboard() {
         <ClientDetail
           client={selectedClient}
           onClose={() => setSelectedClient(null)}
+          onRefresh={data.fetchData}
         />
       )}
     </div>

@@ -11,6 +11,14 @@ type Props = {
   onRefresh?: () => void;
 };
 
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof Error && error.message.trim().length > 0) {
+    return error.message;
+  }
+
+  return fallback;
+};
+
 export function ClientDetail({ client, onClose, onRefresh }: Props) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -37,10 +45,23 @@ export function ClientDetail({ client, onClose, onRefresh }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           clientName: client.business_name,
+          sector: client.sector,
+          address: client.address,
+          province: client.province,
+          phone: client.phone,
           website: client.website,
+          hasWebsite: client.has_website ?? Boolean(client.website),
+          digitalScore: client.digital_score,
           notes: client.notes,
           keyword: client.keyword,
           city: client.city,
+          status: client.status,
+          estimatedRevenue: client.estimated_revenue,
+          employeeCount: client.employee_count,
+          lastContactMethod: client.last_contact_method,
+          lastContactDate: client.last_contact_date,
+          followUpDate: client.follow_up_date,
+          googleMapsUrl: client.google_maps_url,
         }),
       });
 
@@ -49,9 +70,9 @@ export function ClientDetail({ client, onClose, onRefresh }: Props) {
       
       setEmailSubject(data.subject);
       setEmailBody(data.body);
-    } catch (err: any) {
-      console.error(err);
-      alert(err.message || "Errore durante la generazione dell'email");
+    } catch (error: unknown) {
+      console.error(error);
+      alert(getErrorMessage(error, "Errore durante la generazione dell'email"));
     } finally {
       setIsGenerating(false);
     }
@@ -80,9 +101,9 @@ export function ClientDetail({ client, onClose, onRefresh }: Props) {
       alert("Email inviata con successo!");
       if (onRefresh) onRefresh();
       onClose();
-    } catch (err: any) {
-      console.error(err);
-      alert(err.message || "Errore durante l'invio dell'email");
+    } catch (error: unknown) {
+      console.error(error);
+      alert(getErrorMessage(error, "Errore durante l'invio dell'email"));
     } finally {
       setIsSending(false);
     }
@@ -113,8 +134,8 @@ export function ClientDetail({ client, onClose, onRefresh }: Props) {
       alert("Chiamata registrata!");
       if (onRefresh) onRefresh();
       onClose();
-    } catch (err: any) {
-      console.error(err);
+    } catch (error: unknown) {
+      console.error(error);
       alert("Errore durante la registrazione della chiamata.");
     } finally {
       setIsLoggingCall(false);

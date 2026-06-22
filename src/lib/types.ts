@@ -13,6 +13,7 @@ export type SavedClient = {
   keyword?: string | null;
   city?: string | null;
   province?: string | null;
+  address?: string | null;
   phone?: string | null;
   email?: string | null;
   website?: string | null;
@@ -27,6 +28,7 @@ export type SavedClient = {
   employee_count?: string | null;
   has_website?: boolean;
   digital_score?: number;
+  google_maps_url?: string | null;
   operator_id?: string | null;
   converted_value?: number | null;
   converted_at?: string | null;

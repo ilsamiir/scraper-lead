@@ -25,6 +25,7 @@ type SavedClient = {
     id: string;
     business_name?: string | null;
     keyword?: string | null;
+    sector?: string | null;
     city?: string | null;
     province?: string | null;
     address?: string | null;
@@ -37,6 +38,10 @@ type SavedClient = {
     status?: string | null;
     notes?: string | null;
     google_maps_url?: string | null;
+    estimated_revenue?: string | null;
+    employee_count?: string | null;
+    has_website?: boolean;
+    digital_score?: number | null;
     created_at?: string | null;
 };
 
@@ -476,10 +481,24 @@ export function SavedClientsTable() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     clientName: selectedClient.business_name,
+                    sector: selectedClient.sector,
+                    address: selectedClient.address,
+                    province: selectedClient.province,
+                    phone: detailDraft.phone || selectedClient.phone,
                     website: detailDraft.website || selectedClient.website,
+                    hasWebsite: selectedClient.has_website ?? Boolean(detailDraft.website || selectedClient.website),
+                    digitalScore: selectedClient.digital_score,
                     notes: detailDraft.notes || selectedClient.notes,
                     keyword: selectedClient.keyword,
                     city: selectedClient.city,
+                    status: selectedClient.status,
+                    estimatedRevenue: selectedClient.estimated_revenue,
+                    employeeCount: selectedClient.employee_count,
+                    lastContactMethod: selectedClient.last_contact_method,
+                    lastContactDate: selectedClient.last_contact_date,
+                    followUpDate: detailDraft.follow_up_date || selectedClient.follow_up_date,
+                    googleMapsUrl: selectedClient.google_maps_url,
+                    contactCount: contactCounts[selectedClient.id] ?? 0,
                 }),
             });
 
@@ -640,6 +659,156 @@ export function SavedClientsTable() {
         );
     }
 
+    const renderSelectedClientPanel = (className: string) => {
+        if (!selectedClient) return null;
+
+        return (
+            <div className={className}>
+                <div className="space-y-4">
+                    <div className="flex items-start justify-between gap-2">
+                        <div>
+                            <h3 className="text-base font-medium text-brand-text leading-tight">
+                                {selectedClient.business_name}
+                            </h3>
+                            <p className="text-xs text-brand-muted mt-1">
+                                {selectedClient.city || "-"}
+                                {selectedClient.province ? ` (${selectedClient.province})` : ""}
+                            </p>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <button
+                                onClick={() => setSelectedClientId(null)}
+                                className="rounded-md bg-gray-100 p-2 text-brand-muted hover:bg-gray-200 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_84%,white_16%)]"
+                                title="Chiudi pannello"
+                                style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={() => handleDeleteClient(selectedClient.id)}
+                                className="p-2 rounded-md bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
+                                title="Elimina nominativo"
+                                style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs text-brand-muted">Email</label>
+                        <input
+                            type="email"
+                            value={detailDraft.email}
+                            onChange={(e) => setDetailDraft((prev) => ({ ...prev, email: e.target.value }))}
+                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs text-brand-muted">Telefono</label>
+                        <input
+                            type="text"
+                            value={detailDraft.phone}
+                            onChange={(e) => setDetailDraft((prev) => ({ ...prev, phone: e.target.value }))}
+                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs text-brand-muted">Sito web</label>
+                        <input
+                            type="text"
+                            value={detailDraft.website}
+                            onChange={(e) => setDetailDraft((prev) => ({ ...prev, website: e.target.value }))}
+                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
+                        />
+                        <div className="flex items-center gap-2 text-xs">
+                            {selectedClient.website && (
+                                <a
+                                    href={selectedClient.website}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-brand-primary hover:text-brand-accent hover:underline inline-flex items-center gap-1 font-medium"
+                                >
+                                    Sito <ExternalLink className="w-3 h-3" />
+                                </a>
+                            )}
+                            {selectedClient.google_maps_url && (
+                                <a
+                                    href={selectedClient.google_maps_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-brand-accent hover:underline inline-flex items-center gap-1"
+                                >
+                                    Maps <ExternalLink className="w-3 h-3" />
+                                </a>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs text-brand-muted">Data follow-up</label>
+                        <input
+                            type="date"
+                            value={detailDraft.follow_up_date}
+                            onChange={(e) => setDetailDraft((prev) => ({ ...prev, follow_up_date: e.target.value }))}
+                            className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs text-brand-muted">Note</label>
+                        <textarea
+                            value={detailDraft.notes}
+                            onChange={(e) => setDetailDraft((prev) => ({ ...prev, notes: e.target.value }))}
+                            rows={4}
+                            className="w-full resize-y rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                        <button
+                            onClick={() => logContact("chiamata")}
+                            className="px-3 py-2 rounded-lg bg-sky-100 dark:bg-blue-500/10 hover:bg-sky-200 dark:hover:bg-blue-500/20 text-sky-900 dark:text-blue-300 text-sm font-medium flex items-center justify-center gap-1.5"
+                        >
+                            <Phone className="w-4 h-4" /> Chiamata
+                        </button>
+                        <button
+                            onClick={handleGenerateEmail}
+                            className="px-3 py-2 rounded-lg bg-violet-100 dark:bg-purple-500/10 hover:bg-violet-200 dark:hover:bg-purple-500/20 text-violet-900 dark:text-purple-300 text-sm font-medium flex items-center justify-center gap-1.5"
+                        >
+                            <Mail className="w-4 h-4" /> Email AI
+                        </button>
+                    </div>
+
+                    <button
+                        onClick={handleSaveDetails}
+                        disabled={savingDetails}
+                        className="w-full px-3 py-2 rounded-lg bg-brand-accent text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                        <Save className="w-4 h-4" /> {savingDetails ? "Salvataggio..." : "Salva dettagli"}
+                    </button>
+
+                    <div className="border-t border-brand-border pt-2">
+                        <div className="flex items-center justify-between text-xs text-brand-muted mb-2">
+                            <span>Ultimo contatto</span>
+                            <span className="inline-flex items-center gap-1">
+                                <CalendarIcon className="w-3 h-3" />
+                                {selectedClient.last_contact_date
+                                    ? new Date(selectedClient.last_contact_date).toLocaleDateString("it-IT")
+                                    : "Nessuno"}
+                            </span>
+                        </div>
+                        <FollowUpHistory clientId={selectedClient.id} />
+                    </div>
+
+                    <EmailHistoryPanel clientId={selectedClient.id} refreshToken={emailHistoryRefreshToken} />
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="flex flex-col gap-4" data-view-mode={viewMode}>
             <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
@@ -720,8 +889,8 @@ export function SavedClientsTable() {
                     </p>
                 </div>
             ) : (
-                <div className={selectedClient ? "grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]" : ""}>
-                    <div className={selectedClient ? "glass-panel p-4 overflow-x-auto" : "glass-panel w-full overflow-x-auto p-4"}>
+                <div className={selectedClient && viewMode === "board" ? "grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]" : ""}>
+                    <div className={selectedClient && viewMode === "board" ? "glass-panel p-4 overflow-x-auto" : "glass-panel w-full overflow-x-auto p-4"}>
                         {viewMode === "board" ? (
                             <div className="flex gap-4 min-h-[560px]">
                                 {groupedClients.map((column) => (
@@ -855,38 +1024,41 @@ export function SavedClientsTable() {
                                             const statusLabel = client.status || defaultColumnId;
 
                                             return (
-                                                <button
-                                                    key={client.id}
-                                                    type="button"
-                                                    onClick={() => setSelectedClientId(client.id)}
-                                                    className={`grid w-full min-w-[760px] grid-cols-[minmax(240px,2.2fr)_minmax(160px,1.1fr)_minmax(150px,1fr)_minmax(160px,1fr)_minmax(170px,1fr)] gap-4 px-4 py-4 text-left transition-colors ${isActive ? "bg-brand-accent/10" : "hover:bg-brand-background/70 dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_88%,white_12%)]"}`}
-                                                >
-                                                    <span className="min-w-0">
-                                                        <span className="block truncate text-sm font-medium text-brand-text">
-                                                            {client.business_name || "Senza nome"}
+                                                <div key={client.id}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setSelectedClientId(client.id)}
+                                                        className={`grid w-full min-w-[760px] grid-cols-[minmax(240px,2.2fr)_minmax(160px,1.1fr)_minmax(150px,1fr)_minmax(160px,1fr)_minmax(170px,1fr)] gap-4 px-4 py-4 text-left transition-colors ${isActive ? "bg-brand-accent/10" : "hover:bg-brand-background/70 dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_88%,white_12%)]"}`}
+                                                    >
+                                                        <span className="min-w-0">
+                                                            <span className="block truncate text-sm font-medium text-brand-text">
+                                                                {client.business_name || "Senza nome"}
+                                                            </span>
+                                                            <span className="mt-1 flex flex-wrap items-center gap-3 text-xs text-brand-muted">
+                                                                <span>{contactCounts[client.id] ?? 0} contatti</span>
+                                                                {client.phone ? <span>{client.phone}</span> : null}
+                                                                {client.email ? <span className="truncate">{client.email}</span> : null}
+                                                            </span>
                                                         </span>
-                                                        <span className="mt-1 flex flex-wrap items-center gap-3 text-xs text-brand-muted">
-                                                            <span>{contactCounts[client.id] ?? 0} contatti</span>
-                                                            {client.phone ? <span>{client.phone}</span> : null}
-                                                            {client.email ? <span className="truncate">{client.email}</span> : null}
+                                                        <span className="text-sm text-brand-text capitalize">
+                                                            {client.last_contact_method || "Nessuno"}
                                                         </span>
-                                                    </span>
-                                                    <span className="text-sm text-brand-text capitalize">
-                                                        {client.last_contact_method || "Nessuno"}
-                                                    </span>
-                                                    <span className="text-sm text-brand-text">
-                                                        {formatLastContactDate(client.last_contact_date)}
-                                                    </span>
-                                                    <span>
-                                                        <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-medium ${getStatusBadgeClass(statusLabel)}`}>
-                                                            {statusLabel}
+                                                        <span className="text-sm text-brand-text">
+                                                            {formatLastContactDate(client.last_contact_date)}
                                                         </span>
-                                                    </span>
-                                                    <span className="text-sm text-brand-text">
-                                                        {client.city || "-"}
-                                                        {client.province ? ` (${client.province})` : ""}
-                                                    </span>
-                                                </button>
+                                                        <span>
+                                                            <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-medium ${getStatusBadgeClass(statusLabel)}`}>
+                                                                {statusLabel}
+                                                            </span>
+                                                        </span>
+                                                        <span className="text-sm text-brand-text">
+                                                            {client.city || "-"}
+                                                            {client.province ? ` (${client.province})` : ""}
+                                                        </span>
+                                                    </button>
+
+                                                    {isActive ? renderSelectedClientPanel("border-t border-brand-border bg-brand-background/40 p-4 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)]") : null}
+                                                </div>
                                             );
                                         })}
                                     </div>
@@ -895,151 +1067,9 @@ export function SavedClientsTable() {
                         )}
                     </div>
 
-                    {selectedClient && (
-                        <aside className="glass-panel min-h-[560px] border border-brand-border bg-brand-surface p-4 shadow-[0_14px_30px_rgba(15,23,42,0.05)] dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)] dark:shadow-none">
-                            <div className="space-y-4">
-                                <div className="flex items-start justify-between gap-2">
-                                    <div>
-                                        <h3 className="text-base font-medium text-brand-text leading-tight">
-                                            {selectedClient.business_name}
-                                        </h3>
-                                        <p className="text-xs text-brand-muted mt-1">
-                                            {selectedClient.city || "-"}
-                                            {selectedClient.province ? ` (${selectedClient.province})` : ""}
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-2 items-center">
-                                        <button
-                                            onClick={() => setSelectedClientId(null)}
-                                            className="rounded-md bg-gray-100 p-2 text-brand-muted hover:bg-gray-200 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_90%,white_10%)] dark:hover:bg-[color:color-mix(in_srgb,var(--brand-surface)_84%,white_16%)]"
-                                            title="Chiudi pannello"
-                                            style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                        >
-                                            <X className="w-4 h-4" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDeleteClient(selectedClient.id)}
-                                            className="p-2 rounded-md bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400"
-                                            title="Elimina nominativo"
-                                            style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-xs text-brand-muted">Email</label>
-                                    <input
-                                        type="email"
-                                        value={detailDraft.email}
-                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, email: e.target.value }))}
-                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-xs text-brand-muted">Telefono</label>
-                                    <input
-                                        type="text"
-                                        value={detailDraft.phone}
-                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, phone: e.target.value }))}
-                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-xs text-brand-muted">Sito web</label>
-                                    <input
-                                        type="text"
-                                        value={detailDraft.website}
-                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, website: e.target.value }))}
-                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
-                                    />
-                                    <div className="flex items-center gap-2 text-xs">
-                                        {selectedClient.website && (
-                                            <a
-                                                href={selectedClient.website}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-brand-primary hover:text-brand-accent hover:underline inline-flex items-center gap-1 font-medium"
-                                            >
-                                                Sito <ExternalLink className="w-3 h-3" />
-                                            </a>
-                                        )}
-                                        {selectedClient.google_maps_url && (
-                                            <a
-                                                href={selectedClient.google_maps_url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-brand-accent hover:underline inline-flex items-center gap-1"
-                                            >
-                                                Maps <ExternalLink className="w-3 h-3" />
-                                            </a>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-xs text-brand-muted">Data follow-up</label>
-                                    <input
-                                        type="date"
-                                        value={detailDraft.follow_up_date}
-                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, follow_up_date: e.target.value }))}
-                                        className="w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-xs text-brand-muted">Note</label>
-                                    <textarea
-                                        value={detailDraft.notes}
-                                        onChange={(e) => setDetailDraft((prev) => ({ ...prev, notes: e.target.value }))}
-                                        rows={4}
-                                        className="w-full resize-y rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-brand-text focus:outline-none focus:border-brand-accent/60 dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)]"
-                                    />
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-2">
-                                    <button
-                                        onClick={() => logContact("chiamata")}
-                                        className="px-3 py-2 rounded-lg bg-sky-100 dark:bg-blue-500/10 hover:bg-sky-200 dark:hover:bg-blue-500/20 text-sky-900 dark:text-blue-300 text-sm font-medium flex items-center justify-center gap-1.5"
-                                    >
-                                        <Phone className="w-4 h-4" /> Chiamata
-                                    </button>
-                                    <button
-                                        onClick={handleGenerateEmail}
-                                        className="px-3 py-2 rounded-lg bg-violet-100 dark:bg-purple-500/10 hover:bg-violet-200 dark:hover:bg-purple-500/20 text-violet-900 dark:text-purple-300 text-sm font-medium flex items-center justify-center gap-1.5"
-                                    >
-                                        <Mail className="w-4 h-4" /> Email AI
-                                    </button>
-                                </div>
-
-                                <button
-                                    onClick={handleSaveDetails}
-                                    disabled={savingDetails}
-                                    className="w-full px-3 py-2 rounded-lg bg-brand-accent text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-                                >
-                                    <Save className="w-4 h-4" /> {savingDetails ? "Salvataggio..." : "Salva dettagli"}
-                                </button>
-
-                                <div className="border-t border-brand-border pt-2">
-                                    <div className="flex items-center justify-between text-xs text-brand-muted mb-2">
-                                        <span>Ultimo contatto</span>
-                                        <span className="inline-flex items-center gap-1">
-                                            <CalendarIcon className="w-3 h-3" />
-                                            {selectedClient.last_contact_date
-                                                ? new Date(selectedClient.last_contact_date).toLocaleDateString("it-IT")
-                                                : "Nessuno"}
-                                        </span>
-                                    </div>
-                                    <FollowUpHistory clientId={selectedClient.id} />
-                                </div>
-
-                                <EmailHistoryPanel clientId={selectedClient.id} refreshToken={emailHistoryRefreshToken} />
-                            </div>
-                        </aside>
-                    )}
+                    {selectedClient && viewMode === "board"
+                        ? renderSelectedClientPanel("glass-panel min-h-[560px] border border-brand-border bg-brand-surface p-4 shadow-[0_14px_30px_rgba(15,23,42,0.05)] dark:bg-[color:color-mix(in_srgb,var(--brand-surface)_94%,white_6%)] dark:shadow-none")
+                        : null}
                 </div>
             )}
 
